@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "alganis-mutfak",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["tools/sunucu.js"],
+      "port": 8322
+    }
+  ]
+}

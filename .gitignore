@@ -1,0 +1,15 @@
+# İşletim sistemi
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# Düzenleyici
+.vscode/
+.idea/
+*.swp
+
+# Claude Code yerel ayarları
+.claude/settings.local.json
+
+# Bağımlılık yok — node_modules olmamalı
+node_modules/

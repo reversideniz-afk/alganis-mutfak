@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- Güvenlik: uygulama hiçbir dış kaynağa bağlanamaz. Tüm kod ve veri bu klasörden gelir. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self'; manifest-src 'self'; base-uri 'none'; form-action 'none'; object-src 'none'">
+<meta name="referrer" content="no-referrer">
+<title>Alganis Mutfak — Bugün ne pişirsem?</title>
+<meta name="description" content="Evdeki malzemelerle bugün ne pişirebileceğini söyleyen, internetsiz de çalışan mutfak defteri.">
+<meta name="theme-color" content="#E8552D">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Alganis Mutfak">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="doodle-katman" aria-hidden="true"></div>
+
+<!-- ======================================================== ÜST BAŞLIK -->
+<header class="ust-bar" id="ustBar">
+  <div class="ust-ic">
+    <div class="logo">
+      <span class="logo-tencere" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="26" height="26" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <path d="M6 13h20v9a4 4 0 0 1-4 4H10a4 4 0 0 1-4-4z"/>
+          <path d="M4 13h24M8 9c0-2 1.5-2 1.5-4M16 9c0-2 1.5-2 1.5-4M24 9c0-2 1.5-2 1.5-4"/>
+        </svg>
+      </span>
+      <div class="logo-yazi">
+        <strong>Alganis Mutfak</strong>
+        <small id="ustAltYazi">Bugün ne pişirsem?</small>
+      </div>
+    </div>
+    <button class="ikon-btn" id="btnAyar" type="button" aria-label="Ayarlar" title="Ayarlar">
+      <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+        <circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9l2.1 2.1M17 17l2.1 2.1M19.1 4.9L17 7M7 17l-2.1 2.1"/>
+      </svg>
+    </button>
+  </div>
+</header>
+
+<main id="anaAlan">
+
+<!-- ===================================================== EKRAN: MUTFAĞIM -->
+<section class="ekran" id="ekran-mutfak" hidden>
+  <div class="ekran-ic">
+
+    <div class="bilgi-kart mor">
+      <h2>Evde neler var?</h2>
+      <p>Olanları tıkla, olmayanlara dokunma. Seçimlerin telefonda kalır — bir daha sormayacağım.</p>
+      <p id="hosgeldinNot" class="hosgeldin" hidden>
+        👋 Hoş geldin! Mutfakta hemen her zaman bulunan malzemeleri senin için işaretledim.
+        Üstünden bir geç, olmayanlara dokunup kaldır — sonra alttaki <b>Bugün</b> sekmesine bak.
+      </p>
+    </div>
+
+    <div class="arama-satir">
+      <label class="arama-kutu">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="malzemeArama" placeholder="Malzeme ara… (örn. patlıcan)" autocomplete="off" enterkeyhint="search" spellcheck="false">
+        <button type="button" class="temizle-x" id="btnAramaTemizle" hidden aria-label="Aramayı temizle">✕</button>
+      </label>
+    </div>
+
+    <nav class="kat-serit" id="katSerit" aria-label="Malzeme kategorileri"></nav>
+
+    <div id="malzemeListe" class="malzeme-liste"></div>
+
+    <div class="alt-aksiyon">
+      <button type="button" class="btn hayalet kucuk" id="btnTemelleriSec">Temelleri işaretle</button>
+      <button type="button" class="btn hayalet kucuk tehlike" id="btnHepsiniTemizle">Hepsini temizle</button>
+    </div>
+  </div>
+</section>
+
+<!-- ======================================================== EKRAN: BUGÜN -->
+<section class="ekran" id="ekran-bugun" hidden>
+  <div class="ekran-ic">
+
+    <div id="bosMutfakUyari" class="bilgi-kart sari" hidden>
+      <h2>Önce mutfağını tanıyayım</h2>
+      <p>Evdeki malzemeleri işaretlersen sana ne pişirebileceğini söyleyebilirim.</p>
+      <button type="button" class="btn birincil" data-git="mutfak">Malzemeleri seç</button>
+    </div>
+
+    <div id="oneriAlan" hidden>
+      <div class="filtre-serit" id="filtreSerit">
+        <button type="button" class="filtre-cip aktif" data-filtre="hepsi">Hepsi</button>
+        <button type="button" class="filtre-cip" data-filtre="hizli">⏱ 30 dk altı</button>
+        <button type="button" class="filtre-cip" data-filtre="kolay">👍 Kolay</button>
+        <button type="button" class="filtre-cip" data-filtre="etsiz">🌱 Etsiz</button>
+        <button type="button" class="filtre-cip" data-filtre="firinsiz">🍲 Fırınsız</button>
+      </div>
+
+      <div id="oneriKart"></div>
+
+      <div class="oneri-aksiyon">
+        <button type="button" class="btn birincil buyuk" id="btnTarifiAc">Tarifi aç</button>
+        <button type="button" class="btn ikincil buyuk" id="btnBaskaOner">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h5l3 5M21 7h-5l-7 10H3M21 17h-5"/><path d="M18 4l3 3-3 3M18 14l3 3-3 3"/></svg>
+          Başka bir şey öner
+        </button>
+      </div>
+
+      <div class="bolum" id="bolumYapilabilir">
+        <div class="bolum-baslik">
+          <h3>Şimdi yapabilecekleriniz</h3>
+          <span class="sayac" id="sayacYapilabilir">0</span>
+        </div>
+        <nav class="kat-serit" id="ogunSerit" aria-label="Yemek türü"></nav>
+        <div id="gruplarYapilabilir"></div>
+        <button type="button" class="btn hayalet tam" id="btnDahaFazlaYapilabilir" hidden>Daha fazla göster</button>
+      </div>
+
+      <div class="bolum" id="bolumNerdeyse" hidden>
+        <div class="bolum-baslik">
+          <h3>Neler yapabilirdiniz?</h3>
+          <span class="sayac gri" id="sayacNerdeyse">0</span>
+        </div>
+        <p class="bolum-not">Bir iki malzeme daha olsa bunlar da olurdu.</p>
+        <div class="tarif-izgara" id="listeNerdeyse"></div>
+        <button type="button" class="btn hayalet tam" id="btnDahaFazlaNerdeyse" hidden>Daha fazla göster</button>
+      </div>
+
+      <div class="bilgi-kart yesil ince" id="sonucYokKart" hidden>
+        <h2>Bu filtreyle bir şey çıkmadı</h2>
+        <p>Filtreyi gevşetmeyi ya da birkaç malzeme daha işaretlemeyi dene.</p>
+        <button type="button" class="btn birincil" data-git="mutfak">Malzemeleri düzenle</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ==================================================== EKRAN: FAVORİLER -->
+<section class="ekran" id="ekran-favori" hidden>
+  <div class="ekran-ic">
+    <div class="bilgi-kart pembe">
+      <h2>Favorileriniz</h2>
+      <p>Beğendiğin tarifleri kalple işaretle, hep burada dursunlar.</p>
+    </div>
+    <div class="tarif-izgara" id="listeFavori"></div>
+    <div class="bos-durum" id="favoriBos" hidden>
+      <div class="bos-emoji">💛</div>
+      <p>Henüz favori yok. Bir tarifin sağ üstündeki kalbe dokunman yeterli.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================================================= EKRAN: TÜM TARİFLER -->
+<section class="ekran" id="ekran-tarifler" hidden>
+  <div class="ekran-ic">
+    <div class="arama-satir">
+      <label class="arama-kutu">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <input type="search" id="tarifArama" placeholder="Tarif ara… (örn. dolma)" autocomplete="off" enterkeyhint="search" spellcheck="false">
+        <button type="button" class="temizle-x" id="btnTarifAramaTemizle" hidden aria-label="Aramayı temizle">✕</button>
+      </label>
+    </div>
+    <nav class="kat-serit" id="tarifKatSerit" aria-label="Tarif kategorileri"></nav>
+    <div class="tarif-izgara" id="listeTumTarifler"></div>
+    <button type="button" class="btn hayalet tam" id="btnDahaFazlaTum" hidden>Daha fazla göster</button>
+    <div class="bos-durum" id="tarifBos" hidden>
+      <div class="bos-emoji">🔍</div>
+      <p>Aradığın tarif bulunamadı.</p>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ========================================================== ALT MENÜ -->
+<nav class="alt-menu" id="altMenu" aria-label="Ana menü">
+  <button type="button" class="menu-btn" data-git="bugun">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 11h16v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3z"/><path d="M2 11h20M7 7c0-1.5 1-1.5 1-3M12 7c0-1.5 1-1.5 1-3M17 7c0-1.5 1-1.5 1-3"/></svg>
+    <span>Bugün</span>
+  </button>
+  <button type="button" class="menu-btn" data-git="mutfak">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M4 10h16M8 5V3M16 5V3M9 15h6"/></svg>
+    <span>Mutfağım</span>
+    <em class="rozet" id="rozetMalzeme" hidden>0</em>
+  </button>
+  <button type="button" class="menu-btn" data-git="favori">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.5-7-9.5A3.9 3.9 0 0 1 12 7a3.9 3.9 0 0 1 7 3.5C19 15.5 12 20 12 20z"/></svg>
+    <span>Favoriler</span>
+  </button>
+  <button type="button" class="menu-btn" data-git="tarifler">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
+    <span>Tarifler</span>
+  </button>
+</nav>
+
+<!-- ==================================================== TARİF DETAY PANEL -->
+<div class="panel" id="tarifPanel" hidden role="dialog" aria-modal="true" aria-label="Tarif">
+  <div class="panel-ic">
+    <div class="panel-ust">
+      <button type="button" class="ikon-btn" id="btnPanelKapat" aria-label="Kapat">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <button type="button" class="ikon-btn kalp" id="btnFavori" aria-label="Favorilere ekle" aria-pressed="false">
+        <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.5-7-9.5A3.9 3.9 0 0 1 12 7a3.9 3.9 0 0 1 7 3.5C19 15.5 12 20 12 20z"/></svg>
+      </button>
+    </div>
+    <div class="panel-govde" id="panelGovde"></div>
+    <div class="panel-alt">
+      <button type="button" class="btn birincil buyuk tam" id="btnPisirmeBasla">
+        <svg viewBox="0 0 24 24" width="19" height="19" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5l11 7-11 7z"/></svg>
+        Adım adım pişir
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===================================================== PİŞİRME MODU -->
+<div class="pisirme" id="pisirmePanel" hidden role="dialog" aria-modal="true" aria-label="Pişirme modu">
+  <div class="pisirme-ust">
+    <button type="button" class="ikon-btn" id="btnPisirmeKapat" aria-label="Pişirme modundan çık">
+      <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+    </button>
+    <div class="pisirme-baslik" id="pisirmeBaslik"></div>
+    <div class="ekran-uyanik" id="ekranUyanikRozet" hidden title="Ekran kapanmayacak">👁</div>
+  </div>
+  <div class="pisirme-ilerleme"><div class="pisirme-dolgu" id="pisirmeDolgu"></div></div>
+  <div class="pisirme-govde" id="pisirmeGovde"></div>
+  <div class="pisirme-alt">
+    <button type="button" class="btn ikincil buyuk" id="btnAdimGeri">Geri</button>
+    <span class="adim-sayac" id="adimSayac">1 / 1</span>
+    <button type="button" class="btn birincil buyuk" id="btnAdimIleri">İleri</button>
+  </div>
+</div>
+
+<!-- ========================================================= AYAR PANELİ -->
+<div class="panel dar" id="ayarPanel" hidden role="dialog" aria-modal="true" aria-label="Ayarlar">
+  <div class="panel-ic">
+    <div class="panel-ust">
+      <button type="button" class="ikon-btn" id="btnAyarKapat" aria-label="Kapat">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+      <h2 class="panel-ust-baslik">Ayarlar</h2>
+    </div>
+    <div class="panel-govde" id="ayarGovde"></div>
+  </div>
+</div>
+
+<div class="bildirim" id="bildirim" hidden role="status" aria-live="polite"></div>
+
+<!-- Veri: sürüm + katalog + tarifler. Yeni tarif dosyası eklerken sw.js'deki
+     listeye de eklemeyi unutma (README'de anlatıldı). -->
+<script src="data/malzemeler.js"></script>
+<script src="data/tarifler-corba.js"></script>
+<script src="data/tarifler-sebze.js"></script>
+<script src="data/tarifler-etli.js"></script>
+<script src="data/tarifler-tavuk-balik.js"></script>
+<script src="data/tarifler-bakliyat.js"></script>
+<script src="data/tarifler-pilav-makarna.js"></script>
+<script src="data/tarifler-hamur.js"></script>
+<script src="data/tarifler-kahvalti.js"></script>
+<script src="data/tarifler-salata-meze.js"></script>
+<script src="data/tarifler-tatli.js"></script>
+<script src="data/surum.js"></script>
+
+<!-- Uygulama -->
+<script src="js/depo.js"></script>
+<script src="js/eslestir.js"></script>
+<script src="js/arayuz.js"></script>
+<script src="js/uygulama.js"></script>
+</body>
+</html>
