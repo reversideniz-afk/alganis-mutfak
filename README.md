@@ -39,16 +39,34 @@ node tools/veri-kontrol.js
 
 ## Yayınlama — GitHub Pages
 
-Ücretsiz, kalıcı bir link verir ve her güncellemede aynı link geçerli kalır.
+**Bu adımlar tamamlandı.** Uygulama şu adreste yayında:
+
+```
+https://reversideniz-afk.github.io/alganis-mutfak/
+```
+
+Depo: [github.com/reversideniz-afk/alganis-mutfak](https://github.com/reversideniz-afk/alganis-mutfak)
+
+> ### ⚠️ Aşağıdaki komutlar TERMİNALE yazılır
+>
+> Bu bölümdeki `git ...` satırları **bilgisayarındaki komut satırına** (PowerShell
+> ya da Git Bash) yazılacak komutlardır — GitHub sitesinde dosya içeriği olarak
+> yapıştırılacak metin değil.
+>
+> Windows'ta: proje klasöründe boş bir yere **sağ tık → "Open in Terminal"**,
+> sonra komutları tek tek yapıştırıp Enter.
+
+### İlk kurulum (bir kez yapılır, yapıldı)
+
+<details>
+<summary>Sıfırdan yeni bir depoya yayınlamak istersen adımlar</summary>
 
 **1. GitHub'da boş bir depo aç**
 
 [github.com/new](https://github.com/new) → ad: `alganis-mutfak` → **Public** seç
 → "Add a README" gibi kutuların hiçbirini işaretleme → **Create repository**.
 
-**2. Bu klasörü depoya gönder**
-
-Bu klasörün içinde, sırayla:
+**2. Bu klasörü depoya gönder** — proje klasöründe açtığın terminale:
 
 ```bash
 git init -b main
@@ -78,17 +96,29 @@ Depo sayfasında **Settings** → sol menüden **Pages** →
 *Build and deployment* altında **Source: Deploy from a branch**,
 **Branch: main**, klasör **/ (root)** → **Save**.
 
-1-2 dakika sonra adresin hazır:
+1-2 dakika sonra adres hazır olur.
 
-```
-https://KULLANICI-ADIN.github.io/alganis-mutfak/
-```
+</details>
 
-Bu linki annene gönder. Bir daha değişmeyecek.
+### Önemli: dosyalar deponun KÖKÜNDE olmalı
+
+GitHub Pages yayını deponun kökünden yapar. `index.html` kökte görünmüyorsa
+(örneğin bir alt klasörün içindeyse) adres 404 verir. Depo ana sayfasında
+`index.html`, `css`, `js`, `data`, `icons` doğrudan listeleniyor olmalı.
 
 ---
 
 ## Anneye nasıl anlatılır
+
+Gönderilecek link:
+
+```
+https://reversideniz-afk.github.io/alganis-mutfak/
+```
+
+> `http://localhost:8322` adresi **sadece kendi bilgisayarında** çalışır.
+> `localhost` "bu cihaz" demektir; telefonda açılmaz. Telefona yukarıdaki
+> github.io adresini gönder.
 
 Telefonda linki aç, sonra:
 
