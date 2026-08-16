@@ -1,7 +1,7 @@
-# Alganis Mutfak — "Bugün ne pişirsem?"
+﻿# Alganis Mutfak — "Bugün ne pişirsem?"
 
 Evdeki malzemeleri tıklayarak işaretlersin, uygulama o malzemelerle
-yapabileceğin yemekleri söyler. **283 tarif**, **185 malzeme**.
+yapabileceğin yemekleri söyler. **651 tarif**, **242 malzeme**.
 İnternetsiz çalışır, telefona uygulama gibi kurulur, hiçbir veri toplamaz.
 
 ---
@@ -24,7 +24,7 @@ yapabileceğin yemekleri söyler. **283 tarif**, **185 malzeme**.
 node tools/sunucu.js
 ```
 
-Sonra tarayıcıda `http://localhost:8321` adresini aç.
+Sonra tarayıcıda `http://localhost:8322` adresini aç.
 
 > Dosyayı çift tıklayarak da açabilirsin, uygulama çalışır — ama çevrimdışı
 > katmanı (service worker) yalnızca gerçek bir adres üzerinden devreye girer.
@@ -153,10 +153,10 @@ sürüm numarasını aynı anda artır**:
 
 | Dosya | Satır |
 |---|---|
-| `data/surum.js` | `AM.SURUM = "1.1.0";` |
-| `sw.js` | `const SURUM = "1.1.0";` |
+| `data/surum.js` | `AM.SURUM = "2.0.0";` |
+| `sw.js` | `const SURUM = "2.0.0";` |
 
-Örneğin ikisini de `"1.2.0"` yap, sonra:
+Örneğin ikisini de `"2.1.0"` yap, sonra:
 
 ```bash
 git add . && git commit -m "Tatlı tarifleri eklendi" && git push
@@ -290,9 +290,9 @@ Alganis Mutfak/
 │  ├─ arayuz.js                Kart, tarif, ölçü biçimlendirme
 │  └─ uygulama.js              Ekranlar, olaylar, pişirme modu
 ├─ data/
-│  ├─ malzemeler.js            185 malzeme, kategorili
+│  ├─ malzemeler.js            242 malzeme, kategorili
 │  ├─ surum.js                 Sürüm + kategoriler + öğün grupları  ← SÜRÜM BURADA
-│  └─ tarifler-*.js            283 tarif, 11 dosya
+│  └─ tarifler-*.js            651 tarif, 21 dosya
 ├─ icons/                      PWA ikonları (üretilmiş)
 └─ tools/
    ├─ sunucu.js                Yerel test sunucusu
@@ -304,24 +304,32 @@ Alganis Mutfak/
 
 | Kategori | Adet |
 |---|---:|
-| Çorbalar | 31 |
-| Sebze & Zeytinyağlı | 44 |
-| Etli Yemekler | 34 |
-| Tavuk | 18 |
-| Balık & Deniz | 13 |
-| Bakliyat | 18 |
-| Pilav & Makarna | 26 |
-| Hamur İşi | 26 |
-| Kahvaltılık | 19 |
-| Salata & Meze | 28 |
-| Tatlılar | 26 |
-| **Toplam** | **283** |
+| Çorbalar | 73 |
+| Sebze & Zeytinyağlı | 86 |
+| Etli Yemekler | 76 |
+| Tavuk | 40 |
+| Balık & Deniz | 31 |
+| Bakliyat | 43 |
+| Pilav & Makarna | 61 |
+| Hamur İşi | 66 |
+| Kahvaltılık | 47 |
+| Salata & Meze | 62 |
+| Tatlılar | 66 |
+| **Toplam** | **651** |
+
+Her kategorinin tarifleri iki dosyaya bölünmüştür: `tarifler-<kategori>.js`
+temel/klasik tarifleri, `tarifler-<kategori>-2.js` ise yöresel ve daha az
+bilinen tarifleri içerir. İkisi de aynı şemayı kullanır.
 
 ---
 
 ## Tarifler hakkında
 
-Ölçüler Türk ev mutfağının yerleşik oranlarına dayanıyor; kritik olanlar
+Ağırlık Türk ev mutfağında; yöresel tarifler (Gaziantep beyranı, Erzurum cağ
+kebabı, Van gırar çorbası, Karadeniz hamsi kuşu, Ege ot yemekleri, Yozgat
+arabaşısı gibi) çeşitliliğin büyük kısmını oluşturuyor.
+
+Ölçüler yerleşik ev mutfağı oranlarına dayanıyor; kritik olanlar
 (pilav su oranı, sütlaç süt-pirinç oranı, kısır bulgur-su oranı, mantı hamuru,
 şerbet oranları) yaygın kaynaklarla karşılaştırılarak yazıldı. Yine de her
 mutfak, her ocak ve her malzeme farklıdır — tarifler başlangıç noktasıdır,

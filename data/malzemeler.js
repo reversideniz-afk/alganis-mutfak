@@ -228,5 +228,82 @@ AM.MALZEMELER = [
   ["hardal",            "Hardal",                 "kiler", 0],
   ["kahve",             "Kahve",                  "kiler", 0, "nescafe turk kahvesi"],
   ["dondurma",          "Dondurma",               "kiler", 0],
-  ["kadayif",           "Tel kadayıf",            "kiler", 0]
+  ["kadayif",           "Tel kadayıf",            "kiler", 0],
+
+  /* ==========================================================================
+     EK MALZEMELER — yöresel tarifler için sonradan eklendi.
+     Ekranda gruplama listedeki sıraya değil "kategori" alanına baktığı için
+     bunlar kendi başlıkları altında görünür, sona eklenmiş olmaları sorun değil.
+     ========================================================================== */
+
+  /* --- otlar ve daha az bilinen sebzeler --- */
+  ["isirgan",           "Isırgan otu",            "yesillik", 0],
+  ["radika",            "Radika / hindiba",       "yesillik", 0],
+  ["arapsaci",          "Arapsaçı",               "yesillik", 0, "rezene otu"],
+  ["labada",            "Labada / evelik",        "yesillik", 0],
+  ["ebegumeci",         "Ebegümeci",              "yesillik", 0],
+  ["madimak",           "Madımak",                "yesillik", 0],
+  ["turp-otu",          "Turp otu / hardal otu",  "yesillik", 0],
+  ["sevketi-bostan",    "Şevketi bostan",         "sebze", 0],
+  ["deniz-borulcesi",   "Deniz börülcesi",        "sebze", 0],
+  ["kuskonmaz",         "Kuşkonmaz",              "sebze", 0],
+  ["yer-elmasi",        "Yer elması",             "sebze", 0],
+  ["bruksel-lahanasi",  "Brüksel lahanası",       "sebze", 0],
+  ["kereviz-sapi",      "Kereviz sapı",           "sebze", 0],
+  ["acur",              "Acur",                   "sebze", 0],
+  ["kabak-cicegi",      "Kabak çiçeği",           "sebze", 0],
+  ["kuru-bamya",        "Kuru bamya",             "sebze", 0],
+
+  /* --- et, sakatat, kümes, deniz --- */
+  ["hindi",             "Hindi",                  "et", 0],
+  ["kaz",               "Kaz / ördek",            "et", 0],
+  ["bonfile",           "Bonfile / antrikot",     "et", 0],
+  ["iskembe",           "İşkembe",                "et", 0],
+  ["kuzu-kelle",        "Kelle / paça",           "et", 0],
+  ["kurutulmus-et",     "Kurutulmuş et",          "et", 0],
+  ["sardalya",          "Sardalya",               "et", 0],
+  ["istavrit",          "İstavrit",               "et", 0],
+  ["lufer",             "Lüfer",                  "et", 0],
+  ["kefal",             "Kefal",                  "et", 0],
+  ["ahtapot",           "Ahtapot",                "et", 0],
+
+  /* --- süt ürünleri --- */
+  ["otlu-peynir",       "Otlu peynir",            "sut", 0],
+  ["cokelek",           "Çökelek",                "sut", 0],
+  ["dil-peyniri",       "Dil peyniri",            "sut", 0],
+  ["keci-peyniri",      "Keçi peyniri",           "sut", 0],
+  ["kefir",             "Kefir",                  "sut", 0],
+
+  /* --- tahıl, un, hamur --- */
+  ["firik",             "Firik",                  "bakliyat", 0, "yesil bugday"],
+  ["yarma",             "Yarma buğday",           "bakliyat", 0],
+  ["kus-dili",          "Kuş dili şehriye",       "bakliyat", 0],
+  ["gullac-yapragi",    "Güllaç yaprağı",         "bakliyat", 0],
+  ["milfoy",            "Milföy hamuru",          "bakliyat", 0],
+
+  /* --- baharat ve aroma --- */
+  ["mahlep",            "Mahlep",                 "baharat", 0],
+  ["damla-sakizi",      "Damla sakızı",           "baharat", 0],
+  ["gul-suyu",          "Gül suyu",               "baharat", 0],
+  ["sahlep",            "Salep",                  "baharat", 0],
+  ["hashas",            "Haşhaş",                 "baharat", 0],
+  ["limon-tuzu",        "Limon tuzu",             "baharat", 0],
+
+  /* --- meyve ve kuruyemiş --- */
+  ["erik",              "Erik",                   "meyve", 0],
+  ["kiraz",             "Kiraz",                  "meyve", 0],
+  ["dut",               "Dut",                    "meyve", 0],
+  ["armut",             "Armut",                  "meyve", 0],
+  ["kavun",             "Kavun",                  "meyve", 0],
+  ["karpuz",            "Karpuz",                 "meyve", 0],
+  ["mandalina",         "Mandalina",              "meyve", 0],
+  ["kizilcik",          "Kızılcık",               "meyve", 0],
+  ["kuru-dut",          "Kuru dut",               "meyve", 0],
+  ["kabak-cekirdegi",   "Kabak / ay çekirdeği",   "meyve", 0],
+
+  /* --- kiler --- */
+  ["kapari",            "Kapari",                 "kiler", 0],
+  ["recel",             "Reçel",                  "kiler", 0],
+  ["jelatin",           "Jelatin / toz jöle",     "kiler", 0],
+  ["ketcap",            "Ketçap",                 "kiler", 0]
 ];

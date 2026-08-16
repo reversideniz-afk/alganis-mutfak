@@ -11,7 +11,7 @@
 
 window.AM = window.AM || {};
 
-AM.SURUM = "1.1.0";
+AM.SURUM = "2.0.0";
 
 AM.TARIF_KATEGORILERI = [
   { id: "corba",    ad: "Çorbalar",            emoji: "🍜" },
@@ -69,7 +69,14 @@ AM.ARA_SICAKLAR = [
   "sigara-boregi", "muska-boregi", "cig-borek", "talas-boregi", "pisi",
   "mucver", "mantar-sote", "patlican-kizartma", "karnabahar-graten",
   "citir-tavuk", "kalamar-tava", "icli-kofte", "arnavut-cigeri",
-  "firinda-citir-nohut", "misir-sote", "tavuk-schnitzel"
+  "firinda-citir-nohut", "misir-sote", "tavuk-schnitzel",
+  /* 2. bölümden eklenenler */
+  "pacanga-boregi", "avci-boregi", "milfoy-peynirli-borek", "puf-borek",
+  "kasarli-milfoy-cubuk", "sarimsakli-ekmek", "patates-koftesi",
+  "karnabahar-kizartmasi", "karnabahar-mucveri", "pirasa-koftesi",
+  "biber-kizartmasi", "kabak-kizartmasi", "kumpir", "midye-tava",
+  "karides-tava", "istavrit-tava", "hamsi-kusu", "tavuk-cigeri-tava",
+  "susamli-tavuk", "sebzeli-milfoy-tart", "firinda-yumurta-kokotel"
 ];
 
 (function () {

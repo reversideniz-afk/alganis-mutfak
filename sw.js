@@ -14,7 +14,7 @@
    değişmez, kimsenin bir şey yüklemesi gerekmez.
    ========================================================================== */
 
-const SURUM = "1.1.0";
+const SURUM = "2.0.0";
 const ONBELLEK = "alganis-mutfak-v" + SURUM;
 
 const DOSYALAR = [
@@ -24,15 +24,25 @@ const DOSYALAR = [
   "./css/style.css",
   "./data/malzemeler.js",
   "./data/tarifler-corba.js",
+  "./data/tarifler-corba-2.js",
   "./data/tarifler-sebze.js",
+  "./data/tarifler-sebze-2.js",
   "./data/tarifler-etli.js",
+  "./data/tarifler-etli-2.js",
   "./data/tarifler-tavuk-balik.js",
+  "./data/tarifler-tavuk-balik-2.js",
   "./data/tarifler-bakliyat.js",
+  "./data/tarifler-bakliyat-2.js",
   "./data/tarifler-pilav-makarna.js",
+  "./data/tarifler-pilav-makarna-2.js",
   "./data/tarifler-hamur.js",
+  "./data/tarifler-hamur-2.js",
   "./data/tarifler-kahvalti.js",
+  "./data/tarifler-kahvalti-2.js",
   "./data/tarifler-salata-meze.js",
+  "./data/tarifler-salata-meze-2.js",
   "./data/tarifler-tatli.js",
+  "./data/tarifler-tatli-2.js",
   "./data/surum.js",
   "./js/depo.js",
   "./js/eslestir.js",

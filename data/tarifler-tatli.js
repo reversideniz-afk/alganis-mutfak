@@ -361,9 +361,10 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
   ip:"Fırın yok, şeker yok, 25 dakika. Buzdolabında iki hafta durur." },
 
 { id:"meyve-salatasi", ad:"Ballı Meyve Salatası", kat:"tatli", em:"🍓", sure:20, zor:1, por:4,
-  m:[["elma|muz|portakal",3,"adet","ana","ne varsa, karışık"],
+  m:[["elma|muz|portakal|mandalina",3,"adet","ana","ne varsa, karışık"],
      ["uzum",1,"su bardağı","yrd"],["seftali|kayisi",2,"adet","yrd"],
-     ["cilek",1,"su bardağı","ops"],["incir",2,"adet","ops"],["nar",null,"taneleri","ops"],
+     ["cilek|kiraz|dut",1,"su bardağı","ops"],["kavun|karpuz",2,"dilim","ops"],
+     ["incir",2,"adet","ops"],["nar",null,"taneleri","ops"],
      ["bal|pekmez",2,"yemek kaşığı","yrd"],["limon",0.5,"adet","yrd"],
      ["ceviz|findik",2,"yemek kaşığı","ops"],["tarcin",null,"bir tutam","ops"],
      ["yogurt",null,"servis için","ops"]],

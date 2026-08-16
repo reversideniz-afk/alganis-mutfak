@@ -17,20 +17,15 @@ const path = require("path");
 const vm = require("vm");
 
 const kok = path.join(__dirname, "..");
-const dosyalar = [
-  "data/malzemeler.js",
-  "data/surum.js",
-  "data/tarifler-corba.js",
-  "data/tarifler-sebze.js",
-  "data/tarifler-etli.js",
-  "data/tarifler-tavuk-balik.js",
-  "data/tarifler-bakliyat.js",
-  "data/tarifler-pilav-makarna.js",
-  "data/tarifler-hamur.js",
-  "data/tarifler-kahvalti.js",
-  "data/tarifler-salata-meze.js",
-  "data/tarifler-tatli.js"
-];
+
+/* Tarif dosyaları klasörden otomatik bulunur; yeni bir dosya eklediğinde
+   bu listeyi güncellemen gerekmez. */
+const tarifDosyalari = fs.readdirSync(path.join(kok, "data"))
+  .filter((d) => /^tarifler-.*\.js$/.test(d))
+  .sort()
+  .map((d) => "data/" + d);
+
+const dosyalar = ["data/malzemeler.js", "data/surum.js"].concat(tarifDosyalari);
 
 const kapsam = { window: {} };
 kapsam.window.window = kapsam.window;
