@@ -1,7 +1,7 @@
 ﻿# Alganis Mutfak — "Bugün ne pişirsem?"
 
 Evdeki malzemeleri tıklayarak işaretlersin, uygulama o malzemelerle
-yapabileceğin yemekleri söyler. **651 tarif**, **242 malzeme**.
+yapabileceğin yemekleri söyler. **869 tarif**, **242 malzeme**.
 İnternetsiz çalışır, telefona uygulama gibi kurulur, hiçbir veri toplamaz.
 
 ---
@@ -141,8 +141,18 @@ türe göre daralır — "bugün canım çorba istiyor" dendiğinde tek dokunuş
 Seçimler telefonda kalır. Uygulama kapanıp açıldığında bir daha malzeme sormaz,
 doğrudan öneriyi gösterir.
 
-Ayarlardan görünüm **Gün ışığı** (varsayılan, beyaz ve aydınlık), **Gece** ya da
-**Telefona uy** olarak değiştirilebilir; yazı boyutu üç kademelidir.
+Sağ üstteki **⚙ Ayarlar** düğmesinden şunlar değiştirilebilir:
+
+| Ayar | Seçenekler |
+|---|---|
+| Görünüm | Gün ışığı (varsayılan) · Gece · Telefona uy |
+| Renk paleti | Domates · Zeytin · Patlıcan · Deniz · Gül kurusu · Bal köpüğü · **Yüksek kontrast** |
+| Yazı boyutu | Normal · Büyük · Çok büyük |
+| Öneri davranışı | Ufak eksiklere göz yum (açık/kapalı) |
+| Ölçü cetveli | Su bardağı, kaşık ve paket karşılıkları tablosu |
+
+**Yüksek kontrast** paleti gözü yorulanlar için: siyah-beyaza yakın, kalın
+çerçeveli, doodle'sız. Tema seçiminden bağımsız çalışır.
 
 ---
 
@@ -153,10 +163,10 @@ sürüm numarasını aynı anda artır**:
 
 | Dosya | Satır |
 |---|---|
-| `data/surum.js` | `AM.SURUM = "2.0.0";` |
-| `sw.js` | `const SURUM = "2.0.0";` |
+| `data/surum.js` | `AM.SURUM = "2.1.0";` |
+| `sw.js` | `const SURUM = "2.1.0";` |
 
-Örneğin ikisini de `"2.1.0"` yap, sonra:
+Örneğin ikisini de `"2.2.0"` yap, sonra:
 
 ```bash
 git add . && git commit -m "Tatlı tarifleri eklendi" && git push
@@ -292,7 +302,7 @@ Alganis Mutfak/
 ├─ data/
 │  ├─ malzemeler.js            242 malzeme, kategorili
 │  ├─ surum.js                 Sürüm + kategoriler + öğün grupları  ← SÜRÜM BURADA
-│  └─ tarifler-*.js            651 tarif, 21 dosya
+│  └─ tarifler-*.js            869 tarif, 31 dosya
 ├─ icons/                      PWA ikonları (üretilmiş)
 └─ tools/
    ├─ sunucu.js                Yerel test sunucusu
@@ -304,22 +314,20 @@ Alganis Mutfak/
 
 | Kategori | Adet |
 |---|---:|
-| Çorbalar | 73 |
-| Sebze & Zeytinyağlı | 86 |
-| Etli Yemekler | 76 |
-| Tavuk | 40 |
-| Balık & Deniz | 31 |
-| Bakliyat | 43 |
-| Pilav & Makarna | 61 |
-| Hamur İşi | 66 |
-| Kahvaltılık | 47 |
-| Salata & Meze | 62 |
-| Tatlılar | 66 |
-| **Toplam** | **651** |
+| Çorbalar | 93 |
+| Sebze & Zeytinyağlı | 112 |
+| Etli Yemekler | 103 |
+| Tavuk | 55 |
+| Balık & Deniz | 39 |
+| Bakliyat | 55 |
+| Pilav & Makarna | 81 |
+| Hamur İşi | 86 |
+| Kahvaltılık | 62 |
+| Salata & Meze | 77 |
+| Tatlılar | 106 |
+| **Toplam** | **869** |
 
-Her kategorinin tarifleri iki dosyaya bölünmüştür: `tarifler-<kategori>.js`
-temel/klasik tarifleri, `tarifler-<kategori>-2.js` ise yöresel ve daha az
-bilinen tarifleri içerir. İkisi de aynı şemayı kullanır.
+Her kategorinin tarifleri üç dosyaya bölünmüştür: `tarifler-<kategori>.js` temel ve klasik tarifler, `-2.js` yöresel ve daha az bilinenler, `-3.js` pratik akşam yemekleri ve ek tarifler. Üçü de aynı şemayı kullanır.
 
 ---
 

@@ -24,36 +24,42 @@
     tolerans: true,   // ufak eksiklere göz yum
     yazi: "n",        // n | b | cb
     tema: "gunisigi", // gunisigi | gece | sistem
+    palet: "domates", // renk paleti (bkz. GECERLI_PALETLER)
     ogun: "hepsi"     // "Bugün" ekranındaki yemek türü seçimi
   };
+
+  /* Ayarlardaki renk paletleri. css/style.css içindeki [data-palet] blokları
+     ve js/uygulama.js içindeki PALETLER listesiyle aynı sırada tutulmalı. */
+  var GECERLI_PALETLER = [
+    "domates", "zeytin", "patlican", "deniz", "gul", "bal", "kontrast"
+  ];
 
   var durum = null;
 
   /* --- yardımcılar ------------------------------------------------------- */
 
-  function guvenliDizi(deger, gecerliKume, enFazla) {
+  /**
+   * Kayıttan okunan id listesini temizler.
+   *
+   * ÖNEMLİ — bilerek katalogla karşılaştırma YAPILMIYOR:
+   * Bir malzeme ya da tarif ileride katalogdan çıkarılırsa veya yeniden
+   * adlandırılırsa, kullanıcının o seçimi silinmemeli. Tanınmayan id'ler
+   * saklanır ama hiçbir tarifle eşleşmez; ekranlar her zaman katalogdan
+   * çizildiği için de hiçbir yerde görünmezler. Böylece bir sonraki sürümde
+   * malzeme geri gelirse seçim de geri gelir.
+   * (Sürüm 2.0.0'da 12 malzeme çıkarılmış ve o seçimler sessizce kaybolmuştu.)
+   */
+  function guvenliDizi(deger, enFazla) {
     if (!Array.isArray(deger)) return [];
     var sonuc = [];
     for (var i = 0; i < deger.length && sonuc.length < enFazla; i++) {
       var d = deger[i];
-      // Sadece string ve sadece bilinen id'ler kabul edilir.
-      if (typeof d === "string" && gecerliKume.has(d) && sonuc.indexOf(d) === -1) {
+      if (typeof d === "string" && d.length > 0 && d.length <= 64 &&
+          sonuc.indexOf(d) === -1) {
         sonuc.push(d);
       }
     }
     return sonuc;
-  }
-
-  function malzemeKumesi() {
-    var k = new Set();
-    (AM.MALZEMELER || []).forEach(function (m) { k.add(m[0]); });
-    return k;
-  }
-
-  function tarifKumesi() {
-    var k = new Set();
-    (AM.TARIFLER || []).forEach(function (t) { k.add(t.id); });
-    return k;
   }
 
   function temelSepet() {
@@ -73,18 +79,16 @@
     }
     if (!d || typeof d !== "object" || Array.isArray(d)) d = {};
 
-    var mKume = malzemeKumesi();
-    var tKume = tarifKumesi();
-
     durum = {
       s: SEMA,
-      sepet: Array.isArray(d.sepet) ? guvenliDizi(d.sepet, mKume, 400) : null,
-      fav: guvenliDizi(d.fav, tKume, 500),
+      sepet: Array.isArray(d.sepet) ? guvenliDizi(d.sepet, 600) : null,
+      fav: guvenliDizi(d.fav, 600),
       filtre: typeof d.filtre === "string" ? d.filtre : varsayilan.filtre,
       oneriIx: (typeof d.oneriIx === "number" && isFinite(d.oneriIx)) ? Math.abs(d.oneriIx | 0) : 0,
       tolerans: d.tolerans === false ? false : true,
       yazi: (d.yazi === "b" || d.yazi === "cb") ? d.yazi : "n",
       tema: (d.tema === "gece" || d.tema === "sistem") ? d.tema : "gunisigi",
+      palet: GECERLI_PALETLER.indexOf(d.palet) !== -1 ? d.palet : "domates",
       ogun: typeof d.ogun === "string" ? d.ogun : "hepsi"
     };
     return durum;
@@ -123,7 +127,7 @@
     },
 
     sepetKur: function (idler) {
-      durum.sepet = guvenliDizi(idler, malzemeKumesi(), 400);
+      durum.sepet = guvenliDizi(idler, 600);
       kaydet();
     },
 
@@ -167,6 +171,12 @@
       if (yeni !== undefined) { durum.tema = yeni; kaydet(); }
       return durum.tema;
     },
+    palet: function (yeni) {
+      if (yeni !== undefined && GECERLI_PALETLER.indexOf(yeni) !== -1) {
+        durum.palet = yeni; kaydet();
+      }
+      return durum.palet;
+    },
     ogun: function (yeni) {
       if (yeni !== undefined) { durum.ogun = String(yeni); durum.oneriIx = 0; kaydet(); }
       return durum.ogun;
@@ -178,7 +188,7 @@
       durum = {
         s: SEMA, sepet: null, fav: [], filtre: "hepsi",
         oneriIx: 0, tolerans: true, yazi: "n",
-        tema: "gunisigi", ogun: "hepsi"
+        tema: "gunisigi", palet: "domates", ogun: "hepsi"
       };
     },
 

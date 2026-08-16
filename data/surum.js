@@ -11,7 +11,7 @@
 
 window.AM = window.AM || {};
 
-AM.SURUM = "2.0.0";
+AM.SURUM = "2.1.0";
 
 AM.TARIF_KATEGORILERI = [
   { id: "corba",    ad: "Çorbalar",            emoji: "🍜" },

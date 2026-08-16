@@ -11,17 +11,17 @@
    ileride renk değiştirmek istediğinde iki yeri güncellemek zorunda kalma. */
 
 :root {
-  /* Marka renkleri — her iki temada da aynı.
-     Bunlar DOLGU renkleridir (düğme/rozet zemini, üzerine beyaz yazı gelir);
-     beyaz metinle kontrastları 4.5:1'in üzerinde tutuldu. Zemin üzerine YAZI
-     olarak kullanılan kırmızı ayrı: --vurgu-kirmizi (temaya göre değişir). */
-  --kirmizi:      #CB431A;
-  --kirmizi-koyu: #A8330E;
-  --turuncu:      #F5843C;
-  --sari:         #F7BE4B;
+  /* Marka renkleri seçili PALETTEN gelir (bkz. aşağıdaki [data-palet] blokları).
+     --marka DOLGU rengidir (düğme/rozet zemini, üzerine beyaz yazı gelir) ve
+     beyaz metinle kontrastı 4.5:1'in üzerinde tutulur.
+     --marka-acik ise koyu zeminde YAZI olarak kullanılan açık tondur. */
+  --kirmizi:      var(--marka);
+  --kirmizi-koyu: var(--marka-koyu);
+  --turuncu:      var(--grad-2);
+  --sari:         var(--grad-3);
   --yesil:        #4F7F31;
   --yesil-koyu:   #3D6626;
-  --mor:          #7E4E82;
+  --mor:          var(--ikincil);
   --pembe:        #D14E6B;
 
   /* gün ışığı teması */
@@ -39,7 +39,7 @@
   --pembe-acik:   #FDE8ED;
   --vurgu-yesil:   #3D6626;
   --vurgu-sari:    #7D5100;
-  --vurgu-kirmizi: #CB431A;
+  --vurgu-kirmizi: var(--marka);
   --hosgeldin-zemin: rgba(255, 255, 255, .72);
 
   --golge:        0 1px 3px rgba(76, 58, 40, .06), 0 6px 16px rgba(76, 58, 40, .05);
@@ -73,7 +73,7 @@
   --pembe-acik:   #40232A;
   --vurgu-yesil:   #B6DE92;
   --vurgu-sari:    #F3C775;
-  --vurgu-kirmizi: #F2884F;
+  --vurgu-kirmizi: var(--marka-acik);
   --hosgeldin-zemin: rgba(0, 0, 0, .24);
   --golge:        0 2px 10px rgba(0, 0, 0, .35);
   --golge-kart:   0 4px 18px rgba(0, 0, 0, .42);
@@ -109,6 +109,89 @@
                       rgba(242, 180, 65, 0) 65%);
   }
 }
+
+/* ---------------------------------------------------------------- PALETLER
+   Ayarlardan seçilir, <html data-palet="…"> üzerine yazılır.
+   Her palet üç ton tanımlar:
+     --marka       dolgu rengi (düğme/rozet zemini) — ÜZERİNE BEYAZ YAZI GELİR,
+                   bu yüzden beyazla kontrastı 4.5:1'in üstünde seçildi
+     --marka-koyu  basılı/vurgulu hali
+     --marka-acik  koyu zeminde yazı rengi olarak kullanılan açık ton
+   Artı üst başlık gradyanı (--grad-1/2/3) ve ikincil vurgu (--ikincil).
+   Bu bloklar tema bloklarından SONRA gelir; "kontrast" paletinin nötr renkleri
+   de ezebilmesi için sıralama önemli. */
+
+:root,
+:root[data-palet="domates"] {
+  --marka: #CB431A;  --marka-koyu: #A8330E;  --marka-acik: #F2884F;
+  --grad-1: #CB431A; --grad-2: #F5843C;      --grad-3: #F7BE4B;
+  --ikincil: #7E4E82;
+  --doodle-renk: #D9822B;
+}
+:root[data-palet="zeytin"] {
+  --marka: #4A7A2B;  --marka-koyu: #38601F;  --marka-acik: #A8D179;
+  --grad-1: #4A7A2B; --grad-2: #7BA83F;      --grad-3: #C3D46A;
+  --ikincil: #6E7F3A;
+  --doodle-renk: #6B8F3C;
+}
+:root[data-palet="patlican"] {
+  --marka: #6B3A78;  --marka-koyu: #522B5C;  --marka-acik: #C79BD1;
+  --grad-1: #6B3A78; --grad-2: #8E5A9C;      --grad-3: #C98BB8;
+  --ikincil: #8A5A8F;
+  --doodle-renk: #8B5A9C;
+}
+:root[data-palet="deniz"] {
+  --marka: #1F5F84;  --marka-koyu: #17475F;  --marka-acik: #79BEDD;
+  --grad-1: #1F5F84; --grad-2: #3B87A8;      --grad-3: #6FBFCB;
+  --ikincil: #3E6E8C;
+  --doodle-renk: #2E7DA0;
+}
+:root[data-palet="gul"] {
+  --marka: #A83E5C;  --marka-koyu: #86304A;  --marka-acik: #E895AC;
+  --grad-1: #A83E5C; --grad-2: #D06A82;      --grad-3: #E9A3A8;
+  --ikincil: #8A4E77;
+  --doodle-renk: #C2607C;
+}
+:root[data-palet="bal"] {
+  --marka: #9A6212;  --marka-koyu: #7A4C0B;  --marka-acik: #F0C264;
+  --grad-1: #9A6212; --grad-2: #C98A2A;      --grad-3: #F0C264;
+  --ikincil: #8A6A3A;
+  --doodle-renk: #B5822C;
+}
+
+/* Yüksek kontrast: gözü yorulanlar için. Nötr renkleri de ezer, doodle'ları
+   kapatır ve çerçeveleri kalınlaştırır. Tema seçiminden bağımsız çalışır. */
+:root[data-palet="kontrast"] {
+  --marka: #000000;  --marka-koyu: #000000;  --marka-acik: #FFE066;
+  --grad-1: #1A1A1A; --grad-2: #2E2E2E;      --grad-3: #454545;
+  --ikincil: #000000;
+
+  --zemin: #FFFFFF;  --kagit: #FFFFFF;       --kagit-2: #F0F0F0;
+  --metin: #000000;  --metin-orta: #1F1F1F;  --metin-soluk: #3A3A3A;
+  --cizgi: #767676;
+
+  --sari-acik: #FFF2CC;  --yesil-acik: #E2F0D9;
+  --mor-acik: #EFE4F2;   --pembe-acik: #FBE4E9;
+  --vurgu-yesil: #145200;  --vurgu-sari: #4A3000;  --vurgu-kirmizi: #A30000;
+  --yesil: #1F5C00;        --yesil-koyu: #143D00;
+  --hosgeldin-zemin: #F0F0F0;
+
+  --golge: 0 0 0 1px rgba(0, 0, 0, .12);
+  --golge-kart: 0 0 0 1px rgba(0, 0, 0, .16);
+  --doodle-op: 0;
+  --gunisigi: none;
+}
+:root[data-palet="kontrast"] .cip,
+:root[data-palet="kontrast"] .kat-cip,
+:root[data-palet="kontrast"] .filtre-cip,
+:root[data-palet="kontrast"] .tarif-kart,
+:root[data-palet="kontrast"] .malzeme-satir,
+:root[data-palet="kontrast"] .adim,
+:root[data-palet="kontrast"] .arama-kutu,
+:root[data-palet="kontrast"] .hero,
+:root[data-palet="kontrast"] .ayar-satir,
+:root[data-palet="kontrast"] .btn.ikincil,
+:root[data-palet="kontrast"] .btn.hayalet { border-width: 2px; }
 
 * { box-sizing: border-box; }
 
@@ -670,6 +753,73 @@ main { position: relative; z-index: 1; }
 .anahtar[aria-pressed="true"]::after { transform: translateX(20px); }
 .ayar-not { font-size: 13px; color: var(--metin-soluk); line-height: 1.6; margin-top: 14px; }
 .ayar-not code { background: var(--kagit); padding: 1px 5px; border-radius: 5px; font-size: 12px; }
+
+/* ----------------------------------------------------------- palet seçici */
+.palet-izgara {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(96px, 1fr));
+  gap: 9px;
+}
+.palet-btn {
+  border: 2px solid var(--cizgi);
+  background: var(--kagit);
+  border-radius: var(--r-m);
+  padding: 9px 8px 8px;
+  cursor: pointer;
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  min-height: 74px;
+  font-size: 12.5px; font-weight: 700; color: var(--metin-orta);
+}
+.palet-btn[aria-pressed="true"] {
+  border-color: var(--metin);
+  color: var(--metin);
+  box-shadow: inset 0 0 0 1px var(--metin);
+}
+.palet-ornek {
+  display: flex; border-radius: 999px; overflow: hidden;
+  width: 62px; height: 20px;
+  border: 1px solid rgba(0, 0, 0, .12);
+}
+.palet-ornek i { flex: 1; }
+
+/* ------------------------------------------------------------ ölçü cetveli */
+.olcu-tablo {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: calc(14px * var(--olcek, 1));
+  background: var(--kagit);
+  border: 1.5px solid var(--cizgi);
+  border-radius: var(--r-m);
+  overflow: hidden;
+}
+.olcu-tablo caption {
+  caption-side: top;
+  text-align: left;
+  font-size: 13px; font-weight: 800; letter-spacing: .05em;
+  text-transform: uppercase; color: var(--metin-soluk);
+  padding: 14px 0 7px;
+}
+.olcu-tablo th, .olcu-tablo td {
+  padding: 9px 12px;
+  border-bottom: 1px solid var(--cizgi);
+  text-align: left;
+}
+.olcu-tablo tr:last-child th, .olcu-tablo tr:last-child td { border-bottom: 0; }
+.olcu-tablo th { font-weight: 600; color: var(--metin); }
+.olcu-tablo td { text-align: right; white-space: nowrap; font-weight: 700; color: var(--vurgu-yesil); }
+
+/* ------------------------------------------------ üst bardaki Ayarlar tuşu */
+.ayar-btn {
+  flex: none;
+  display: flex; align-items: center; gap: 6px;
+  height: 40px; padding: 0 13px 0 10px;
+  border: 0; border-radius: 999px;
+  background: rgba(255, 255, 255, .22);
+  color: inherit;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer;
+}
+.ayar-btn:active { transform: scale(.95); }
 
 /* ---------------------------------------------------------- bildirim */
 .bildirim {
