@@ -114,6 +114,20 @@ const katSayilari = {};
   });
 });
 
+/* --- ara sıcak listesi: yazım hatası olan id var mı? --------------------- */
+(AM.ARA_SICAKLAR || []).forEach(function (id) {
+  if (!tarifIdler.has(id)) {
+    hatalar.push('ARA_SICAKLAR: "' + id + '" diye bir tarif yok (yazım hatası?)');
+  }
+});
+
+/* --- öğün gruplarının dağılımı (bilgi) ----------------------------------- */
+var grupSayilari = {};
+(AM.TARIFLER || []).forEach(function (t) {
+  var g = AM.grupBul(t);
+  grupSayilari[g] = (grupSayilari[g] || 0) + 1;
+});
+
 /* --- kullanılmayan malzemeler (uyarı) ------------------------------------ */
 malzemeIdler.forEach((id) => {
   if (!kullanilan.has(id)) uyarilar.push(`Malzeme "${id}" hiçbir tarifte kullanılmıyor`);
@@ -128,6 +142,12 @@ console.log("");
 console.log("Kategoriye göre:");
 AM.TARIF_KATEGORILERI.forEach((k) => {
   console.log("  " + k.ad.padEnd(24, ".") + " " + (katSayilari[k.id] || 0));
+});
+
+console.log("");
+console.log("Öğün grubuna göre (Bugün ekranı):");
+AM.OGUN_GRUPLARI.forEach(function (g) {
+  console.log("  " + g.ad.padEnd(24, ".") + " " + (grupSayilari[g.id] || 0));
 });
 
 if (uyarilar.length) {

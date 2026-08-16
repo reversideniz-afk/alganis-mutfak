@@ -14,7 +14,7 @@
    değişmez, kimsenin bir şey yüklemesi gerekmez.
    ========================================================================== */
 
-const SURUM = "2.1.1";
+const SURUM = "2.1.2";
 const ONBELLEK = "alganis-mutfak-v" + SURUM;
 
 const DOSYALAR = [
