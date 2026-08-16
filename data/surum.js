@@ -1,4 +1,4 @@
-/* ============================================================================
+﻿/* ============================================================================
    SÜRÜM VE TARİF KATEGORİLERİ
 
    YENİ SÜRÜM YAYINLARKEN:
@@ -11,7 +11,7 @@
 
 window.AM = window.AM || {};
 
-AM.SURUM = "2.1.0";
+AM.SURUM = "2.1.1";
 
 AM.TARIF_KATEGORILERI = [
   { id: "corba",    ad: "Çorbalar",            emoji: "🍜" },

@@ -1,4 +1,4 @@
-/* ============================================================================
+﻿/* ============================================================================
    SERVICE WORKER — çevrimdışı çalışma ve sessiz güncelleme
 
    NASIL ÇALIŞIR
@@ -14,7 +14,7 @@
    değişmez, kimsenin bir şey yüklemesi gerekmez.
    ========================================================================== */
 
-const SURUM = "2.1.0";
+const SURUM = "2.1.1";
 const ONBELLEK = "alganis-mutfak-v" + SURUM;
 
 const DOSYALAR = [
@@ -63,13 +63,33 @@ const DOSYALAR = [
   "./icons/icon-maskable-512.png"
 ];
 
-/* --- kurulum: bütün dosyaları önbelleğe al ------------------------------- */
+/* --- kurulum: bütün dosyaları önbelleğe al -------------------------------
+   Dosyalar TEK TEK indiriliyor. cache.addAll() atomiktir: tek bir dosya
+   inmezse hiçbiri kaydedilmez ve kullanıcı çevrimdışı açamaz hale gelir.
+   Zayıf bağlantıda ilk kurulumun yarım kalmaması için her dosya ayrı
+   deneniyor; inmeyenler zaten fetch olayında ilk kullanımda tamamlanır. */
+async function dosyalariIndir() {
+  const onbellek = await caches.open(ONBELLEK);
+  const basarisiz = [];
+
+  await Promise.all(DOSYALAR.map(async (yol) => {
+    try {
+      const cevap = await fetch(yol, { cache: "reload" });
+      if (cevap && cevap.ok) await onbellek.put(yol, cevap);
+      else basarisiz.push(yol);
+    } catch (e) {
+      basarisiz.push(yol);
+    }
+  }));
+
+  if (basarisiz.length) {
+    console.warn("[Alganis Mutfak] önbelleğe alınamayan dosyalar:", basarisiz);
+  }
+  return basarisiz;
+}
+
 self.addEventListener("install", (olay) => {
-  olay.waitUntil(
-    caches.open(ONBELLEK)
-      .then((onbellek) => onbellek.addAll(DOSYALAR))
-      .catch(() => { /* tek bir dosya inmezse kurulum yine de sürsün */ })
-  );
+  olay.waitUntil(dosyalariIndir());
 });
 
 /* --- etkinleşme: eski sürümlerin önbelleğini temizle ---------------------- */
