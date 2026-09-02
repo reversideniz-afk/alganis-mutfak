@@ -42,7 +42,23 @@ Kurallar: `gorseller/*.jpg` commit **edilir**; `_ham/` ve `_istekler.*` edilmez.
 
 ## Test/doğrulama yaklaşımı
 
-Bu ortamda ekran görüntüsü bazen çalışmıyor — `document.elementFromPoint()` + `getComputedStyle(el).display` ile neyin gerçekten göründüğünü doğrula, `[hidden]` öğelerin CSS tarafından ezilmediğinden emin ol. Renk paleti/tema değişikliklerinde WCAG 4.5:1 kontrastı programatik hesapla, tahmin etme.
+Arayüze dokunan her değişiklikten sonra:
+
+```
+node tools/sunucu.js          (ayrı pencerede, açık kalsın)
+node tools/arayuz-testi.js
+```
+
+`tools/tarayici.js` headless Edge'i CDP ile sürer (bağımlılık yok, Node'un yerleşik WebSocket'i). `tools/arayuz-testi.js` bunun üstünde 18 kontrol çalıştırır: dört ekranın gerçekten çizildiği, `[hidden]` öğelerin CSS tarafından ezilmediği, panel/pişirme modunun açıldığı, üç genişlikte yatay taşma olmadığı, dokunma hedeflerinin ≥32px olduğu ve konsolun temiz olduğu.
+
+Kendi kodundan kullanmak için: `const t = await require("./tools/tarayici.js").ac(url); await t.calistir("...")`, `t.goruntu("x.png")`, `t.duraklat(ms)`, `t.hatalar()`.
+
+Dikkat edilecekler:
+- **Tıklama ile ölçümü ayrı adımlarda yap** — aynı ifadede ölçersen ekran yeniden çizilmeden ölçer, her şey 0px görünür.
+- Alt menü düğmesini seçerken `.menu-btn[data-git="..."]` kullan; `data-git` bilgi kartlarının içindeki gizli düğmelerde de var.
+- Görünüm alanını `--window-size` değil `Emulation.setDeviceMetricsOverride` belirler (araç bunu zaten yapıyor).
+- **CSP satır içi stili engeller**: `setAttribute("style", ...)` sessizce iptal edilir. `el()` yardımcısının `stil: { ... }` alanını kullan, CSSOM ile atar.
+- Renk paleti/tema değişikliklerinde WCAG 4.5:1 kontrastı programatik hesapla, tahmin etme.
 
 ## Durum (özet — detaylar için git log)
 

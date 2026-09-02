@@ -559,7 +559,7 @@
     PALETLER.forEach(function (p) {
       var ornek = el("span", { sinif: "palet-ornek", "aria-hidden": "true" });
       p.renkler.forEach(function (renk) {
-        ornek.appendChild(el("i", { style: "background:" + renk }));
+        ornek.appendChild(el("i", { stil: { background: renk } }));
       });
       var btn = el("button", {
         type: "button", sinif: "palet-btn",

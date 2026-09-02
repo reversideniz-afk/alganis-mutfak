@@ -20,6 +20,11 @@
         if (k === "sinif") d.className = v;
         else if (k === "metin") d.textContent = v;
         else if (k === "veri") Object.keys(v).forEach(function (dk) { d.dataset[dk] = v[dk]; });
+        /* Stil CSSOM ile atanıyor, style ÖZNİTELİĞİ ile değil.
+           index.html'deki CSP style-src 'self' satır içi stil özniteliğini
+           engelliyor: setAttribute("style", ...) sessizce iptal ediliyor ve
+           öğe renksiz kalıyordu. CSSOM ataması CSP kapsamı dışında. */
+        else if (k === "stil") Object.keys(v).forEach(function (sk) { d.style[sk] = v[sk]; });
         else d.setAttribute(k, v === true ? "" : v);
       });
     }
