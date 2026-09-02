@@ -13,3 +13,10 @@ desktop.ini
 
 # Bağımlılık yok — node_modules olmamalı
 node_modules/
+
+# Görsel hattının ara dosyaları.
+# gorseller/*.jpg (işlenmiş çıktılar) commit EDİLİR — uygulamanın parçasıdır.
+# Ham üretim çıktıları ve istem listeleri edilmez: büyükler ve yeniden üretilebilirler.
+gorseller/_ham/
+gorseller/_istekler.txt
+gorseller/_istekler.csv

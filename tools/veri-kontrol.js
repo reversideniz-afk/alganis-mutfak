@@ -128,6 +128,22 @@ var grupSayilari = {};
   grupSayilari[g] = (grupSayilari[g] || 0) + 1;
 });
 
+/* --- görseller (bilgi) ---------------------------------------------------
+   Eksik görsel HATA DEĞİLDİR: görseli olmayan tarif SVG portresine düşer.
+   Bu yüzden sadece sayılır, yayını engellemez. */
+var gorselKlasor = path.join(kok, "gorseller");
+var gorselVar = 0, kapakVar = 0;
+if (fs.existsSync(gorselKlasor)) {
+  fs.readdirSync(gorselKlasor)
+    .filter(function (d) { return /\.jpg$/i.test(d); })
+    .forEach(function (d) {
+      var ad = d.replace(/\.jpg$/i, "");
+      if (ad.indexOf("kapak-") === 0) kapakVar++;
+      else if (tarifIdler.has(ad)) gorselVar++;
+      else uyarilar.push('Görsel "' + d + '" hiçbir tarife ait değil (adı yanlış olabilir)');
+    });
+}
+
 /* --- kullanılmayan malzemeler (uyarı) ------------------------------------ */
 malzemeIdler.forEach((id) => {
   if (!kullanilan.has(id)) uyarilar.push(`Malzeme "${id}" hiçbir tarifte kullanılmıyor`);
@@ -149,6 +165,12 @@ console.log("Öğün grubuna göre (Bugün ekranı):");
 AM.OGUN_GRUPLARI.forEach(function (g) {
   console.log("  " + g.ad.padEnd(24, ".") + " " + (grupSayilari[g.id] || 0));
 });
+
+console.log("");
+console.log("Görseller:");
+console.log("  " + "Kapak görseli".padEnd(24, ".") + " " + kapakVar + " / " + (AM.TARIF_KATEGORILERI.length + (AM.MUTFAKLAR || []).length));
+console.log("  " + "Tarif görseli".padEnd(24, ".") + " " + gorselVar + " / " + (AM.TARIFLER || []).length +
+            "   (kalanı SVG portreye düşer)");
 
 if (uyarilar.length) {
   console.log("\nUYARILAR (" + uyarilar.length + "):");
