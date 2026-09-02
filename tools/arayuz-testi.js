@@ -164,7 +164,64 @@ function kontrol(ad, gecti, ek) {
   })()`);
   kontrol("ayarlar paneli açılıyor", ayar.acik && ayar.icerik > 100, ayar.icerik + " karakter");
 
-  /* --- 10. konsol hatası --- */
+  /* --- 10. modüller arası çağrılar -------------------------------------
+     Ekranlar ayrı dosyalarda ve birbirini AM.ic üzerinden çağırıyor. Bu
+     sınırların gerçekten bağlı olduğunu kod okuyarak anlamak zor; en emin
+     yol kullanıcı gibi tıklayıp sonucu ölçmek. */
+  await t.calistir(`document.getElementById("btnAyarKapat").click()`);
+  await t.duraklat(300);
+
+  /* ayarlar → ekran-bugun : tolerans değişince öneriler yeniden hesaplanmalı */
+  await t.calistir(`document.querySelector('.menu-btn[data-git="bugun"]').click()`);
+  await t.duraklat(400);
+  const oncekiSayi = await t.calistir(`document.getElementById("sayacYapilabilir").textContent`);
+  await t.calistir(`document.getElementById("btnAyar").click()`);
+  await t.duraklat(400);
+  await t.calistir(`document.querySelector(".anahtar").click()`);
+  await t.duraklat(600);
+  const sonrakiSayi = await t.calistir(`document.getElementById("sayacYapilabilir").textContent`);
+  kontrol("ayarlar → bugün: tolerans öneriyi değiştiriyor",
+          oncekiSayi !== sonrakiSayi, oncekiSayi + " → " + sonrakiSayi);
+  await t.calistir(`document.querySelector(".anahtar").click()`);   /* geri al */
+  await t.duraklat(400);
+  await t.calistir(`document.getElementById("btnAyarKapat").click()`);
+  await t.duraklat(300);
+
+  /* ekran-bugun içi: öğün çipi seçimi listeyi daraltmalı */
+  const ogunEtkisi = await t.calistir(`(function () {
+    var cipler = document.getElementById("ogunSerit").children;
+    if (cipler.length < 2) return { yetersiz: true };
+    cipler[1].click();
+    return { secildi: cipler[1].textContent };
+  })()`);
+  await t.duraklat(600);
+  const ogunSonuc = await t.calistir(`(function () {
+    return {
+      aktifCip: (document.querySelector("#ogunSerit .aktif") || {}).textContent || "",
+      kartSayisi: document.querySelectorAll("#gruplarYapilabilir .tarif-kart").length
+    };
+  })()`);
+  kontrol("bugün: öğün çipi listeyi daraltıyor",
+          !ogunEtkisi.yetersiz && ogunSonuc.kartSayisi > 0 && ogunSonuc.aktifCip !== "",
+          ogunSonuc.aktifCip.trim() + ", " + ogunSonuc.kartSayisi + " kart");
+
+  /* uygulama → ekran-mutfak : malzeme işaretleyince şerit sayacı güncellenmeli */
+  await t.calistir(`document.querySelector('.menu-btn[data-git="mutfak"]').click()`);
+  await t.duraklat(500);
+  const malzemeEtkisi = await t.calistir(`(function () {
+    var once = document.getElementById("rozetMalzeme").textContent;
+    var cip = document.querySelector("#malzemeListe .cip");
+    cip.click();
+    return { once: once, id: cip.dataset.id };
+  })()`);
+  await t.duraklat(400);
+  const malzemeSonra = await t.calistir(`document.getElementById("rozetMalzeme").textContent`);
+  kontrol("mutfak: malzeme işaretlemek sayacı güncelliyor",
+          malzemeEtkisi.once !== malzemeSonra, malzemeEtkisi.once + " → " + malzemeSonra);
+  await t.calistir(`document.querySelector("#malzemeListe .cip").click()`);  /* geri al */
+  await t.duraklat(300);
+
+  /* --- 11. konsol hatası --- */
   const hatalar = t.hatalar();
   kontrol("konsol hatası yok", hatalar.length === 0, hatalar.slice(0, 2).join(" | "));
 

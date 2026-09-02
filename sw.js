@@ -14,7 +14,7 @@
    değişmez, kimsenin bir şey yüklemesi gerekmez.
    ========================================================================== */
 
-const SURUM = "2.4.1";
+const SURUM = "2.5.0";
 const ONBELLEK = "alganis-mutfak-v" + SURUM;
 
 /* Tarif görselleri (gorseller/*.jpg) BİLEREK bu listede yok: yüzlerce dosya,
@@ -65,6 +65,12 @@ const DOSYALAR = [
   "./js/besin-hesap.js",
   "./js/gorsel.js",
   "./js/arayuz.js",
+  "./js/cekirdek.js",
+  "./js/ekran-mutfak.js",
+  "./js/ekran-bugun.js",
+  "./js/ekran-liste.js",
+  "./js/panel-tarif.js",
+  "./js/ayarlar.js",
   "./js/uygulama.js",
   "./icons/icon-192.png",
   "./icons/icon-512.png",

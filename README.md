@@ -163,8 +163,8 @@ sürüm numarasını aynı anda artır**:
 
 | Dosya | Satır |
 |---|---|
-| `data/surum.js` | `AM.SURUM = "2.4.1";` |
-| `sw.js` | `const SURUM = "2.4.1";` |
+| `data/surum.js` | `AM.SURUM = "2.5.0";` |
+| `sw.js` | `const SURUM = "2.5.0";` |
 
 İkisini de bir üst sürüme (örneğin `"2.3.1"`) yap, sonra:
 

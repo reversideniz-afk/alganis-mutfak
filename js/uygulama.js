@@ -1,700 +1,16 @@
 /* ============================================================================
-   UYGULAMA — ekranlar, olaylar, pişirme modu, güncelleme bildirimi
+   UYGULAMA — çatı: olay bağlama, service worker, başlatma
+   ----------------------------------------------------------------------------
+   Ekranların çizimi artık ayrı dosyalarda (js/ekran-*.js, js/panel-tarif.js,
+   js/ayarlar.js). Burada kalan iş: her şeyi birbirine bağlamak ve çalıştırmak.
+   Ortak durum ve yardımcılar js/cekirdek.js içindeki AM.ic üzerinde.
+
+   Bu dosya bütün ekran modüllerinden SONRA yüklenmeli.
    ========================================================================== */
 
 (function () {
   "use strict";
-  var el = AM.ui.el, bosalt = AM.ui.bosalt;
-  var $ = function (id) { return document.getElementById(id); };
-
-  var EKRANLAR = ["bugun", "mutfak", "favori", "tarifler"];
-  var SAYFA_ADET = 24;
-
-  /* "Hepsi" seçiliyken her öğün grubundan kaç kart gösterilsin */
-  var GRUP_ONIZLEME = 6;
-
-  var durum = {
-    ekran: "bugun",
-    katFiltre: "hepsi",
-    malzemeArama: "",
-    tarifKat: "hepsi",
-    tarifArama: "",
-    gosterYapilabilir: SAYFA_ADET,
-    gosterNerdeyse: 12,
-    gosterTum: SAYFA_ADET,
-    acikTarif: null,
-    porsiyon: 4,
-    adim: 0,
-    sonOneriler: null
-  };
-
-  var uyanikKilit = null;
-
-  /* ====================================================== BİLDİRİM (toast) */
-  var bildirimZaman = null;
-  function bildir(metin, aksiyonAdi, aksiyon) {
-    var kutu = $("bildirim");
-    bosalt(kutu);
-    kutu.appendChild(document.createTextNode(metin));
-    if (aksiyonAdi) {
-      var b = el("button", { type: "button", metin: aksiyonAdi });
-      b.addEventListener("click", aksiyon);
-      kutu.appendChild(b);
-    }
-    kutu.hidden = false;
-    clearTimeout(bildirimZaman);
-    if (!aksiyonAdi) bildirimZaman = setTimeout(function () { kutu.hidden = true; }, 2200);
-  }
-
-  /* ============================================================== GEZİNME */
-  function git(ad) {
-    if (EKRANLAR.indexOf(ad) === -1) ad = "bugun";
-    durum.ekran = ad;
-    EKRANLAR.forEach(function (e) { $("ekran-" + e).hidden = (e !== ad); });
-    Array.prototype.forEach.call(document.querySelectorAll(".menu-btn"), function (b) {
-      b.classList.toggle("aktif", b.dataset.git === ad);
-    });
-    var altYazi = {
-      bugun: "Bugün ne pişirsem?",
-      mutfak: "Evde neler var?",
-      favori: "En sevdikleriniz",
-      tarifler: (AM.TARIFLER.length) + " tarif"
-    };
-    $("ustAltYazi").textContent = altYazi[ad];
-    window.scrollTo(0, 0);
-
-    if (ad === "bugun") ciz_bugun();
-    if (ad === "favori") ciz_favori();
-    if (ad === "tarifler") ciz_tarifler();
-  }
-
-  /* ================================================== EKRAN: MUTFAĞIM */
-
-  function malzemeSayaclari() {
-    var sepet = AM.depo.sepet();
-    var say = {};
-    AM.MALZEMELER.forEach(function (m) {
-      if (sepet.has(m[0])) say[m[2]] = (say[m[2]] || 0) + 1;
-    });
-    return { say: say, toplam: sepet.size };
-  }
-
-  function ciz_katSerit() {
-    var serit = $("katSerit");
-    var bilgi = malzemeSayaclari();
-    bosalt(serit);
-
-    function cip(id, ad, emoji, adet) {
-      var b = el("button", {
-        type: "button",
-        sinif: "kat-cip" + (durum.katFiltre === id ? " aktif" : ""),
-        veri: { kat: id }
-      }, [emoji ? el("span", { "aria-hidden": "true", metin: emoji }) : null, ad]);
-      if (adet) b.appendChild(el("span", { sinif: "kat-adet", metin: String(adet) }));
-      b.addEventListener("click", function () {
-        durum.katFiltre = id;
-        ciz_katSerit();
-        ciz_malzemeler();
-      });
-      return b;
-    }
-
-    serit.appendChild(cip("hepsi", "Tümü", "🧺", bilgi.toplam));
-    AM.KATEGORILER.forEach(function (k) {
-      serit.appendChild(cip(k.id, k.ad, k.emoji, bilgi.say[k.id] || 0));
-    });
-  }
-
-  function ciz_malzemeler() {
-    var kap = $("malzemeListe");
-    var sepet = AM.depo.sepet();
-    var q = AM.nrm(durum.malzemeArama);
-    bosalt(kap);
-
-    AM.KATEGORILER.forEach(function (k) {
-      if (durum.katFiltre !== "hepsi" && durum.katFiltre !== k.id) return;
-
-      var uygun = AM.MALZEMELER.filter(function (m) {
-        if (m[2] !== k.id) return false;
-        if (!q) return true;
-        return AM.nrm(m[1] + " " + (m[4] || "")).indexOf(q) !== -1;
-      });
-      if (!uygun.length) return;
-
-      var bolum = el("section", { sinif: "kat-bolum" });
-      bolum.appendChild(el("h3", { sinif: "kat-baslik" }, [
-        el("span", { sinif: "em", "aria-hidden": "true", metin: k.emoji }), k.ad
-      ]));
-
-      var izgara = el("div", { sinif: "cip-izgara" });
-      uygun.forEach(function (m) {
-        var secili = sepet.has(m[0]);
-        var b = el("button", {
-          type: "button", sinif: "cip",
-          "aria-pressed": secili ? "true" : "false",
-          veri: { id: m[0] }
-        }, [el("span", { sinif: "tik", "aria-hidden": "true", metin: "✓" }), m[1]]);
-        izgara.appendChild(b);
-      });
-      bolum.appendChild(izgara);
-      kap.appendChild(bolum);
-    });
-
-    if (!kap.firstChild) {
-      kap.appendChild(el("div", { sinif: "bos-durum" }, [
-        el("div", { sinif: "bos-emoji", metin: "🥄" }),
-        el("p", { metin: "Bu aramaya uyan malzeme yok." })
-      ]));
-    }
-  }
-
-  function rozetGuncelle() {
-    var n = AM.depo.sepet().size;
-    var r = $("rozetMalzeme");
-    r.textContent = String(n);
-    r.hidden = n === 0;
-  }
-
-  /* ===================================================== EKRAN: BUGÜN */
-
-  function ciz_bugun() {
-    var sepet = AM.depo.sepet();
-    var bos = sepet.size === 0;
-    $("bosMutfakUyari").hidden = !bos;
-    $("oneriAlan").hidden = bos;
-    if (bos) return;
-
-    var sonuc = AM.oneriler(sepet, AM.depo.filtre(), AM.depo.tolerans());
-    durum.sonOneriler = sonuc;
-
-    /* --- kahraman kart --- */
-    var kap = $("oneriKart");
-    bosalt(kap);
-    var yokKart = $("sonucYokKart");
-
-    if (sonuc.tam.length) {
-      // Günün önerisi seçili yemek türünden gelir. "Hepsi" seçiliyken ana
-      // yemeklerden seçilir; tatlı ya da salata baş köşeye oturmasın.
-      var ogun = AM.depo.ogun();
-      var havuz = sonuc.tam.filter(function (k) {
-        return AM.grupBul(k.t) === (ogun === "hepsi" ? "ana" : ogun);
-      });
-      if (!havuz.length) havuz = sonuc.tam;
-
-      var ix = AM.depo.oneriIx() % havuz.length;
-      var secili = havuz[ix];
-      kap.appendChild(AM.ui.heroKart(secili));
-      $("btnTarifiAc").disabled = false;
-      $("btnBaskaOner").disabled = havuz.length < 2;
-      kap.dataset.id = secili.t.id;
-      yokKart.hidden = true;
-    } else {
-      $("btnTarifiAc").disabled = true;
-      $("btnBaskaOner").disabled = true;
-      kap.dataset.id = "";
-      yokKart.hidden = sonuc.yakin.length > 0;
-      if (sonuc.yakin.length) {
-        kap.appendChild(el("div", { sinif: "bilgi-kart mor" }, [
-          el("h2", { metin: "Tam çıkan bir şey yok" }),
-          el("p", { metin: "Ama aşağıdaki listeye bak — bir iki malzemeyle hepsi olur." })
-        ]));
-      }
-    }
-
-    /* --- yapılabilirler: yemek türüne göre gruplanmış --- */
-    ciz_ogunSerit(sonuc.tam);
-    ciz_yapilabilirler(sonuc.tam);
-    $("sayacYapilabilir").textContent = String(sonuc.tam.length);
-    $("bolumYapilabilir").hidden = sonuc.tam.length === 0;
-
-    /* --- neler yapabilirdiniz (seçili yemek türüne uyanlar) --- */
-    var ogunSecimi = AM.depo.ogun();
-    var yakin = ogunSecimi === "hepsi" ? sonuc.yakin : sonuc.yakin.filter(function (k) {
-      return AM.grupBul(k.t) === ogunSecimi;
-    });
-    var lst2 = $("listeNerdeyse");
-    bosalt(lst2);
-    yakin.slice(0, durum.gosterNerdeyse).forEach(function (k) {
-      lst2.appendChild(AM.ui.tarifKart(k, tarifAc));
-    });
-    $("sayacNerdeyse").textContent = String(yakin.length);
-    $("bolumNerdeyse").hidden = yakin.length === 0;
-    $("btnDahaFazlaNerdeyse").hidden = yakin.length <= durum.gosterNerdeyse;
-  }
-
-  /** Yemek türü şeridi: Tümü + o an gerçekten yapılabilen gruplar. */
-  function ciz_ogunSerit(kayitlar) {
-    var serit = $("ogunSerit");
-    var secili = AM.depo.ogun();
-    var sayim = {};
-    kayitlar.forEach(function (k) {
-      var g = AM.grupBul(k.t);
-      sayim[g] = (sayim[g] || 0) + 1;
-    });
-    bosalt(serit);
-
-    function cip(id, ad, emoji, adet) {
-      var b = el("button", {
-        type: "button",
-        sinif: "kat-cip" + (secili === id ? " aktif" : "")
-      }, [emoji ? el("span", { "aria-hidden": "true", metin: emoji }) : null, ad]);
-      if (adet) b.appendChild(el("span", { sinif: "kat-adet", metin: String(adet) }));
-      b.addEventListener("click", function () { ogunSec(id); });
-      return b;
-    }
-
-    serit.appendChild(cip("hepsi", "Tümü", "🍽", kayitlar.length));
-    AM.OGUN_GRUPLARI.forEach(function (g) {
-      if (!sayim[g.id]) return;          // o gruptan yapılabilir bir şey yoksa gösterme
-      serit.appendChild(cip(g.id, g.ad, g.emoji, sayim[g.id]));
-    });
-  }
-
-  function ogunSec(id) {
-    AM.depo.ogun(id);
-    durum.gosterYapilabilir = SAYFA_ADET;
-    durum.gosterNerdeyse = 12;
-    ciz_bugun();
-    $("bolumYapilabilir").scrollIntoView({ block: "start", behavior: "smooth" });
-  }
-
-  /**
-   * "Tümü" seçiliyken her yemek türü kendi başlığı altında, en fazla
-   * GRUP_ONIZLEME kart olacak şekilde listelenir. Belirli bir tür seçiliyse
-   * tek liste halinde, sayfalı gösterilir.
-   */
-  function ciz_yapilabilirler(kayitlar) {
-    var kap = $("gruplarYapilabilir");
-    var secili = AM.depo.ogun();
-    var dahaFazla = $("btnDahaFazlaYapilabilir");
-    bosalt(kap);
-
-    if (secili !== "hepsi") {
-      var uyanlar = kayitlar.filter(function (k) { return AM.grupBul(k.t) === secili; });
-      var izgara = el("div", { sinif: "tarif-izgara" });
-      uyanlar.slice(0, durum.gosterYapilabilir).forEach(function (k) {
-        izgara.appendChild(AM.ui.tarifKart(k, tarifAc));
-      });
-      kap.appendChild(izgara);
-      dahaFazla.hidden = uyanlar.length <= durum.gosterYapilabilir;
-      return;
-    }
-
-    dahaFazla.hidden = true;
-    AM.OGUN_GRUPLARI.forEach(function (g) {
-      var uyanlar = kayitlar.filter(function (k) { return AM.grupBul(k.t) === g.id; });
-      if (!uyanlar.length) return;
-
-      var baslik = el("div", { sinif: "grup-baslik" }, [
-        el("span", { sinif: "gb-emoji", "aria-hidden": "true", metin: g.emoji }),
-        el("h4", { metin: g.ad }),
-        el("span", { sinif: "grup-adet", metin: String(uyanlar.length) })
-      ]);
-      if (uyanlar.length > GRUP_ONIZLEME) {
-        var tumu = el("button", { type: "button", sinif: "grup-tumu", metin: "Tümü →" });
-        tumu.addEventListener("click", function () { ogunSec(g.id); });
-        baslik.appendChild(tumu);
-      }
-
-      var izgara = el("div", { sinif: "tarif-izgara" });
-      uyanlar.slice(0, GRUP_ONIZLEME).forEach(function (k) {
-        izgara.appendChild(AM.ui.tarifKart(k, tarifAc));
-      });
-
-      kap.appendChild(el("section", { sinif: "grup-bolum" }, [baslik, izgara]));
-    });
-  }
-
-  /* ================================================== EKRAN: FAVORİLER */
-
-  function ciz_favori() {
-    var kap = $("listeFavori");
-    var sepet = AM.depo.sepet();
-    bosalt(kap);
-    var favlar = AM.depo.favlar()
-      .map(function (id) { return AM.T[id]; })
-      .filter(Boolean);
-
-    favlar.forEach(function (t) {
-      kap.appendChild(AM.ui.tarifKart({ t: t, d: AM.degerlendir(t, sepet) }, tarifAc));
-    });
-    $("favoriBos").hidden = favlar.length > 0;
-  }
-
-  /* ================================================ EKRAN: TÜM TARİFLER */
-
-  function ciz_tarifKatSerit() {
-    var serit = $("tarifKatSerit");
-    bosalt(serit);
-    function cip(id, ad, emoji) {
-      var b = el("button", {
-        type: "button",
-        sinif: "kat-cip" + (durum.tarifKat === id ? " aktif" : "")
-      }, [emoji ? el("span", { "aria-hidden": "true", metin: emoji }) : null, ad]);
-      b.addEventListener("click", function () {
-        durum.tarifKat = id;
-        durum.gosterTum = SAYFA_ADET;
-        ciz_tarifKatSerit();
-        ciz_tarifler();
-      });
-      return b;
-    }
-    serit.appendChild(cip("hepsi", "Tümü", "📖"));
-    AM.TARIF_KATEGORILERI.forEach(function (k) { serit.appendChild(cip(k.id, k.ad, k.emoji)); });
-  }
-
-  function ciz_tarifler() {
-    var kap = $("listeTumTarifler");
-    var sepet = AM.depo.sepet();
-    bosalt(kap);
-    var sonuc = AM.tarifAra(durum.tarifArama, durum.tarifKat);
-    sonuc.slice(0, durum.gosterTum).forEach(function (t) {
-      kap.appendChild(AM.ui.tarifKart({ t: t, d: AM.degerlendir(t, sepet) }, tarifAc));
-    });
-    $("tarifBos").hidden = sonuc.length > 0;
-    $("btnDahaFazlaTum").hidden = sonuc.length <= durum.gosterTum;
-  }
-
-  /* ==================================================== TARİF DETAYI */
-
-  function tarifAc(id) {
-    var t = AM.T[id];
-    if (!t) return;
-    durum.acikTarif = t;
-    durum.porsiyon = t.por;
-    panelAc("tarifPanel");
-    ciz_detay();
-  }
-
-  function ciz_detay() {
-    var t = durum.acikTarif;
-    if (!t) return;
-    var govde = $("panelGovde");
-    bosalt(govde);
-    govde.appendChild(AM.ui.detay(t, AM.depo.sepet(), durum.porsiyon, function (yeni) {
-      durum.porsiyon = yeni;
-      AM.ui.porsiyonYenile(govde, t, yeni);
-    }));
-    var fav = AM.depo.favMi(t.id);
-    $("btnFavori").setAttribute("aria-pressed", fav ? "true" : "false");
-    $("btnFavori").setAttribute("aria-label", fav ? "Favorilerden çıkar" : "Favorilere ekle");
-  }
-
-  /* ==================================================== PİŞİRME MODU */
-
-  function pisirmeAc() {
-    var t = durum.acikTarif;
-    if (!t) return;
-    durum.adim = 0;
-    $("pisirmeBaslik").textContent = t.ad;
-    $("pisirmePanel").hidden = false;
-    document.body.style.overflow = "hidden";
-    ciz_pisirme();
-    uyanikTut();
-    gecmisEkle("pisirme");
-  }
-
-  function ciz_pisirme() {
-    var t = durum.acikTarif;
-    var govde = $("pisirmeGovde");
-    bosalt(govde);
-    govde.appendChild(AM.ui.pisirmeAdimi(t, durum.adim, durum.porsiyon / t.por));
-    govde.scrollTop = 0;
-    $("adimSayac").textContent = (durum.adim + 1) + " / " + t.y.length;
-    $("pisirmeDolgu").style.width = ((durum.adim + 1) / t.y.length * 100) + "%";
-    $("btnAdimGeri").disabled = durum.adim === 0;
-    $("btnAdimIleri").textContent = (durum.adim === t.y.length - 1) ? "Afiyet olsun 🎉" : "İleri";
-  }
-
-  function pisirmeKapat() {
-    $("pisirmePanel").hidden = true;
-    document.body.style.overflow = "";
-    uyanikBirak();
-  }
-
-  function uyanikTut() {
-    if (!("wakeLock" in navigator)) return;
-    navigator.wakeLock.request("screen").then(function (k) {
-      uyanikKilit = k;
-      $("ekranUyanikRozet").hidden = false;
-      k.addEventListener("release", function () { $("ekranUyanikRozet").hidden = true; });
-    }).catch(function () { /* izin yok ya da desteklenmiyor — sorun değil */ });
-  }
-
-  function uyanikBirak() {
-    if (uyanikKilit) { try { uyanikKilit.release(); } catch (e) {} uyanikKilit = null; }
-    $("ekranUyanikRozet").hidden = true;
-  }
-
-  document.addEventListener("visibilitychange", function () {
-    if (document.visibilityState === "visible" && !$("pisirmePanel").hidden && !uyanikKilit) {
-      uyanikTut();
-    }
-  });
-
-  /* ======================================================== PANELLER */
-
-  function panelAc(id) {
-    $(id).hidden = false;
-    document.body.style.overflow = "hidden";
-    gecmisEkle(id);
-  }
-
-  function panelKapat(id) {
-    $(id).hidden = true;
-    if ($("pisirmePanel").hidden && $("tarifPanel").hidden && $("ayarPanel").hidden) {
-      document.body.style.overflow = "";
-    }
-  }
-
-  function hepsiniKapat() {
-    if (!$("pisirmePanel").hidden) { pisirmeKapat(); return true; }
-    if (!$("tarifPanel").hidden) { panelKapat("tarifPanel"); return true; }
-    if (!$("ayarPanel").hidden) { panelKapat("ayarPanel"); return true; }
-    return false;
-  }
-
-  /* Android geri tuşu paneli kapatsın, uygulamadan çıkmasın. */
-  var gecmisDerinlik = 0;
-  function gecmisEkle(ad) {
-    gecmisDerinlik++;
-    try { history.pushState({ am: ad, d: gecmisDerinlik }, ""); } catch (e) {}
-  }
-  window.addEventListener("popstate", function () {
-    if (gecmisDerinlik > 0) gecmisDerinlik--;
-    hepsiniKapat();
-  });
-  function geriGit() {
-    if (gecmisDerinlik > 0) history.back();
-    else hepsiniKapat();
-  }
-
-  /* ========================================================== AYARLAR */
-
-  /* Tariflerde kullanılan kap ölçülerinin karşılıkları.
-     Tarifleri otomatik grama çevirmiyoruz: her malzemenin yoğunluğu farklı
-     olduğu için otomatik çevirim yanıltıcı olur. Onun yerine referans veriyoruz. */
-  var OLCU_HACIM = [
-    ["1 su bardağı", "200 ml"],
-    ["1 çay bardağı", "~100 ml"],
-    ["1 kahve fincanı", "~80 ml"],
-    ["1 yemek kaşığı", "15 ml"],
-    ["1 tatlı kaşığı", "10 ml"],
-    ["1 çay kaşığı", "5 ml"]
-  ];
-  var OLCU_AGIRLIK = [
-    ["1 su bardağı un", "~120 g"],
-    ["1 su bardağı toz şeker", "~180 g"],
-    ["1 su bardağı pirinç", "~180 g"],
-    ["1 su bardağı bulgur", "~170 g"],
-    ["1 su bardağı irmik", "~160 g"],
-    ["1 su bardağı mercimek", "~190 g"],
-    ["1 su bardağı su / süt", "200 g"],
-    ["1 su bardağı sıvı yağ", "~180 g"],
-    ["1 su bardağı yoğurt", "~220 g"],
-    ["1 yemek kaşığı un", "~10 g"],
-    ["1 yemek kaşığı tereyağı", "~15 g"]
-  ];
-  var OLCU_PAKET = [
-    ["1 paket kabartma tozu", "10 g"],
-    ["1 paket vanilya", "5 g"],
-    ["1 paket kuru maya", "10 g"],
-    ["1 paket yaş maya", "42 g"],
-    ["1 paket tereyağı", "250 g"]
-  ];
-
-  function olcuTablosu(baslik, satirlar) {
-    var tablo = el("table", { sinif: "olcu-tablo" });
-    tablo.appendChild(el("caption", { metin: baslik }));
-    var govde = el("tbody");
-    satirlar.forEach(function (s) {
-      govde.appendChild(el("tr", null, [
-        el("th", { scope: "row", metin: s[0] }),
-        el("td", { metin: s[1] })
-      ]));
-    });
-    tablo.appendChild(govde);
-    return tablo;
-  }
-
-  function olcuCetveli() {
-    var kap = document.createDocumentFragment();
-    kap.appendChild(olcuTablosu("Hacim", OLCU_HACIM));
-    kap.appendChild(olcuTablosu("Ağırlık karşılıkları", OLCU_AGIRLIK));
-    kap.appendChild(olcuTablosu("Paket ölçüleri", OLCU_PAKET));
-    kap.appendChild(el("p", { sinif: "ayar-not", metin:
-      "Ağırlıklar yaklaşıktır — un ve şeker gibi malzemeler bardağa nasıl " +
-      "doldurulduğuna göre değişir. Hassas ölçü gereken tatlılarda mutfak " +
-      "terazisi kullanmak en doğrusu. Bardak ölçüsü 200 ml'lik standart su " +
-      "bardağına göredir." }));
-    return kap;
-  }
-
-  function ciz_ayarlar() {
-    var govde = $("ayarGovde");
-    bosalt(govde);
-
-    /* tema */
-    govde.appendChild(el("div", { sinif: "td-bolum-baslik", metin: "Görünüm" }));
-    var temalar = [["gunisigi", "☀️ Gün ışığı"], ["gece", "🌙 Gece"], ["sistem", "📱 Telefona uy"]];
-    var temaSerit = el("div", { sinif: "filtre-serit" });
-    temalar.forEach(function (t) {
-      var btn = el("button", {
-        type: "button",
-        sinif: "filtre-cip" + (AM.depo.tema() === t[0] ? " aktif" : ""),
-        metin: t[1]
-      });
-      btn.addEventListener("click", function () {
-        AM.depo.tema(t[0]);
-        temayiUygula();
-        ciz_ayarlar();
-      });
-      temaSerit.appendChild(btn);
-    });
-    govde.appendChild(temaSerit);
-
-    /* renk paleti */
-    govde.appendChild(el("div", { sinif: "td-bolum-baslik", metin: "Renk paleti" }));
-    var paletIzgara = el("div", { sinif: "palet-izgara" });
-    PALETLER.forEach(function (p) {
-      var ornek = el("span", { sinif: "palet-ornek", "aria-hidden": "true" });
-      p.renkler.forEach(function (renk) {
-        ornek.appendChild(el("i", { stil: { background: renk } }));
-      });
-      var btn = el("button", {
-        type: "button", sinif: "palet-btn",
-        "aria-pressed": AM.depo.palet() === p.id ? "true" : "false"
-      }, [ornek, p.ad]);
-      btn.addEventListener("click", function () {
-        AM.depo.palet(p.id);
-        temayiUygula();
-        ciz_ayarlar();
-      });
-      paletIzgara.appendChild(btn);
-    });
-    govde.appendChild(paletIzgara);
-
-    /* yazı boyutu */
-    govde.appendChild(el("div", { sinif: "td-bolum-baslik", metin: "Yazı boyutu" }));
-    var boyutlar = [["n", "Normal"], ["b", "Büyük"], ["cb", "Çok büyük"]];
-    var boyutSerit = el("div", { sinif: "filtre-serit" });
-    boyutlar.forEach(function (b) {
-      var btn = el("button", {
-        type: "button",
-        sinif: "filtre-cip" + (AM.depo.yazi() === b[0] ? " aktif" : ""),
-        metin: b[1]
-      });
-      btn.addEventListener("click", function () {
-        AM.depo.yazi(b[0]);
-        document.documentElement.dataset.yazi = b[0];
-        ciz_ayarlar();
-      });
-      boyutSerit.appendChild(btn);
-    });
-    govde.appendChild(boyutSerit);
-
-    /* tolerans */
-    govde.appendChild(el("div", { sinif: "td-bolum-baslik", metin: "Öneri davranışı" }));
-    var anahtar = el("button", {
-      type: "button", sinif: "anahtar",
-      "aria-pressed": AM.depo.tolerans() ? "true" : "false",
-      "aria-label": "Ufak eksiklere göz yum"
-    });
-    anahtar.addEventListener("click", function () {
-      AM.depo.tolerans(!AM.depo.tolerans());
-      ciz_ayarlar();
-      ciz_bugun();
-    });
-    govde.appendChild(el("div", { sinif: "ayar-satir" }, [
-      el("div", { sinif: "as-yazi" }, [
-        el("strong", { metin: "Ufak eksiklere göz yum" }),
-        el("small", { metin: "Sadece maydanoz, havuç gibi tali malzemesi eksik yemekler de önerilsin." })
-      ]),
-      anahtar
-    ]));
-
-    /* sürüm & güncelleme */
-    govde.appendChild(el("div", { sinif: "td-bolum-baslik", metin: "Uygulama" }));
-    govde.appendChild(el("div", { sinif: "ayar-satir" }, [
-      el("div", { sinif: "as-yazi" }, [
-        el("strong", { metin: "Sürüm " + AM.SURUM }),
-        el("small", { metin: AM.TARIFLER.length + " tarif · " + AM.MALZEMELER.length + " malzeme" })
-      ])
-    ]));
-
-    var gncBtn = el("button", { type: "button", sinif: "btn hayalet tam", metin: "Güncelleme var mı, bak" });
-    gncBtn.addEventListener("click", function () {
-      if (!navigator.serviceWorker) { bildir("Bu tarayıcıda güncelleme denetimi yok."); return; }
-      navigator.serviceWorker.getRegistration().then(function (r) {
-        if (!r) { bildir("Çevrimdışı kurulum bulunamadı."); return; }
-        r.update().then(function () { bildir("Denetlendi. Yenisi varsa haber vereceğim."); });
-      }).catch(function () { bildir("Şu an denetlenemedi."); });
-    });
-    govde.appendChild(gncBtn);
-
-    /* ölçü cetveli */
-    govde.appendChild(el("div", { sinif: "td-bolum-baslik", metin: "Ölçü cetveli" }));
-    govde.appendChild(olcuCetveli());
-
-    /* sıfırlama */
-    govde.appendChild(el("div", { sinif: "td-bolum-baslik", metin: "Verilerim" }));
-    var silBtn = el("button", { type: "button", sinif: "btn hayalet tehlike tam", metin: "Seçimlerimi ve favorilerimi sil" });
-    var onayda = false;
-    silBtn.addEventListener("click", function () {
-      if (!onayda) {
-        onayda = true;
-        silBtn.textContent = "Emin misin? Silmek için tekrar dokun";
-        setTimeout(function () { onayda = false; silBtn.textContent = "Seçimlerimi ve favorilerimi sil"; }, 4000);
-        return;
-      }
-      AM.depo.sifirla();
-      AM.depo.baslat();
-      AM.depo.temelleriSec();
-      panelKapat("ayarPanel");
-      basla_ilkCizim(true);
-      bildir("Sıfırlandı.");
-    });
-    govde.appendChild(silBtn);
-
-    govde.appendChild(el("p", { sinif: "ayar-not", metin:
-      "Bu uygulama tamamen telefonunuzda çalışır. İnternet bağlantısı kullanmaz, " +
-      "hiçbir veri hiçbir yere gönderilmez, hesap veya izin istemez. İşaretlediğiniz " +
-      "malzemeler ve favorileriniz yalnızca bu cihazda saklanır." }));
-  }
-
-  /* ====================================================== BAŞLANGIÇ */
-
-  /* Ayarlardaki renk paletleri. css/style.css içindeki [data-palet] blokları ve
-     js/depo.js içindeki GECERLI_PALETLER listesiyle aynı sırada tutulmalı.
-     Buradaki renkler sadece ayar ekranındaki küçük önizleme şeridi içindir. */
-  var PALETLER = [
-    { id: "domates",  ad: "Domates",   renkler: ["#CB431A", "#F5843C", "#F7BE4B"] },
-    { id: "zeytin",   ad: "Zeytin",    renkler: ["#4A7A2B", "#7BA83F", "#C3D46A"] },
-    { id: "patlican", ad: "Patlıcan",  renkler: ["#6B3A78", "#8E5A9C", "#C98BB8"] },
-    { id: "deniz",    ad: "Deniz",     renkler: ["#1F5F84", "#3B87A8", "#6FBFCB"] },
-    { id: "gul",      ad: "Gül kurusu",renkler: ["#A83E5C", "#D06A82", "#E9A3A8"] },
-    { id: "bal",      ad: "Bal köpüğü",renkler: ["#9A6212", "#C98A2A", "#F0C264"] },
-    { id: "kontrast", ad: "Yüksek kontrast", renkler: ["#000000", "#2E2E2E", "#FFFFFF"] }
-  ];
-
-  /** Seçili tema ve paleti <html> üzerine yazar, tarayıcı çubuğu rengini eşitler. */
-  function temayiUygula() {
-    var tema = AM.depo.tema();
-    var palet = AM.depo.palet();
-    document.documentElement.dataset.tema = tema;
-    document.documentElement.dataset.palet = palet;
-
-    var koyuMu = tema === "gece" ||
-      (tema === "sistem" && window.matchMedia &&
-       window.matchMedia("(prefers-color-scheme: dark)").matches);
-
-    // Yüksek kontrast paleti her zaman beyaz zeminlidir, temadan bağımsız.
-    if (palet === "kontrast") koyuMu = false;
-
-    var secili = PALETLER.filter(function (p) { return p.id === palet; })[0] || PALETLER[0];
-    var etiket = document.querySelector('meta[name="theme-color"]');
-    if (etiket) etiket.setAttribute("content", koyuMu ? "#1B1714" : secili.renkler[0]);
-  }
+  var ic = AM.ic, $ = ic.$;
 
   /** Yapışkan arama çubuğu tam başlığın altına otursun diye gerçek yüksekliği ölç. */
   function ustYuksekligiOlc() {
@@ -702,23 +18,25 @@
     if (h > 0) document.documentElement.style.setProperty("--ust-h", h + "px");
   }
 
-  function basla_ilkCizim(ilkKez) {
-    ciz_katSerit();
-    ciz_malzemeler();
-    rozetGuncelle();
-    ciz_tarifKatSerit();
+  ic.basla_ilkCizim = function (ilkKez) {
+    ic.ciz_katSerit();
+    ic.ciz_malzemeler();
+    ic.rozetGuncelle();
+    ic.ciz_tarifKatSerit();
 
     // İlk açılışta doğrudan malzeme ekranı; sonraki açılışlarda öneriler.
     var hosgeldin = $("hosgeldinNot");
     if (hosgeldin) hosgeldin.hidden = !ilkKez;
-    git((ilkKez || AM.depo.sepet().size === 0) ? "mutfak" : "bugun");
-  }
+    ic.git((ilkKez || AM.depo.sepet().size === 0) ? "mutfak" : "bugun");
+  };
+
+  /* ======================================================== OLAY BAĞLAMA */
 
   function olaylariBagla() {
     /* alt menü + "şuraya git" düğmeleri */
     document.addEventListener("click", function (e) {
       var hedef = e.target.closest("[data-git]");
-      if (hedef) { git(hedef.dataset.git); return; }
+      if (hedef) { ic.git(hedef.dataset.git); return; }
     });
 
     /* malzeme çipleri (olay delegasyonu — 200 dinleyici yerine 1 tane) */
@@ -727,32 +45,32 @@
       if (!cip) return;
       var acikMi = AM.depo.sepetDegistir(cip.dataset.id);
       cip.setAttribute("aria-pressed", acikMi ? "true" : "false");
-      rozetGuncelle();
-      ciz_katSerit();
+      ic.rozetGuncelle();
+      ic.ciz_katSerit();
     });
 
     /* malzeme arama */
     var mArama = $("malzemeArama");
     mArama.addEventListener("input", function () {
-      durum.malzemeArama = mArama.value;
+      ic.durum.malzemeArama = mArama.value;
       $("btnAramaTemizle").hidden = !mArama.value;
-      ciz_malzemeler();
+      ic.ciz_malzemeler();
     });
     $("btnAramaTemizle").addEventListener("click", function () {
-      mArama.value = ""; durum.malzemeArama = "";
+      mArama.value = ""; ic.durum.malzemeArama = "";
       $("btnAramaTemizle").hidden = true;
-      ciz_malzemeler(); mArama.focus();
+      ic.ciz_malzemeler(); mArama.focus();
     });
 
     $("btnTemelleriSec").addEventListener("click", function () {
       AM.depo.temelleriSec();
-      ciz_malzemeler(); ciz_katSerit(); rozetGuncelle();
-      bildir("Temel malzemeler işaretlendi.");
+      ic.ciz_malzemeler(); ic.ciz_katSerit(); ic.rozetGuncelle();
+      ic.bildir("Temel malzemeler işaretlendi.");
     });
     $("btnHepsiniTemizle").addEventListener("click", function () {
       AM.depo.sepetTemizle();
-      ciz_malzemeler(); ciz_katSerit(); rozetGuncelle();
-      bildir("Tüm seçimler kaldırıldı.");
+      ic.ciz_malzemeler(); ic.ciz_katSerit(); ic.rozetGuncelle();
+      ic.bildir("Tüm seçimler kaldırıldı.");
     });
 
     /* filtreler */
@@ -760,83 +78,86 @@
       var b = e.target.closest(".filtre-cip");
       if (!b) return;
       AM.depo.filtre(b.dataset.filtre);
-      durum.gosterYapilabilir = SAYFA_ADET;
-      durum.gosterNerdeyse = 12;
+      ic.durum.gosterYapilabilir = ic.SAYFA_ADET;
+      ic.durum.gosterNerdeyse = 12;
       Array.prototype.forEach.call($("filtreSerit").children, function (x) {
         x.classList.toggle("aktif", x === b);
       });
-      ciz_bugun();
+      ic.ciz_bugun();
     });
 
     /* öneri düğmeleri */
     $("btnTarifiAc").addEventListener("click", function () {
       var id = $("oneriKart").dataset.id;
-      if (id) tarifAc(id);
+      if (id) ic.tarifAc(id);
     });
     $("btnBaskaOner").addEventListener("click", function () {
       AM.depo.oneriIx(AM.depo.oneriIx() + 1);
-      ciz_bugun();
+      ic.ciz_bugun();
       $("oneriKart").scrollIntoView({ block: "nearest", behavior: "smooth" });
     });
 
     $("btnDahaFazlaYapilabilir").addEventListener("click", function () {
-      durum.gosterYapilabilir += SAYFA_ADET; ciz_bugun();
+      ic.durum.gosterYapilabilir += ic.SAYFA_ADET; ic.ciz_bugun();
     });
     $("btnDahaFazlaNerdeyse").addEventListener("click", function () {
-      durum.gosterNerdeyse += SAYFA_ADET; ciz_bugun();
+      ic.durum.gosterNerdeyse += ic.SAYFA_ADET; ic.ciz_bugun();
     });
     $("btnDahaFazlaTum").addEventListener("click", function () {
-      durum.gosterTum += SAYFA_ADET; ciz_tarifler();
+      ic.durum.gosterTum += ic.SAYFA_ADET; ic.ciz_tarifler();
     });
 
     /* tarif arama */
     var tArama = $("tarifArama");
     tArama.addEventListener("input", function () {
-      durum.tarifArama = tArama.value;
-      durum.gosterTum = SAYFA_ADET;
+      ic.durum.tarifArama = tArama.value;
+      ic.durum.gosterTum = ic.SAYFA_ADET;
       $("btnTarifAramaTemizle").hidden = !tArama.value;
-      ciz_tarifler();
+      ic.ciz_tarifler();
     });
     $("btnTarifAramaTemizle").addEventListener("click", function () {
-      tArama.value = ""; durum.tarifArama = "";
+      tArama.value = ""; ic.durum.tarifArama = "";
       $("btnTarifAramaTemizle").hidden = true;
-      ciz_tarifler(); tArama.focus();
+      ic.ciz_tarifler(); tArama.focus();
     });
 
     /* tarif paneli */
-    $("btnPanelKapat").addEventListener("click", geriGit);
+    $("btnPanelKapat").addEventListener("click", ic.geriGit);
     $("tarifPanel").addEventListener("click", function (e) {
-      if (e.target === $("tarifPanel")) geriGit();
+      if (e.target === $("tarifPanel")) ic.geriGit();
     });
     $("btnFavori").addEventListener("click", function () {
-      if (!durum.acikTarif) return;
-      var eklendi = AM.depo.favDegistir(durum.acikTarif.id);
+      if (!ic.durum.acikTarif) return;
+      var eklendi = AM.depo.favDegistir(ic.durum.acikTarif.id);
       $("btnFavori").setAttribute("aria-pressed", eklendi ? "true" : "false");
-      bildir(eklendi ? "Favorilere eklendi 💛" : "Favorilerden çıkarıldı");
-      if (durum.ekran === "favori") ciz_favori();
+      ic.bildir(eklendi ? "Favorilere eklendi 💛" : "Favorilerden çıkarıldı");
+      if (ic.durum.ekran === "favori") ic.ciz_favori();
     });
-    $("btnPisirmeBasla").addEventListener("click", pisirmeAc);
+    $("btnPisirmeBasla").addEventListener("click", ic.pisirmeAc);
 
     /* pişirme modu */
-    $("btnPisirmeKapat").addEventListener("click", geriGit);
+    $("btnPisirmeKapat").addEventListener("click", ic.geriGit);
     $("btnAdimGeri").addEventListener("click", function () {
-      if (durum.adim > 0) { durum.adim--; ciz_pisirme(); }
+      if (ic.durum.adim > 0) { ic.durum.adim--; ic.ciz_pisirme(); }
     });
     $("btnAdimIleri").addEventListener("click", function () {
-      var t = durum.acikTarif;
-      if (durum.adim < t.y.length - 1) { durum.adim++; ciz_pisirme(); }
-      else { geriGit(); bildir("Afiyet olsun! 🎉"); }
+      var t = ic.durum.acikTarif;
+      if (ic.durum.adim < t.y.length - 1) { ic.durum.adim++; ic.ciz_pisirme(); }
+      else { ic.geriGit(); ic.bildir("Afiyet olsun! 🎉"); }
     });
 
     /* ayarlar */
-    $("btnAyar").addEventListener("click", function () { ciz_ayarlar(); panelAc("ayarPanel"); });
-    $("btnAyarKapat").addEventListener("click", geriGit);
+    $("btnAyar").addEventListener("click", function () {
+      ic.ciz_ayarlar();
+      ic.panelAc("ayarPanel");
+    });
+    $("btnAyarKapat").addEventListener("click", ic.geriGit);
     $("ayarPanel").addEventListener("click", function (e) {
-      if (e.target === $("ayarPanel")) geriGit();
+      if (e.target === $("ayarPanel")) ic.geriGit();
     });
 
     document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape") geriGit();
+      if (e.key === "Escape") ic.geriGit();
       if (!$("pisirmePanel").hidden) {
         if (e.key === "ArrowRight") $("btnAdimIleri").click();
         if (e.key === "ArrowLeft") $("btnAdimGeri").click();
@@ -851,7 +172,7 @@
     if (location.protocol === "file:") return;   // yerel dosyadan açıldıysa gerek yok
 
     function guncellemeVar(isci) {
-      bildir("Yeni tarifler hazır!", "Güncelle", function () {
+      ic.bildir("Yeni tarifler hazır!", "Güncelle", function () {
         isci.postMessage({ tip: "HEMEN_GEC" });
       });
     }
@@ -906,12 +227,12 @@
     var ilkKez = AM.depo.ilkKezMi();
     if (ilkKez) AM.depo.temelleriSec();
     document.documentElement.dataset.yazi = AM.depo.yazi();
-    temayiUygula();
+    ic.temayiUygula();
 
     // "Telefona uy" seçiliyken sistem teması değişirse anında yansısın
     if (window.matchMedia) {
       var sorgu = window.matchMedia("(prefers-color-scheme: dark)");
-      var dinle = function () { if (AM.depo.tema() === "sistem") temayiUygula(); };
+      var dinle = function () { if (AM.depo.tema() === "sistem") ic.temayiUygula(); };
       if (sorgu.addEventListener) sorgu.addEventListener("change", dinle);
       else if (sorgu.addListener) sorgu.addListener(dinle);
     }
@@ -925,7 +246,7 @@
     olaylariBagla();
     ustYuksekligiOlc();
     window.addEventListener("resize", ustYuksekligiOlc);
-    basla_ilkCizim(ilkKez);
+    ic.basla_ilkCizim(ilkKez);
     swKur();
   }
 
