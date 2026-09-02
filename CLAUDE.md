@@ -32,8 +32,8 @@ Annem için hazırlanan, "bugün ne pişirsem?" web uygulaması. Mobil öncelikl
 
 Tarif görselleri elle üretiliyor (Nano Banana Pro / yerel Fooocus) ve depoda duruyor — dış bağlantı yok.
 
-1. `node tools/gorsel-istek.js --parti 50` → `gorseller/_istekler.txt` (öncelik sırası: kategori kapakları → "vitrin" tarifleri → gövde).
-2. Üretilen ham dosyalar `gorseller/_ham/<tarif-id>.png` — **dosya adı tarif id'siyle birebir aynı olmalı**, hattın geri kalanı buna bakıyor.
+1. `node tools/gorsel-istek.js --hepsi` → `gorseller/_istekler.txt` + `.csv` (öncelik sırası: kategori kapakları → "vitrin" tarifleri → gövde).
+2. `node tools/fooocus-uret.js --parti 50` → Fooocus'u sürüp ham görselleri `gorseller/_ham/<tarif-id>.png` yazar. **Fooocus açık olmalı** (`http://127.0.0.1:7865`). Ayarları (model, stil, oran) araç değil Fooocus arayüzü belirler — araç arayüzün o anki durumunu okuyup yalnızca istemi değiştirir. Görsel başına ~2,5 dk. `--incele` eşlemeyi gösterir, `--deneme` tek görsel üretir.
 3. `powershell -File tools/gorsel-isle.ps1` → 4:3 kırpar, 800×600 JPEG q78 olarak `gorseller/<tarif-id>.jpg` yazar (System.Drawing, kurulum gerektirmez).
 4. `node tools/veri-kontrol.js` görsel sayısını raporlar ve yanlış adlandırılmış dosyaları yakalar.
 
