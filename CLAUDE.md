@@ -34,6 +34,7 @@ Tarif görselleri elle üretiliyor (Nano Banana Pro / yerel Fooocus) ve depoda d
 
 1. `node tools/gorsel-istek.js --hepsi` → `gorseller/_istekler.txt` + `.csv` (öncelik sırası: kategori kapakları → "vitrin" tarifleri → gövde).
 2. `node tools/fooocus-uret.js --parti 50` → Fooocus'u sürüp ham görselleri `gorseller/_ham/<tarif-id>.png` yazar. **Fooocus açık olmalı** (`http://127.0.0.1:7865`). Ayarları (model, stil, oran) araç değil Fooocus arayüzü belirler — araç arayüzün o anki durumunu okuyup yalnızca istemi değiştirir. Görsel başına ~2,5 dk. `--incele` eşlemeyi gösterir, `--deneme` tek görsel üretir.
+   **Her 50 görselde dur ve devam için kullanıcıdan izin iste** — üretim kullanıcının GPU'sunu saatlerce meşgul ediyor, ne kadar süre bağlanacağına o karar veriyor. `--hepsi` bayrağını kendiliğinden kullanma.
 3. `powershell -File tools/gorsel-isle.ps1` → 4:3 kırpar, 800×600 JPEG q78 olarak `gorseller/<tarif-id>.jpg` yazar (System.Drawing, kurulum gerektirmez).
 4. `node tools/veri-kontrol.js` görsel sayısını raporlar ve yanlış adlandırılmış dosyaları yakalar.
 

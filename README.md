@@ -163,10 +163,10 @@ sürüm numarasını aynı anda artır**:
 
 | Dosya | Satır |
 |---|---|
-| `data/surum.js` | `AM.SURUM = "2.1.2";` |
-| `sw.js` | `const SURUM = "2.1.2";` |
+| `data/surum.js` | `AM.SURUM = "2.3.0";` |
+| `sw.js` | `const SURUM = "2.3.0";` |
 
-Örneğin ikisini de `"2.2.0"` yap, sonra:
+İkisini de bir üst sürüme (örneğin `"2.3.1"`) yap, sonra:
 
 ```bash
 git add . && git commit -m "Tatlı tarifleri eklendi" && git push

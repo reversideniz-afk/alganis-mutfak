@@ -25,7 +25,7 @@ const tarifDosyalari = fs.readdirSync(path.join(kok, "data"))
   .sort()
   .map((d) => "data/" + d);
 
-const dosyalar = ["data/malzemeler.js", "data/surum.js"].concat(tarifDosyalari);
+const dosyalar = ["data/malzemeler.js", "data/surum.js", "data/besin.js"].concat(tarifDosyalari);
 
 const kapsam = { window: {} };
 kapsam.window.window = kapsam.window;
@@ -55,11 +55,24 @@ AM.MALZEMELER.forEach((m, i) => {
   malzemeIdler.add(id);
   if (typeof ad !== "string" || !ad) hatalar.push(`MALZEME "${id}": ad eksik`);
   if (!gecerliKategoriler.has(kat)) hatalar.push(`MALZEME "${id}": bilinmeyen kategori "${kat}"`);
+  /* Besin değeri olmayan malzeme, içinde geçtiği her tarifin toplamını
+     sessizce düşürür — bu yüzden hata sayılıyor, uyarı değil. */
+  if (!AM.BESIN || !AM.BESIN[id]) {
+    hatalar.push(`MALZEME "${id}": data/besin.js'te besin değeri yok`);
+  }
+});
+
+/* besin.js'te olup katalogda olmayan id (yazım hatası yakalar) */
+Object.keys(AM.BESIN || {}).forEach((id) => {
+  if (!malzemeIdler.has(id)) uyarilar.push(`besin.js: "${id}" diye bir malzeme yok`);
 });
 
 /* --- tarifler ------------------------------------------------------------ */
 const tarifIdler = new Set();
 const gecerliTarifKat = new Set(AM.TARIF_KATEGORILERI.map((k) => k.id));
+const gecerliMutfak = new Set((AM.MUTFAKLAR || []).map((m) => m.id));
+const gecerliGrup = new Set((AM.OGUN_GRUPLARI || []).map((g) => g.id));
+const mutfakSayilari = {};
 const kullanilan = new Set();
 const katSayilari = {};
 
@@ -73,6 +86,15 @@ const katSayilari = {};
   if (!t.ad) hatalar.push(`${etiket}: ad eksik`);
   if (!gecerliTarifKat.has(t.kat)) hatalar.push(`${etiket}: bilinmeyen kategori "${t.kat}"`);
   katSayilari[t.kat] = (katSayilari[t.kat] || 0) + 1;
+
+  /* mutfak ve grup isteğe bağlı alanlar; yazılmışsa geçerli olmalı.
+     Yazılmamışsa mutfak "turk", grup ise kategoriden türetiliyor. */
+  if (t.mutfak !== undefined && !gecerliMutfak.has(t.mutfak)) {
+    hatalar.push(`${etiket}: bilinmeyen mutfak "${t.mutfak}"`);
+  }
+  if (t.grup !== undefined && !gecerliGrup.has(t.grup)) {
+    hatalar.push(`${etiket}: bilinmeyen öğün grubu "${t.grup}"`);
+  }
 
   if (!Number.isFinite(t.sure) || t.sure <= 0) hatalar.push(`${etiket}: süre hatalı`);
   if (![1, 2, 3].includes(t.zor)) hatalar.push(`${etiket}: zorluk 1/2/3 olmalı`);
@@ -126,6 +148,8 @@ var grupSayilari = {};
 (AM.TARIFLER || []).forEach(function (t) {
   var g = AM.grupBul(t);
   grupSayilari[g] = (grupSayilari[g] || 0) + 1;
+  var m = AM.mutfakBul(t);
+  mutfakSayilari[m] = (mutfakSayilari[m] || 0) + 1;
 });
 
 /* --- görseller (bilgi) ---------------------------------------------------
@@ -164,6 +188,14 @@ console.log("");
 console.log("Öğün grubuna göre (Bugün ekranı):");
 AM.OGUN_GRUPLARI.forEach(function (g) {
   console.log("  " + g.ad.padEnd(24, ".") + " " + (grupSayilari[g.id] || 0));
+});
+
+console.log("");
+console.log("Mutfağa göre:");
+(AM.MUTFAKLAR || []).forEach(function (m) {
+  if (mutfakSayilari[m.id]) {
+    console.log("  " + m.ad.padEnd(24, ".") + " " + mutfakSayilari[m.id]);
+  }
 });
 
 console.log("");

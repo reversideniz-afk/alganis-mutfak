@@ -11,7 +11,7 @@
 
 window.AM = window.AM || {};
 
-AM.SURUM = "2.2.0";
+AM.SURUM = "2.3.0";
 
 AM.TARIF_KATEGORILERI = [
   { id: "corba",    ad: "Çorbalar",            emoji: "🍜" },
@@ -52,6 +52,33 @@ AM.OGUN_GRUPLARI = [
   { id: "tatli",    ad: "Tatlılar",         emoji: "🍮" }
 ];
 
+/* ============================================================================
+   MUTFAKLAR
+   ----------------------------------------------------------------------------
+   Tarifin hangi ülke/bölge mutfağına ait olduğu. Tarifte "mutfak" alanı YOKSA
+   "turk" sayılır — bu yüzden mevcut 869 tarifin hiçbirine dokunmak gerekmedi.
+   Yalnızca dünya mutfağı tarifleri kendi mutfağını yazar:  mutfak: "italyan"
+
+   "en" alanı görsel üretim istemlerinde kullanılıyor (tools/gorsel-istek.js).
+   ========================================================================== */
+
+AM.MUTFAKLAR = [
+  { id: "turk",     ad: "Türk",       en: "Turkish",       emoji: "🥘" },
+  { id: "italyan",  ad: "İtalyan",    en: "Italian",       emoji: "🍝" },
+  { id: "uzakdogu", ad: "Uzak Doğu",  en: "East Asian",    emoji: "🥢" },
+  { id: "ortadogu", ad: "Orta Doğu",  en: "Middle Eastern",emoji: "🧆" },
+  { id: "meksika",  ad: "Meksika",    en: "Mexican",       emoji: "🌮" },
+  { id: "hint",     ad: "Hint",       en: "Indian",        emoji: "🍛" },
+  { id: "balkan",   ad: "Balkan",     en: "Balkan",        emoji: "🥟" },
+  { id: "akdeniz",  ad: "Akdeniz",    en: "Mediterranean", emoji: "🫒" },
+  { id: "fransiz",  ad: "Fransız",    en: "French",        emoji: "🥐" }
+];
+
+AM.MUTFAK_VARSAYILAN = "turk";
+
+AM.MUTFAKLAR_AD = {};
+AM.MUTFAKLAR.forEach(function (m) { AM.MUTFAKLAR_AD[m.id] = m.ad; });
+
 /* Kategoriden öğün grubuna varsayılan eşleme */
 AM.KAT_GRUP = {
   corba: "corba",
@@ -64,7 +91,9 @@ AM.KAT_GRUP = {
 };
 
 /* Kategorisi ne olursa olsun sofrada ara sıcak sayılanlar.
-   Yeni bir ara sıcak eklersen tarifin id'sini buraya yazman yeterli. */
+   YENİ TARİFLERDE BU LİSTEYİ KULLANMA — tarife doğrudan  grup: "arasicak"
+   yaz, daha az hata yapılır. Liste eski tarifler için duruyor; ikisi de
+   çalışır, tarifin kendi "grup" alanı önce gelir. */
 AM.ARA_SICAKLAR = [
   "sigara-boregi", "muska-boregi", "cig-borek", "talas-boregi", "pisi",
   "mucver", "mantar-sote", "patlican-kizartma", "karnabahar-graten",
@@ -89,10 +118,17 @@ AM.ARA_SICAKLAR = [
   var araSicakKume = {};
   AM.ARA_SICAKLAR.forEach(function (id) { araSicakKume[id] = 1; });
 
-  /** Bir tarifin hangi öğün grubuna düştüğünü söyler. */
+  /** Bir tarifin hangi öğün grubuna düştüğünü söyler.
+      Öncelik: tarifin kendi "grup" alanı → ARA_SICAKLAR listesi → kategori eşlemesi */
   AM.grupBul = function (t) {
+    if (t.grup) return t.grup;
     if (araSicakKume[t.id]) return "arasicak";
     return AM.KAT_GRUP[t.kat] || "ana";
+  };
+
+  /** Tarifin mutfağı. Alan yoksa Türk mutfağı sayılır. */
+  AM.mutfakBul = function (t) {
+    return t.mutfak || AM.MUTFAK_VARSAYILAN;
   };
 
   AM.OGUN_GRUP_AD = {};

@@ -381,7 +381,9 @@ function isListesi() {
 
   /* --- toplu üretim --- */
   const isler = isListesi();
-  const sinir = bayrak("--hepsi") ? isler.length : sayi("--parti", 25);
+  /* Varsayılan parti 50: üretim kullanıcının GPU'sunu görsel başına ~2,5 dk
+     meşgul ediyor, o yüzden partiler arasında onay alınıyor (bkz. CLAUDE.md). */
+  const sinir = bayrak("--hepsi") ? isler.length : sayi("--parti", 50);
 
   /* İki yerde birden bakıyoruz: henüz işlenmemiş ham dosya (_ham/) ve
      işlenip yerine konmuş son görsel (gorseller/). İkincisi olmazsa
