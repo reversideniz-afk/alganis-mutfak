@@ -14,7 +14,7 @@
    değişmez, kimsenin bir şey yüklemesi gerekmez.
    ========================================================================== */
 
-const SURUM = "2.3.0";
+const SURUM = "2.4.0";
 const ONBELLEK = "alganis-mutfak-v" + SURUM;
 
 /* Tarif görselleri (gorseller/*.jpg) BİLEREK bu listede yok: yüzlerce dosya,
