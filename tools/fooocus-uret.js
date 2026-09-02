@@ -71,10 +71,48 @@ const bekle = (ms) => new Promise((c) => setTimeout(c, ms));
 
 /* ================================================== Gradio arayüz durumu oku */
 
+/* Fooocus ayakta mı? Toplu üretim sırasında da kullanılıyor: bağlantı koparsa
+   araç ölmek yerine burada bekliyor. */
+async function ayaktaMi() {
+  try {
+    const y = await istek("/config");
+    return !!(y && y.dependencies);
+  } catch (e) {
+    return false;
+  }
+}
+
+async function ayagaKalkmasiniBekle(enFazlaDakika) {
+  const bitis = Date.now() + enFazlaDakika * 60 * 1000;
+  let duyuruldu = false;
+  while (Date.now() < bitis) {
+    if (await ayaktaMi()) {
+      if (duyuruldu) console.log("Fooocus geri geldi, devam ediliyor.");
+      return true;
+    }
+    if (!duyuruldu) {
+      console.log("Fooocus'a ulaşılamıyor — geri gelmesi bekleniyor…");
+      duyuruldu = true;
+    }
+    await bekle(15000);
+  }
+  return false;
+}
+
 async function arayuzDurumu() {
-  const yapilandirma = await istek("/config");
+  let yapilandirma = null;
+  try {
+    yapilandirma = await istek("/config");
+  } catch (e) {
+    /* Bağlantı hatasını yutup aşağıdaki anlaşılır mesajı veriyoruz —
+       ham ECONNREFUSED kullanıcıya ne yapması gerektiğini söylemiyor. */
+  }
   if (!yapilandirma || !yapilandirma.dependencies) {
-    throw new Error("Fooocus'a ulaşılamadı. Açık mı? Adres: " + SUNUCU);
+    throw new Error(
+      "Fooocus'a ulaşılamadı (" + SUNUCU + ").\n" +
+      "  Fooocus'u başlat, arayüz tarayıcıda açıldıktan sonra bu komutu tekrar çalıştır.\n" +
+      "  Farklı porttaysa:  set FOOOCUS_ADRES=http://127.0.0.1:PORT"
+    );
   }
 
   const bilesenler = {};
@@ -373,17 +411,37 @@ function isListesi() {
     const is = yapilacak[i];
     const etiket = "[" + (i + 1) + "/" + yapilacak.length + "] " + is.id;
     const t0 = Date.now();
-    try {
-      const cikti = await uret(durum, is.istem);
-      const yol = gorselYolunuBul(cikti);
-      if (!yol) throw new Error("görsel yolu okunamadı");
-      await indir("/file=" + yol, path.join(hamKlasor, is.id + ".png"));
-      const sn = Math.round((Date.now() - t0) / 1000);
-      console.log(etiket.padEnd(50) + sn + " sn");
-      basarili++;
-    } catch (e) {
-      console.log(etiket.padEnd(50) + "HATA: " + e.message);
-      basarisiz++;
+    let oldu = false;
+
+    /* Saatler süren gözetimsiz bir çalışmada tek bir aksama her şeyi
+       düşürmesin: üç deneme, arada Fooocus'un geri gelmesini bekleyerek. */
+    for (let deneme = 1; deneme <= 3 && !oldu; deneme++) {
+      try {
+        const cikti = await uret(durum, is.istem);
+        const yol = gorselYolunuBul(cikti);
+        if (!yol) throw new Error("görsel yolu okunamadı");
+        await indir("/file=" + yol, path.join(hamKlasor, is.id + ".png"));
+        const sn = Math.round((Date.now() - t0) / 1000);
+        console.log(etiket.padEnd(50) + sn + " sn" + (deneme > 1 ? "  (" + deneme + ". deneme)" : ""));
+        basarili++;
+        oldu = true;
+      } catch (e) {
+        if (deneme === 3) {
+          console.log(etiket.padEnd(50) + "HATA: " + e.message);
+          basarisiz++;
+        } else if (!(await ayaktaMi())) {
+          /* Fooocus kapandı ya da yeniden başlıyor — 30 dakikaya kadar bekle. */
+          const geldi = await ayagaKalkmasiniBekle(30);
+          if (!geldi) {
+            console.log("\nFooocus 30 dakikadır kapalı. Üretim durduruldu.");
+            console.log("Fooocus'u açıp aynı komutu çalıştır — kaldığı yerden devam eder.\n");
+            i = yapilacak.length;
+            break;
+          }
+        } else {
+          await bekle(5000);
+        }
+      }
     }
     await bekle(300);
   }

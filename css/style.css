@@ -201,6 +201,26 @@
    Uygulama gizle/göster işini hep `.hidden` üzerinden yaptığı için şart. */
 [hidden] { display: none !important; }
 
+/* ============================================================================
+   TARİF GÖRSELİ
+   js/gorsel.js ya bir <img> ya da SVG portre koyuyor; ikisi de kabı tamamen
+   doldurur. Kartın en-boy oranını kullanan taraf belirler (Faz 1'de kart
+   varyantları geliyor), burada sadece ortak davranış var.
+   ========================================================================== */
+.gorsel-kutu {
+  position: relative;
+  overflow: hidden;
+  background: var(--cizgi);
+  line-height: 0;
+}
+.gorsel-kutu > img,
+.gorsel-kutu > .gorsel-portre {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
 html { -webkit-text-size-adjust: 100%; }
 
 body {

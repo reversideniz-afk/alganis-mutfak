@@ -14,9 +14,13 @@
    değişmez, kimsenin bir şey yüklemesi gerekmez.
    ========================================================================== */
 
-const SURUM = "2.1.2";
+const SURUM = "2.2.0";
 const ONBELLEK = "alganis-mutfak-v" + SURUM;
 
+/* Tarif görselleri (gorseller/*.jpg) BİLEREK bu listede yok: yüzlerce dosya,
+   onlarca megabayt. Aşağıdaki fetch olayı görülen görseli önbelleğe alıyor,
+   böylece bir kez bakılan tarif çevrimdışı da görselli açılıyor. Hiç
+   görülmemiş bir tarif SVG portresine düşer — kart yine boş kalmaz. */
 const DOSYALAR = [
   "./",
   "./index.html",
@@ -54,8 +58,10 @@ const DOSYALAR = [
   "./data/tarifler-tatli-2.js",
   "./data/tarifler-tatli-3.js",
   "./data/surum.js",
+  "./data/gorseller.js",
   "./js/depo.js",
   "./js/eslestir.js",
+  "./js/gorsel.js",
   "./js/arayuz.js",
   "./js/uygulama.js",
   "./icons/icon-192.png",
