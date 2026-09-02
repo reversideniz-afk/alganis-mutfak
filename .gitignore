@@ -20,3 +20,5 @@ node_modules/
 gorseller/_ham/
 gorseller/_istekler.txt
 gorseller/_istekler.csv
+gorseller/_uretim.log
+gorseller/_uretim-hata.log
