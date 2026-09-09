@@ -87,12 +87,39 @@ sürüm 2.1.2, 0 bağımlılık.
   `tasarim/REFERANSLAR.md`.
   **Görsel tarama bitti**: 683/683, bulundu 181, `gorsel-isle.ps1` ile
   işlendi (bkz. Faz 1). 28 İtalyan tarifinden sadece ilk partideki 6'sının
-  görseli var (`_istekler.csv` diğer 22'den önce üretilmişti) — sırada
-  `gorsel-istek.js --hepsi` ile listeyi tazeleyip `gorsel-bul.js --hepsi`'yi
-  tekrar çalıştırmak var.
-  **Sırada**: İtalyan mutfağının geri kalanı (~12 tarif daha — ör.
-  cannoli, insalata di riso, involtini, peperonata, stracciatella
-  gibi tanınmış tarifler değerlendirilebilir), sonra Uzak Doğu mutfağı.
+  görseli vardı (`_istekler.csv` diğer 22'den önce üretilmişti) — liste
+  `gorsel-istek.js --hepsi` ile tazelendi (527 eksik) ve `gorsel-bul.js
+  --hepsi` **oturumdan bağımsız arka planda tekrar başlatıldı** (187 yeni
+  denenecek — kalanı zaten `_bulunamadi.csv`'de). Bu, bir sonraki oturum
+  açıldığında bitmiş olabilir; durum kontrolü: `Get-Content
+  gorseller\_bulma.log -Tail 10`. Bitmişse sırayla `gorsel-isle.ps1` →
+  `veri-kontrol.js` → commit (bkz. CLAUDE.md Görsel üretim hattı).
+
+  **Karar (2026-09-09): İtalyan mutfağı 28 tarifte durup Uzak Doğu'ya
+  geçiliyor** — kullanıcı "clear atacağım sonra uzak doğu mutfağına
+  geçelim" dedi. İtalyan'ın eksik ~12 tarifi (cannoli, insalata di riso,
+  involtini, peperonata, stracciatella gibi) sonra istenirse eklenir,
+  şu an planda değil.
+
+  **Sırada — Uzak Doğu mutfağı** (`mutfak:"uzakdogu"`, `AM.MUTFAKLAR`'da
+  zaten tanımlı, kapak görseli hazır: `gorseller/kapak-mutfak-uzakdogu.jpg`
+  — 9 mutfak kapağının hepsi tarandı). Tek "mutfak" olarak ele alınıyor —
+  Çin/Japon/Kore ağırlıklı ev yemekleri, alt kategoriye bölünmüyor.
+  Beklenen desen (İtalyan'la aynı mantık, bkz. yukarısı):
+  - **Domuz** çok yaygın (Çin/Kore) → tavuk/dana/kuzu ile uyarla.
+  - **Alkol**: Şaoxing şarabı (Çin), sake/mirin (Japon), rice wine (Kore)
+    → çıkar ya da pirinç sirkesi + su gibi alkolsüz bir karşılıkla dengele.
+  - **Muhtemelen yeni malzeme gerekecek** (kontrol edilip eksikse
+    eklenecek — `malzemeler.js`+`besin.js`(USDA)+`tools/malzeme-en.js`):
+    soya sosu, susam yağı, mısır/patates nişastası (kıvam için), pirinç
+    sirkesi, istiridye sosu, tofu. **Zaten katalogda var, tekrar ekleme**:
+    `zencefil` (baharat), `eriste` (noodle karşılığı olabilir, kontrol et).
+  - Kaynak önerisi: The Woks of Life, Just One Cookbook, Maangchi,
+    Omnivore's Cookbook — İtalyan'da olduğu gibi güvenilir, ölçü veren
+    siteler; uydurma oran yazma.
+  - Tarifler eklendikten sonra: `gorsel-istek.js --hepsi` (listeyi
+    tazele) unutulmasın, yoksa yeni tarifler taramaya girmez (bkz.
+    Faz 2'nin İtalyan'da yaşadığı gecikme).
 
   **Telif kontrolü yapıldı (2026-09-09)**: Kullanıcı isteği üzerine hem
   tarif metinlerinin hem görsellerin telif riski gözden geçirildi.
