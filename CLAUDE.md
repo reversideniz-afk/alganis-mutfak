@@ -2,6 +2,8 @@
 
 Annem için hazırlanan, "bugün ne pişirsem?" web uygulaması. Mobil öncelikli, çevrimdışı çalışan bir PWA. GitHub Pages'te yayında: **https://reversideniz-afk.github.io/alganis-mutfak/** (repo: `reversideniz-afk/alganis-mutfak`).
 
+**3.0 mimari planı ve faz haritası** (Faz 0-4, verilen kararlar, görsel üretim sırası) → [`YOL-HARITASI.md`](YOL-HARITASI.md). Her fazın başında/sonunda o dosyanın **Durum** bölümünü oku/güncelle.
+
 ## Kesin kurallar
 
 - **Her şey Türkçe**: arayüz metni, kod yorumları, değişken/fonksiyon adları.
@@ -30,26 +32,53 @@ Annem için hazırlanan, "bugün ne pişirsem?" web uygulaması. Mobil öncelikl
 
 ## Görsel üretim hattı
 
-Tarif görselleri elle üretiliyor (Nano Banana Pro / yerel Fooocus) ve depoda duruyor — dış bağlantı yok.
+**2026-09-09'da yön değişti: Fooocus kaldırıldı (kullanıcı sildi).** Yapay
+zekâ üretimi yerine **internetten telifsiz/yeniden kullanılabilir gerçek
+fotoğraf** kaynaklanıyor. `tools/fooocus-uret.js` bu yüzden silindi — yeniden
+gerekirse git geçmişinde duruyor (`ea9c19d` ve öncesi). Ayrıntılı gerekçe ve
+öğrenilenler için → `YOL-HARITASI.md` Bölüm 6.
 
-1. `node tools/gorsel-istek.js --hepsi` → `gorseller/_istekler.txt` + `.csv` (öncelik sırası: kategori kapakları → "vitrin" tarifleri → gövde).
-2. `node tools/fooocus-uret.js --parti 50` → Fooocus'u sürüp ham görselleri `gorseller/_ham/<tarif-id>.png` yazar. **Fooocus açık olmalı** (`http://127.0.0.1:7865`). Ayarları (model, stil, oran) araç değil Fooocus arayüzü belirler — araç arayüzün o anki durumunu okuyup yalnızca istemi değiştirir. Görsel başına ~2,5 dk. `--incele` eşlemeyi gösterir, `--deneme` tek görsel üretir.
-   **Her 50 görselde dur ve devam için kullanıcıdan izin iste** — üretim kullanıcının GPU'sunu saatlerce meşgul ediyor, ne kadar süre bağlanacağına o karar veriyor. `--hepsi` bayrağını kendiliğinden kullanma.
-
-   **Uzun üretimi oturuma bağlama.** Arka plan görevi olarak başlatırsan oturum kapanınca ölebilir. Bunun yerine ayrı süreç olarak başlat:
+1. `node tools/gorsel-istek.js --hepsi` → `gorseller/_istekler.csv` (öncelik
+   sırası: kategori/mutfak kapakları → "vitrin" tarifleri → gövde). Yeni tarif
+   eklendiğinde (ör. dünya mutfağı) bu listeyi **tekrar üret** — yoksa yeni
+   tarifler taramaya hiç girmez.
+2. `node tools/gorsel-bul.js --parti 50` (ya da `--hepsi`) → Openverse API
+   (api.openverse.org, anahtarsız) üzerinden her tarif için önce kendi
+   Türkçe adıyla, sonra ASCII yaklaşığıyla, sonra genel İngilizce
+   tanımla arar; bulduğunu `gorseller/_ham/<tarif-id>.<uzantı>` indirir.
+   GPU kullanmıyor, saatler sürmüyor (~700 tarif ~1-1,5 saat) — **50'lik onay
+   kuralı bu araca uygulanmaz**, `--hepsi` ile tek seferde çalıştırılabilir.
+   Aynı Start-Process deseniyle oturumdan bağımsız başlat:
    ```powershell
-   Start-Process -FilePath "node" -ArgumentList "tools/fooocus-uret.js","--parti","50" `
+   Start-Process -FilePath "node" -ArgumentList "tools/gorsel-bul.js","--hepsi" `
      -WorkingDirectory "$PWD" -WindowStyle Hidden `
-     -RedirectStandardOutput "$PWD\gorseller\_uretim.log" `
-     -RedirectStandardError "$PWD\gorseller\_uretim-hata.log"
+     -RedirectStandardOutput "$PWD\gorseller\_bulma.log" `
+     -RedirectStandardError "$PWD\gorseller\_bulma-hata.log"
    ```
-   Durum kontrolü (yeni oturumda ilk bakılacak yer): `Get-Content gorseller\_uretim.log -Tail 5` ve `Get-CimInstance Win32_Process -Filter "Name='node.exe'" | Where-Object { $_.CommandLine -like "*fooocus-uret*" }`. Süreç yoksa parti bitmiş ya da durmuş demektir; aynı komut kaldığı yerden devam eder.
+   Durum kontrolü: `Get-Content gorseller\_bulma.log -Tail 10`. Bulunamayan
+   tarifler hata değil, `gorseller/_bulunamadi.csv`'ye yazılır (id;denenen
+   sorgular) — bunlar için Nano Banana Pro ile elle üretim ya da farklı bir
+   arama stratejisi sonra düşünülecek, şimdilik SVG portreye düşüyorlar.
+   Atıf gerektiren (CC0 dışı) her görsel `gorseller/_kaynaklar.csv`'ye
+   yazılır (id;kaynak-url;lisans;yazar) — **bu liste kaybolmamalı**, ileride
+   bir "Fotoğraf Kaynakları" ekranı/sayfası için gerekecek.
+3. `powershell -File tools/gorsel-isle.ps1` → 4:3 kırpar, 800×600 JPEG q78
+   olarak `gorseller/<tarif-id>.jpg` yazar (System.Drawing, kurulum
+   gerektirmez) — kaynak PNG/JPG/WEBP fark etmez.
+4. `node tools/veri-kontrol.js` görsel sayısını raporlar ve yanlış
+   adlandırılmış dosyaları yakalar.
 
-   Üretim yavaşsa sebep genelde GPU'yu paylaşan başka bir uygulamadır (oyun vb.), Fooocus'ta sorun değil.
-3. `powershell -File tools/gorsel-isle.ps1` → 4:3 kırpar, 800×600 JPEG q78 olarak `gorseller/<tarif-id>.jpg` yazar (System.Drawing, kurulum gerektirmez).
-4. `node tools/veri-kontrol.js` görsel sayısını raporlar ve yanlış adlandırılmış dosyaları yakalar.
+Kurallar: `gorseller/*.jpg` commit **edilir**; `_ham/`, `_istekler.*` ve
+`_bulunamadi.csv` edilmez, **`_kaynaklar.csv` edilir** (atıf borcu takibi).
+Eksik görsel hata değildir — `gorsel.js` SVG portreye düşer, kart boş
+kalmaz. Service worker tarif görsellerini önden indirmez, yalnızca
+kapakları; kalanı görüldükçe önbelleğe alınır. `tools/malzeme-en.js`
+istem/arama üretiminde kullanılan İngilizce sözlüktür, **uygulamaya dahil
+değildir** (yeni malzeme eklersen oraya da bir satır ekle).
 
-Kurallar: `gorseller/*.jpg` commit **edilir**; `_ham/` ve `_istekler.*` edilmez. Eksik görsel hata değildir — `gorsel.js` SVG portreye düşer, kart boş kalmaz. Service worker tarif görsellerini önden indirmez, yalnızca kapakları; kalanı görüldükçe önbelleğe alınır. `tools/malzeme-en.js` istem üretiminde kullanılan İngilizce sözlüktür, **uygulamaya dahil değildir** (yeni malzeme eklersen oraya da bir satır ekle).
+**Stil tutarlılığı artık garanti değil** — her fotoğraf farklı kaynaktan
+geliyor, Fooocus'un tek tip görünümü yok. Bilinçli bir ödün: gerçek
+fotoğraf, tutarlı-ama-yapay görselden daha değerli sayıldı.
 
 ## Test/doğrulama yaklaşımı
 
@@ -73,4 +102,4 @@ Dikkat edilecekler:
 
 ## Durum (özet — detaylar için git log)
 
-869 tarif, 242 malzeme, 11 mutfak kategorisi, 8 öğün grubu (Bugün ekranı). Ayarlarda 6 renk paleti + yüksek kontrast, tema (gün ışığı/gece/sistem), yazı boyutu, ölçü cetveli var. Malzeme/favori seçimleri katalogla karşılaştırılmadan saklanır (veri kaybını önlemek için — bkz. `js/depo.js` başındaki not). Güncel sürüm: `data/surum.js` → `AM.SURUM`.
+897 tarif (869 Türk + 28 İtalyan), 247 malzeme, 11 tarif kategorisi, 9 mutfak, 8 öğün grubu (Bugün ekranı). Ayarlarda 6 renk paleti + yüksek kontrast, tema (gün ışığı/gece/sistem), yazı boyutu, ölçü cetveli var. Malzeme/favori seçimleri katalogla karşılaştırılmadan saklanır (veri kaybını önlemek için — bkz. `js/depo.js` başındaki not). Güncel sürüm: `data/surum.js` → `AM.SURUM`.

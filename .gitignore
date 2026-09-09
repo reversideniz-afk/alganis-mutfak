@@ -16,9 +16,15 @@ node_modules/
 
 # Görsel hattının ara dosyaları.
 # gorseller/*.jpg (işlenmiş çıktılar) commit EDİLİR — uygulamanın parçasıdır.
-# Ham üretim çıktıları ve istem listeleri edilmez: büyükler ve yeniden üretilebilirler.
+# gorseller/_kaynaklar.csv da commit EDİLİR — atıf gerektiren görsellerin
+# kaynak/lisans/yazar kaydı, kaybolursa telif borcu takip edilemez.
+# Ham üretim çıktıları, istem/log dosyaları ve bulunamadı listesi edilmez:
+# büyükler ve yeniden üretilebilir/tekrar denenebilirler.
 gorseller/_ham/
 gorseller/_istekler.txt
 gorseller/_istekler.csv
+gorseller/_bulunamadi.csv
 gorseller/_uretim.log
 gorseller/_uretim-hata.log
+gorseller/_bulma.log
+gorseller/_bulma-hata.log

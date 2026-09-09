@@ -11,7 +11,7 @@
 
 window.AM = window.AM || {};
 
-AM.SURUM = "2.5.0";
+AM.SURUM = "3.0.0";
 
 AM.TARIF_KATEGORILERI = [
   { id: "corba",    ad: "Çorbalar",            emoji: "🍜" },
@@ -78,6 +78,9 @@ AM.MUTFAK_VARSAYILAN = "turk";
 
 AM.MUTFAKLAR_AD = {};
 AM.MUTFAKLAR.forEach(function (m) { AM.MUTFAKLAR_AD[m.id] = m.ad; });
+
+AM.MUTFAKLAR_EMOJI = {};
+AM.MUTFAKLAR.forEach(function (m) { AM.MUTFAKLAR_EMOJI[m.id] = m.emoji; });
 
 /* Kategoriden öğün grubuna varsayılan eşleme */
 AM.KAT_GRUP = {

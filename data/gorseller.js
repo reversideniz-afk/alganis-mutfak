@@ -12,5 +12,17 @@
 window.AM = window.AM || {};
 
 AM.GORSELLER = [
-  "kapak-corba"
+  "arpa-sehriye-pilavi", "biber-kizartmasi", "biber-tursusu", "domates-kavurmasi",
+  "ekmek-kadayifi", "ev-yapimi-yufka", "firinda-citir-nohut", "gozleme",
+  "havuc-tarator", "kahvaltilik-patates", "kapak-bakliyat", "kapak-balik",
+  "kapak-corba", "kapak-etli", "kapak-hamur", "kapak-kahvalti",
+  "kapak-pilav", "kapak-salata", "kapak-sebze", "kapak-tatli",
+  "kapak-tavuk", "krep", "kumpir", "kuru-fasulye-corbasi",
+  "kuru-fasulye-yogurtlu", "mayasiz-lavas", "menemen", "muhallebi",
+  "murtuga", "nohut-corbasi", "nohutlu-pilav", "patates-puresi",
+  "patatesli-yumurta", "peynirli-makarna", "peynirli-omlet", "peynirli-patates-tava",
+  "peynirli-yumurta-sahan", "pirinc-pilavi", "sade-omlet", "sahanda-peynir",
+  "sahanda-yumurta", "sarimsakli-ekmek", "sehriye-corbasi", "soganli-yumurta",
+  "sut-corbasi", "sut-helvasi", "tuzlu-katmer", "un-corbasi",
+  "un-helvasi", "yumurtali-ekmek", "zeytinli-omlet"
 ];
