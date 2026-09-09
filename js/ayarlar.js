@@ -188,6 +188,25 @@
       anahtar
     ]));
 
+    /* besin değeri */
+    var besinAnahtar = el("button", {
+      type: "button", sinif: "anahtar",
+      "aria-pressed": AM.depo.besinGoster() ? "true" : "false",
+      "aria-label": "Besin değerini göster"
+    });
+    besinAnahtar.addEventListener("click", function () {
+      AM.depo.besinGoster(!AM.depo.besinGoster());
+      ic.ciz_ayarlar();
+      if (ic.durum.acikTarif) ic.ciz_detay();
+    });
+    govde.appendChild(el("div", { sinif: "ayar-satir" }, [
+      el("div", { sinif: "as-yazi" }, [
+        el("strong", { metin: "Besin değerini göster" }),
+        el("small", { metin: "Tarif panelinde yaklaşık kalori ve makro değerlerini göster." })
+      ]),
+      besinAnahtar
+    ]));
+
     /* sürüm & güncelleme */
     govde.appendChild(el("div", { sinif: "td-bolum-baslik", metin: "Uygulama" }));
     govde.appendChild(el("div", { sinif: "ayar-satir" }, [

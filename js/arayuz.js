@@ -123,75 +123,110 @@
   }
   ui.eksikMetni = eksikMetni;
 
-  /* --- tarif kartı --------------------------------------------------------- */
+  /* --- saate göre selamlama ------------------------------------------------ */
+
+  ui.selamlama = function () {
+    var saat = new Date().getHours();
+    var giris =
+      saat < 5  ? "İyi geceler!" :
+      saat < 11 ? "Günaydın!" :
+      saat < 17 ? "Tünaydın!" :
+      saat < 22 ? "İyi akşamlar!" : "İyi geceler!";
+    return giris + " Bugün ne pişirsem?";
+  };
+
+  /* --- tarif kartı: dört varyant, tek üreteç -------------------------------
+     varyant: "kahraman" | "izgara" | "liste" | "serit" (öntanımlı "izgara").
+     "kahraman" tıklanabilir değildir — Bugün ekranında ayrı "Tarifi aç"
+     düğmesiyle açılır, o yüzden tikla parametresi yoksayılır. */
 
   /** kayit: {t: tarif, d: degerlendirme} — d verilmezse eksik bilgisi çizilmez */
-  ui.tarifKart = function (kayit, secildi) {
+  ui.tarifKarti = function (kayit, varyant, tikla) {
     var t = kayit.t || kayit;
     var d = kayit.d;
+    varyant = varyant || "izgara";
+    var kahramanMi = varyant === "kahraman";
 
-    var kart = el("button", {
-      type: "button", sinif: "tarif-kart", veri: { id: t.id }
-    });
+    var kart = kahramanMi
+      ? el("div", { sinif: "tk tk-kahraman" })
+      : el("button", { type: "button", sinif: "tk tk-" + varyant, veri: { id: t.id } });
+
+    kart.appendChild(AM.gorsel.kutu(t, "gk-" + varyant));
 
     if (AM.depo.favMi(t.id)) {
       kart.appendChild(el("span", { sinif: "tk-kalp", metin: "💛", "aria-hidden": "true" }));
     }
-    kart.appendChild(el("span", { sinif: "tk-emoji", "aria-hidden": "true", metin: t.em || "🍽" }));
-    kart.appendChild(el("span", { sinif: "tk-ad", metin: t.ad }));
-    kart.appendChild(el("span", {
-      sinif: "tk-alt",
-      metin: ui.sureYaz(t.sure) + " · " + ZORLUK[t.zor]
-    }));
 
-    if (d && d.durum === "neredeyse") {
-      // Ana malzemelerin hepsi var, sadece tali olanlar eksik.
-      kart.appendChild(el("span", {
-        sinif: "tk-eksik",
-        metin: eksikMetni(d.eksikYrd) + " olmadan da olur"
+    var govde = el("div", { sinif: "tk-govde" });
+
+    if (kahramanMi) {
+      govde.appendChild(el("span", { sinif: "tk-etiket", metin: ui.selamlama() }));
+      govde.appendChild(el("h2", { metin: t.ad }));
+      var ozet = AM.TARIF_KATEGORILERI_AD[t.kat] || "";
+      govde.appendChild(el("p", { sinif: "tk-ozet", metin: ozet + " · " + t.por + " kişilik" }));
+
+      var pilSatir = el("div", { sinif: "rozet-satir" });
+      pilSatir.appendChild(rozet("⏱ " + ui.sureYaz(t.sure)));
+      pilSatir.appendChild(rozet("👩‍🍳 " + ZORLUK[t.zor]));
+      if (t.etsiz) pilSatir.appendChild(rozet("🌱 Etsiz"));
+      if (d && d.eksikYrd.length) {
+        pilSatir.appendChild(rozet(eksikMetni(d.eksikYrd) + " olmasa da olur", "eksik"));
+      } else if (d) {
+        pilSatir.appendChild(rozet("✓ Her şey evde var", "iyi"));
+      }
+      govde.appendChild(pilSatir);
+    } else {
+      govde.appendChild(el("span", { sinif: "tk-ad", metin: t.ad }));
+      govde.appendChild(el("span", {
+        sinif: "tk-alt",
+        metin: ui.sureYaz(t.sure) + " · " + ZORLUK[t.zor]
       }));
-    } else if (d && d.durum === "yakin") {
-      kart.appendChild(el("span", {
-        sinif: "tk-eksik",
-        metin: "+ " + eksikMetni(d.eksikAna.concat(d.eksikYrd))
-      }));
-    } else if (d && d.durum === "uzak") {
-      kart.appendChild(el("span", {
-        sinif: "tk-eksik",
-        metin: d.eksikSayi + " malzeme eksik"
-      }));
+
+      if (d && d.durum === "neredeyse") {
+        // Ana malzemelerin hepsi var, sadece tali olanlar eksik.
+        govde.appendChild(el("span", {
+          sinif: "tk-eksik",
+          metin: eksikMetni(d.eksikYrd) + " olmadan da olur"
+        }));
+      } else if (d && d.durum === "yakin") {
+        govde.appendChild(el("span", {
+          sinif: "tk-eksik",
+          metin: "+ " + eksikMetni(d.eksikAna.concat(d.eksikYrd))
+        }));
+      } else if (d && d.durum === "uzak") {
+        govde.appendChild(el("span", {
+          sinif: "tk-eksik",
+          metin: d.eksikSayi + " malzeme eksik"
+        }));
+      }
     }
 
-    if (secildi) kart.addEventListener("click", function () { secildi(t.id); });
+    kart.appendChild(govde);
+    if (tikla) kart.addEventListener("click", function () { tikla(t.id); });
     return kart;
   };
 
-  /* --- kahraman (bugünün önerisi) kartı ------------------------------------ */
+  /* --- besin rozetleri -------------------------------------------------------
+     Not: ilerleme halkası (yüzde/hedef) DEĞİL — bu uygulamada hiçbir yerde
+     hedef/limit/uyarı yok (bkz. Karar D). Dört rozet de nötr, aynı yüzey
+     rengiyle; sadece emoji + etiketle ayrışıyor, renkle "iyi/kötü" demiyor. */
+  var BESIN_ALANLAR = [
+    ["kcal", "🔥", "kcal"],
+    ["karb", "🌾", "g karb"],
+    ["prot", "🥩", "g prot"],
+    ["yag",  "🫒", "g yağ"]
+  ];
 
-  ui.heroKart = function (kayit) {
-    var t = kayit.t, d = kayit.d;
-    var kutu = el("div", { sinif: "hero" });
-
-    kutu.appendChild(el("span", { sinif: "hero-emoji", "aria-hidden": "true", metin: t.em || "🍽" }));
-    kutu.appendChild(el("span", { sinif: "hero-etiket", metin: "Bugün ne pişirsem?" }));
-    kutu.appendChild(el("h2", { metin: t.ad }));
-
-    var ozet = AM.TARIF_KATEGORILERI_AD[t.kat] || "";
-    kutu.appendChild(el("p", { sinif: "hero-ozet", metin: ozet + " · " + t.por + " kişilik" }));
-
-    var satir = el("div", { sinif: "rozet-satir" });
-    satir.appendChild(rozet("⏱ " + ui.sureYaz(t.sure)));
-    satir.appendChild(rozet("👩‍🍳 " + ZORLUK[t.zor]));
-    if (t.etsiz) satir.appendChild(rozet("🌱 Etsiz"));
-
-    if (d.eksikYrd.length) {
-      satir.appendChild(rozet(eksikMetni(d.eksikYrd) + " olmasa da olur", "eksik"));
-    } else {
-      satir.appendChild(rozet("✓ Her şey evde var", "iyi"));
-    }
-    kutu.appendChild(satir);
-    return kutu;
-  };
+  function besinSatiri(besin) {
+    var satir = el("div", { sinif: "besin-satir" });
+    BESIN_ALANLAR.forEach(function (b) {
+      satir.appendChild(el("div", { sinif: "besin-halka" }, [
+        el("strong", { veri: { besin: b[0] }, metin: String(besin[b[0]]) }),
+        el("small", { metin: b[2] })
+      ]));
+    });
+    return satir;
+  }
 
   /* --- tarif detayı --------------------------------------------------------- */
 
@@ -199,14 +234,21 @@
     var parca = document.createDocumentFragment();
     var carpan = porsiyon / t.por;
 
-    var ust = el("div", { sinif: "td-ust" }, [
-      el("span", { sinif: "td-emoji", "aria-hidden": "true", metin: t.em || "🍽" }),
-      el("div", null, [
-        el("h2", { sinif: "td-baslik", metin: t.ad }),
-        el("div", { sinif: "td-kaynak", metin: AM.TARIF_KATEGORILERI_AD[t.kat] || "" })
-      ])
-    ]);
-    parca.appendChild(ust);
+    parca.appendChild(AM.gorsel.kutu(t, "gk-panel"));
+
+    parca.appendChild(el("h2", { sinif: "td-baslik", metin: t.ad }));
+
+    /* Mutfak + kategori düz metin altbaşlıkta — mutfak sadece Türk dışıysa
+       yazılır (869 Türk tarifte sürekli "Türk" görmek gürültü olurdu).
+       Süre/zorluk (ve varsa etsiz/fırın) aşağıda rozet olarak kalıyor —
+       altı rozetten dörde indi, referans tasarımdaki iki-üç rozetlik
+       sadelikle uyumlu (bkz. tasarim/REFERANSLAR.md madde 19). */
+    var mutfakId = AM.mutfakBul(t);
+    var katAdi = AM.TARIF_KATEGORILERI_AD[t.kat] || "";
+    var altBaslikMetin = mutfakId === AM.MUTFAK_VARSAYILAN
+      ? katAdi
+      : (AM.MUTFAKLAR_EMOJI[mutfakId] || "") + " " + (AM.MUTFAKLAR_AD[mutfakId] || "") + " · " + katAdi;
+    parca.appendChild(el("p", { sinif: "td-alt-baslik", metin: altBaslikMetin }));
 
     var rozetler = el("div", { sinif: "rozet-satir" });
     rozetler.appendChild(rozet("⏱ " + ui.sureYaz(t.sure)));
@@ -215,9 +257,39 @@
     if (!t.firinsiz) rozetler.appendChild(rozet("🔥 Fırın gerekir"));
     parca.appendChild(rozetler);
 
+    var besinSonuc = AM.besin.hesapla(t, porsiyon);
+    if (AM.depo.besinGoster() && AM.besin.gosterilsinMi(besinSonuc)) {
+      parca.appendChild(besinSatiri(besinSonuc));
+    }
+
+    /* sekmeler: Malzemeler / Yapılışı */
+    var sekmeler = el("div", { sinif: "td-sekmeler", role: "tablist" });
+    var panoMalzeme = el("div", { sinif: "td-pano" });
+    var panoYapilis = el("div", { sinif: "td-pano", hidden: true });
+
+    function sekmeSec(btnMalzeme, btnYapilis, malzemeMi) {
+      panoMalzeme.hidden = !malzemeMi;
+      panoYapilis.hidden = malzemeMi;
+      btnMalzeme.classList.toggle("aktif", malzemeMi);
+      btnMalzeme.setAttribute("aria-selected", malzemeMi ? "true" : "false");
+      btnYapilis.classList.toggle("aktif", !malzemeMi);
+      btnYapilis.setAttribute("aria-selected", !malzemeMi ? "true" : "false");
+    }
+
+    var btnSekmeMalzeme = el("button", {
+      type: "button", sinif: "td-sekme aktif", role: "tab", "aria-selected": "true", metin: "Malzemeler"
+    });
+    var btnSekmeYapilis = el("button", {
+      type: "button", sinif: "td-sekme", role: "tab", "aria-selected": "false", metin: "Yapılışı"
+    });
+    btnSekmeMalzeme.addEventListener("click", function () { sekmeSec(btnSekmeMalzeme, btnSekmeYapilis, true); });
+    btnSekmeYapilis.addEventListener("click", function () { sekmeSec(btnSekmeMalzeme, btnSekmeYapilis, false); });
+    sekmeler.appendChild(btnSekmeMalzeme);
+    sekmeler.appendChild(btnSekmeYapilis);
+    parca.appendChild(sekmeler);
+
     /* porsiyon çarpanı — değişince panel baştan çizilmez, sadece miktarlar
        güncellenir (bkz. ui.porsiyonYenile). Böylece sayfa yukarı kaymaz. */
-    parca.appendChild(el("div", { sinif: "td-bolum-baslik", metin: "Kaç kişilik?" }));
     var eksiBtn = el("button", { type: "button", sinif: "porsiyon-btn", "aria-label": "Porsiyonu azalt", metin: "−" });
     var artiBtn = el("button", { type: "button", sinif: "porsiyon-btn", "aria-label": "Porsiyonu artır", metin: "+" });
     var sayiEl = el("strong", {
@@ -230,12 +302,10 @@
     artiBtn.addEventListener("click", function () {
       porsiyonDegisti(Math.min(24, Number(sayiEl.textContent) + 1));
     });
-    parca.appendChild(el("div", { sinif: "porsiyon-kutu" }, [
+    panoMalzeme.appendChild(el("div", { sinif: "porsiyon-kutu" }, [
       el("span", { metin: "Kişi sayısı" }), eksiBtn, sayiEl, artiBtn
     ]));
 
-    /* malzemeler */
-    parca.appendChild(el("div", { sinif: "td-bolum-baslik", metin: "Malzemeler" }));
     t.m.forEach(function (satir, ix) {
       var rol = satir[3] || "ana";
       var idler = satir[0].split("|");
@@ -252,31 +322,30 @@
       if (satir[4]) icerik.push(el("span", { sinif: "ms-not", metin: satir[4] }));
       else if (rol === "ops") icerik.push(el("span", { sinif: "ms-not", metin: "isteğe bağlı" }));
 
-      parca.appendChild(el("div", { sinif: sinif }, icerik));
+      panoMalzeme.appendChild(el("div", { sinif: sinif }, icerik));
     });
+    parca.appendChild(panoMalzeme);
 
-    /* hazırlanışı */
-    parca.appendChild(el("div", { sinif: "td-bolum-baslik", metin: "Hazırlanışı" }));
     var liste = el("div", { sinif: "adim-liste" });
     t.y.forEach(function (adim) {
       liste.appendChild(el("div", { sinif: "adim" }, [el("span", { metin: adim })]));
     });
-    parca.appendChild(liste);
+    panoYapilis.appendChild(liste);
 
-    /* püf noktası */
     if (t.ip) {
-      parca.appendChild(el("div", { sinif: "td-bolum-baslik", metin: "Püf noktası" }));
-      parca.appendChild(el("div", { sinif: "ipucu-kart" }, [
+      panoYapilis.appendChild(el("div", { sinif: "td-bolum-baslik", metin: "Püf noktası" }));
+      panoYapilis.appendChild(el("div", { sinif: "ipucu-kart" }, [
         el("span", { "aria-hidden": "true", metin: "💡" }),
         el("span", null, [el("b", { metin: "" }), t.ip])
       ]));
     }
+    parca.appendChild(panoYapilis);
 
     return parca;
   };
 
   /**
-   * Porsiyon değiştiğinde sadece miktar yazılarını tazeler.
+   * Porsiyon değiştiğinde sadece miktar ve besin yazılarını tazeler.
    * Paneli baştan çizmediğimiz için kullanıcının kaydırma konumu bozulmaz.
    */
   ui.porsiyonYenile = function (kap, t, porsiyon) {
@@ -287,6 +356,12 @@
       var satir = t.m[Number(e.dataset.mi)];
       if (satir) e.textContent = ui.olcu(satir, carpan);
     });
+    if (AM.depo.besinGoster()) {
+      var besin = AM.besin.hesapla(t, porsiyon);
+      Array.prototype.forEach.call(kap.querySelectorAll("[data-besin]"), function (e) {
+        if (besin[e.dataset.besin] !== undefined) e.textContent = String(besin[e.dataset.besin]);
+      });
+    }
   };
 
   /* --- pişirme modu adımı ---------------------------------------------------- */

@@ -24,7 +24,7 @@
       .filter(Boolean);
 
     favlar.forEach(function (t) {
-      kap.appendChild(AM.ui.tarifKart({ t: t, d: AM.degerlendir(t, sepet) }, ic.tarifAc));
+      kap.appendChild(AM.ui.tarifKarti({ t: t, d: AM.degerlendir(t, sepet) }, "izgara", ic.tarifAc));
     });
     $("favoriBos").hidden = favlar.length > 0;
   };
@@ -59,7 +59,7 @@
     bosalt(kap);
     var sonuc = AM.tarifAra(ic.durum.tarifArama, ic.durum.tarifKat);
     sonuc.slice(0, ic.durum.gosterTum).forEach(function (t) {
-      kap.appendChild(AM.ui.tarifKart({ t: t, d: AM.degerlendir(t, sepet) }, ic.tarifAc));
+      kap.appendChild(AM.ui.tarifKarti({ t: t, d: AM.degerlendir(t, sepet) }, "izgara", ic.tarifAc));
     });
     $("tarifBos").hidden = sonuc.length > 0;
     $("btnDahaFazlaTum").hidden = sonuc.length <= ic.durum.gosterTum;

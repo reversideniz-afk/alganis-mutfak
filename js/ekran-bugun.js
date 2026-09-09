@@ -36,16 +36,18 @@
 
       var ix = AM.depo.oneriIx() % havuz.length;
       var secili = havuz[ix];
-      kap.appendChild(AM.ui.heroKart(secili));
+      kap.appendChild(AM.ui.tarifKarti(secili, "kahraman"));
       $("btnTarifiAc").disabled = false;
       $("btnBaskaOner").disabled = havuz.length < 2;
       kap.dataset.id = secili.t.id;
       yokKart.hidden = true;
+      ciz_digerSecenekler(havuz, secili.t.id);
     } else {
       $("btnTarifiAc").disabled = true;
       $("btnBaskaOner").disabled = true;
       kap.dataset.id = "";
       yokKart.hidden = sonuc.yakin.length > 0;
+      $("bolumDigerSecenekler").hidden = true;
       if (sonuc.yakin.length) {
         kap.appendChild(el("div", { sinif: "bilgi-kart mor" }, [
           el("h2", { metin: "Tam çıkan bir şey yok" }),
@@ -68,12 +70,27 @@
     var lst2 = $("listeNerdeyse");
     bosalt(lst2);
     yakin.slice(0, ic.durum.gosterNerdeyse).forEach(function (k) {
-      lst2.appendChild(AM.ui.tarifKart(k, ic.tarifAc));
+      lst2.appendChild(AM.ui.tarifKarti(k, "liste", ic.tarifAc));
     });
     $("sayacNerdeyse").textContent = String(yakin.length);
     $("bolumNerdeyse").hidden = yakin.length === 0;
     $("btnDahaFazlaNerdeyse").hidden = yakin.length <= ic.durum.gosterNerdeyse;
   };
+
+  /** Kahraman kartta seçilenin dışında, aynı havuzdan hızlıca göz atılacak
+      birkaç alternatif — yatay kaydırmalı şerit. En az iki alternatif yoksa
+      (havuz çok küçükse) bölüm hiç gösterilmez. */
+  function ciz_digerSecenekler(havuz, haricId) {
+    var bolum = $("bolumDigerSecenekler");
+    var serit = $("digerSecenekler");
+    bosalt(serit);
+    var digerler = havuz.filter(function (k) { return k.t.id !== haricId; });
+    if (digerler.length < 2) { bolum.hidden = true; return; }
+    digerler.slice(0, 12).forEach(function (k) {
+      serit.appendChild(AM.ui.tarifKarti(k, "serit", ic.tarifAc));
+    });
+    bolum.hidden = false;
+  }
 
   /** Yemek türü şeridi: Tümü + o an gerçekten yapılabilen gruplar. */
   function ciz_ogunSerit(kayitlar) {
@@ -127,7 +144,7 @@
       var uyanlar = kayitlar.filter(function (k) { return AM.grupBul(k.t) === secili; });
       var izgara = el("div", { sinif: "tarif-izgara" });
       uyanlar.slice(0, ic.durum.gosterYapilabilir).forEach(function (k) {
-        izgara.appendChild(AM.ui.tarifKart(k, ic.tarifAc));
+        izgara.appendChild(AM.ui.tarifKarti(k, "izgara", ic.tarifAc));
       });
       kap.appendChild(izgara);
       dahaFazla.hidden = uyanlar.length <= ic.durum.gosterYapilabilir;
@@ -152,7 +169,7 @@
 
       var izgara2 = el("div", { sinif: "tarif-izgara" });
       uyanlar.slice(0, ic.GRUP_ONIZLEME).forEach(function (k) {
-        izgara2.appendChild(AM.ui.tarifKart(k, ic.tarifAc));
+        izgara2.appendChild(AM.ui.tarifKarti(k, "izgara", ic.tarifAc));
       });
 
       kap.appendChild(el("section", { sinif: "grup-bolum" }, [baslik, izgara2]));

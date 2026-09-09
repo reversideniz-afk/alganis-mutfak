@@ -121,6 +121,14 @@
       ic.ciz_tarifler(); tArama.focus();
     });
 
+    /* Bugün ekranındaki arama "kutusu" aslında bir düğme — arama mantığını
+       tekrarlamak yerine doğrudan Tarifler ekranına gidip oradaki gerçek
+       kutuya odaklanıyor. */
+    $("btnBugunAramaKisayol").addEventListener("click", function () {
+      ic.git("tarifler");
+      tArama.focus();
+    });
+
     /* tarif paneli */
     $("btnPanelKapat").addEventListener("click", ic.geriGit);
     $("tarifPanel").addEventListener("click", function (e) {
@@ -133,6 +141,23 @@
       ic.bildir(eklendi ? "Favorilere eklendi 💛" : "Favorilerden çıkarıldı");
       if (ic.durum.ekran === "favori") ic.ciz_favori();
     });
+    /* Web Share API tarayıcı desteklemiyorsa düğme baştan gizli kalır —
+       özellik yoksa da uygulama çalışır (bkz. pişirme modundaki wake lock
+       ile aynı "sessizce vazgeç" mantığı). Paylaşılan sadece uygulamanın
+       kendi bağlantısı ve tarif adı; dış bir isteğe gitmediği için CSP'yi
+       (connect-src 'self') bozmaz — OS'un paylaşım sayfasını açar. */
+    if (navigator.share) {
+      $("btnPaylas").hidden = false;
+      $("btnPaylas").addEventListener("click", function () {
+        var t = ic.durum.acikTarif;
+        if (!t) return;
+        navigator.share({
+          title: t.ad,
+          text: "Alganis Mutfak'ta " + t.ad + " tarifine bakıyordum:",
+          url: location.href
+        }).catch(function () { /* kullanıcı iptal etti — sorun değil */ });
+      });
+    }
     $("btnPisirmeBasla").addEventListener("click", ic.pisirmeAc);
 
     /* pişirme modu */

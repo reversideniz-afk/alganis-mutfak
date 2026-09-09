@@ -44,6 +44,7 @@
 
   --golge:        0 1px 3px rgba(76, 58, 40, .06), 0 6px 16px rgba(76, 58, 40, .05);
   --golge-kart:   0 2px 6px rgba(76, 58, 40, .07), 0 12px 28px rgba(76, 58, 40, .07);
+  --golge-yuzen:  0 4px 10px rgba(76, 58, 40, .16), 0 2px 5px rgba(76, 58, 40, .12);
   --doodle-renk:  #D9822B;
   --doodle-op:    .05;
   --gunisigi:     radial-gradient(125% 90% at 50% -15%,
@@ -54,6 +55,7 @@
   --r-s: 10px;
   --r-m: 16px;
   --r-l: 22px;
+  --r-round: 999px;
   --gvn: env(safe-area-inset-bottom, 0px);
   --menu-h: 62px;
 }
@@ -77,6 +79,7 @@
   --hosgeldin-zemin: rgba(0, 0, 0, .24);
   --golge:        0 2px 10px rgba(0, 0, 0, .35);
   --golge-kart:   0 4px 18px rgba(0, 0, 0, .42);
+  --golge-yuzen:  0 4px 14px rgba(0, 0, 0, .5);
   --doodle-renk:  #F2B441;
   --doodle-op:    .07;
   --gunisigi:     radial-gradient(125% 90% at 50% -15%,
@@ -102,6 +105,7 @@
     --hosgeldin-zemin: rgba(0, 0, 0, .24);
     --golge:        0 2px 10px rgba(0, 0, 0, .35);
     --golge-kart:   0 4px 18px rgba(0, 0, 0, .42);
+    --golge-yuzen:  0 4px 14px rgba(0, 0, 0, .5);
     --doodle-renk:  #F2B441;
     --doodle-op:    .07;
     --gunisigi:     radial-gradient(125% 90% at 50% -15%,
@@ -178,18 +182,20 @@
 
   --golge: 0 0 0 1px rgba(0, 0, 0, .12);
   --golge-kart: 0 0 0 1px rgba(0, 0, 0, .16);
+  --golge-yuzen: 0 0 0 2px rgba(0, 0, 0, .5);
   --doodle-op: 0;
   --gunisigi: none;
 }
 :root[data-palet="kontrast"] .cip,
 :root[data-palet="kontrast"] .kat-cip,
 :root[data-palet="kontrast"] .filtre-cip,
-:root[data-palet="kontrast"] .tarif-kart,
+:root[data-palet="kontrast"] .tk,
 :root[data-palet="kontrast"] .malzeme-satir,
 :root[data-palet="kontrast"] .adim,
 :root[data-palet="kontrast"] .arama-kutu,
-:root[data-palet="kontrast"] .hero,
 :root[data-palet="kontrast"] .ayar-satir,
+:root[data-palet="kontrast"] .td-sekmeler,
+:root[data-palet="kontrast"] .menu-btn-fab,
 :root[data-palet="kontrast"] .btn.ikincil,
 :root[data-palet="kontrast"] .btn.hayalet { border-width: 2px; }
 
@@ -315,7 +321,7 @@ main { position: relative; z-index: 1; }
 .ekran-ic {
   max-width: 660px;
   margin: 0 auto;
-  padding: 14px 14px calc(var(--menu-h) + var(--gvn) + 26px);
+  padding: 14px 14px calc(var(--menu-h) + var(--gvn) + 38px);
   display: flex;
   flex-direction: column;
   gap: 14px;
@@ -359,7 +365,7 @@ main { position: relative; z-index: 1; }
   display: flex; align-items: center; gap: 9px;
   background: var(--kagit);
   border: 1.5px solid var(--cizgi);
-  border-radius: 999px;
+  border-radius: var(--r-round);
   padding: 0 14px;
   height: 46px;
   color: var(--metin-soluk);
@@ -373,6 +379,15 @@ main { position: relative; z-index: 1; }
   height: 100%;
 }
 .arama-kutu input::-webkit-search-cancel-button { display: none; }
+
+/* Bugün ekranındaki arama kutusu gerçek bir input değil, düğme — dokunulunca
+   Tarifler ekranına gidip oradaki gerçek arama kutusuna odaklanıyor (arama
+   mantığı tek bir yerde kalsın diye). Görünüş aynı, sadece buton sıfırlamaları. */
+.arama-kutu-kisayol {
+  width: 100%; text-align: left; cursor: pointer; font: inherit;
+}
+.arama-kutu-kisayol span { font-size: 15.5px; }
+
 .temizle-x {
   border: 0; background: var(--cizgi); color: var(--metin-orta);
   width: 34px; height: 34px; border-radius: 50%;
@@ -396,7 +411,7 @@ main { position: relative; z-index: 1; }
   border: 1.5px solid var(--cizgi);
   background: var(--kagit);
   color: var(--metin-orta);
-  border-radius: 999px;
+  border-radius: var(--r-round);
   padding: 10px 15px;
   min-height: 44px;
   font-size: 14px; font-weight: 600;
@@ -407,7 +422,7 @@ main { position: relative; z-index: 1; }
 .kat-cip .kat-adet {
   font-size: 11.5px; font-weight: 700;
   background: var(--yesil); color: #fff;
-  border-radius: 999px; padding: 1px 6px; min-width: 18px; text-align: center;
+  border-radius: var(--r-round); padding: 1px 6px; min-width: 18px; text-align: center;
 }
 .kat-cip.aktif {
   background: var(--metin); color: var(--zemin); border-color: var(--metin);
@@ -429,7 +444,7 @@ main { position: relative; z-index: 1; }
   border: 1.5px solid var(--cizgi);
   background: var(--kagit);
   color: var(--metin);
-  border-radius: 999px;
+  border-radius: var(--r-round);
   padding: 9px 14px;
   font-size: 15px;
   cursor: pointer;
@@ -451,7 +466,7 @@ main { position: relative; z-index: 1; }
 
 /* --------------------------------------------------------------- butonlar */
 .btn {
-  border: 0; border-radius: 999px;
+  border: 0; border-radius: var(--r-round);
   padding: 12px 20px;
   font-size: 15.5px; font-weight: 700;
   cursor: pointer;
@@ -478,45 +493,15 @@ main { position: relative; z-index: 1; }
   flex: none;
   border: 1.5px solid var(--cizgi); background: var(--kagit);
   color: var(--metin-orta);
-  border-radius: 999px; padding: 10px 15px;
+  border-radius: var(--r-round); padding: 10px 15px;
   min-height: 44px;                     /* rahat dokunulabilir hedef */
   font-size: 14px; font-weight: 600; white-space: nowrap; cursor: pointer;
 }
 .filtre-cip.aktif { background: var(--mor); border-color: var(--mor); color: #fff; }
 
 /* ------------------------------------------------------------- öneri kart */
-.hero {
-  position: relative;
-  background: var(--kagit);
-  border-radius: var(--r-l);
-  padding: 20px 18px 18px;
-  box-shadow: var(--golge-kart);
-  overflow: hidden;
-  border: 1.5px solid var(--cizgi);
-}
-.hero::before {
-  content: "";
-  position: absolute; inset: 0 0 auto 0; height: 6px;
-  background: linear-gradient(90deg, var(--kirmizi), var(--sari), var(--yesil));
-}
-.hero-etiket {
-  display: inline-block;
-  font-size: 12px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
-  color: var(--vurgu-kirmizi); margin-bottom: 6px;
-}
-.hero h2 { font-size: 26px; margin-bottom: 8px; }
-.hero-emoji { font-size: 40px; line-height: 1; float: right; margin-left: 10px; }
-.hero-ozet { font-size: 14.5px; color: var(--metin-orta); }
-.rozet-satir { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
-.rozet-mini {
-  font-size: 12.5px; font-weight: 700;
-  background: var(--kagit-2); border: 1.5px solid var(--cizgi);
-  color: var(--metin-orta);
-  padding: 4px 10px; border-radius: 999px;
-  display: inline-flex; align-items: center; gap: 5px;
-}
-.rozet-mini.iyi   { background: var(--yesil-acik); border-color: transparent; color: var(--vurgu-yesil); }
-.rozet-mini.eksik { background: var(--sari-acik);  border-color: transparent; color: var(--vurgu-sari); }
+/* Kart (.tk*) ve rozet (.rozet-*) stilleri css/bilesenler.css'te — burada
+   sadece "Tarifi aç / Başka öner" düğme satırı kalıyor. */
 .oneri-aksiyon { display: flex; gap: 10px; }
 
 /* ------------------------------------------------------------ tarif kart */
@@ -527,7 +512,7 @@ main { position: relative; z-index: 1; }
 .sayac {
   font-size: 12.5px; font-weight: 800;
   background: var(--kirmizi); color: #fff;
-  border-radius: 999px; padding: 2px 9px;
+  border-radius: var(--r-round); padding: 2px 9px;
 }
 .sayac.gri { background: var(--metin-soluk); }
 
@@ -544,7 +529,7 @@ main { position: relative; z-index: 1; }
   font-size: 11.5px; font-weight: 800;
   background: var(--kagit-2); border: 1.5px solid var(--cizgi);
   color: var(--metin-soluk);
-  border-radius: 999px; padding: 2px 8px;
+  border-radius: var(--r-round); padding: 2px 8px;
 }
 .grup-tumu {
   margin-left: auto;
@@ -558,37 +543,20 @@ main { position: relative; z-index: 1; }
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   gap: 10px;
 }
-.tarif-kart {
-  position: relative;
-  text-align: left;
-  background: var(--kagit);
-  border: 1.5px solid var(--cizgi);
-  border-radius: var(--r-m);
-  padding: 12px 12px 11px;
-  cursor: pointer;
-  display: flex; flex-direction: column; gap: 5px;
-  box-shadow: var(--golge);
-}
-.tarif-kart:active { transform: scale(.98); }
-.tarif-kart .tk-emoji { font-size: 26px; line-height: 1; }
-.tarif-kart .tk-ad { font-size: 15px; font-weight: 700; line-height: 1.3; }
-.tarif-kart .tk-alt { font-size: 12.5px; color: var(--metin-soluk); }
-.tarif-kart .tk-eksik {
-  font-size: 12px; font-weight: 700; color: var(--vurgu-sari);
-  background: var(--sari-acik); border-radius: 8px; padding: 4px 7px; margin-top: 2px;
-}
-.tarif-kart .tk-kalp { position: absolute; top: 9px; right: 9px; font-size: 14px; }
+/* Kart içeriği (.tk-izgara) css/bilesenler.css'te. */
 
 .bos-durum { text-align: center; padding: 34px 20px; color: var(--metin-soluk); }
 .bos-emoji { font-size: 42px; margin-bottom: 10px; }
 
-/* -------------------------------------------------------------- alt menü */
+/* -------------------------------------------------------------- alt menü
+   Yüzen hap: kenarlardan içeri çekili, tam yuvarlak köşeli. "Bugün" düğmesi
+   (.menu-btn-fab) akıştan çıkıp üstüne biner — bkz. css/bilesenler.css. */
 .alt-menu {
-  position: fixed; left: 0; right: 0; bottom: 0; z-index: 40;
+  position: fixed; left: 14px; right: 14px; bottom: calc(var(--gvn) + 12px); z-index: 40;
   display: flex;
   background: var(--kagit);
-  border-top: 1.5px solid var(--cizgi);
-  padding-bottom: var(--gvn);
+  border: 1.5px solid var(--cizgi);
+  border-radius: var(--r-round);
   box-shadow: 0 -2px 14px rgba(90, 55, 30, .07);
 }
 .menu-btn {
@@ -605,7 +573,7 @@ main { position: relative; z-index: 1; }
   position: absolute; top: 8px; left: 50%; margin-left: 6px;
   background: var(--yesil); color: #fff;
   font-size: 10px; font-weight: 800; font-style: normal;
-  border-radius: 999px; padding: 1px 5px; min-width: 17px; text-align: center;
+  border-radius: var(--r-round); padding: 1px 5px; min-width: 17px; text-align: center;
 }
 
 /* ----------------------------------------------------------------- panel */
@@ -645,10 +613,8 @@ main { position: relative; z-index: 1; }
 }
 
 /* ------------------------------------------------------ tarif detay içi */
-.td-baslik { font-size: 24px; margin-bottom: 6px; }
-.td-ust { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 12px; }
-.td-emoji { font-size: 42px; line-height: 1; }
-.td-kaynak { font-size: 12.5px; color: var(--metin-soluk); }
+.td-baslik { font-size: 24px; margin: 14px 0 4px; }
+.td-alt-baslik { font-size: 14.5px; color: var(--metin-soluk); margin: 0 0 2px; }
 .td-bolum-baslik {
   font-size: 13px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
   color: var(--metin-soluk); margin: 20px 0 9px;
@@ -760,7 +726,7 @@ main { position: relative; z-index: 1; }
 .ayar-satir .as-yazi strong { display: block; font-size: 15px; }
 .ayar-satir .as-yazi small { font-size: 13px; color: var(--metin-soluk); }
 .anahtar {
-  flex: none; width: 50px; height: 30px; border-radius: 999px;
+  flex: none; width: 50px; height: 30px; border-radius: var(--r-round);
   background: var(--cizgi); border: 0; cursor: pointer; position: relative;
   transition: background-color .15s;
 }
@@ -796,7 +762,7 @@ main { position: relative; z-index: 1; }
   box-shadow: inset 0 0 0 1px var(--metin);
 }
 .palet-ornek {
-  display: flex; border-radius: 999px; overflow: hidden;
+  display: flex; border-radius: var(--r-round); overflow: hidden;
   width: 62px; height: 20px;
   border: 1px solid rgba(0, 0, 0, .12);
 }
@@ -833,7 +799,7 @@ main { position: relative; z-index: 1; }
   flex: none;
   display: flex; align-items: center; gap: 6px;
   height: 40px; padding: 0 13px 0 10px;
-  border: 0; border-radius: 999px;
+  border: 0; border-radius: var(--r-round);
   background: rgba(255, 255, 255, .22);
   color: inherit;
   font-size: 13px; font-weight: 700;
@@ -845,9 +811,9 @@ main { position: relative; z-index: 1; }
 .bildirim {
   position: fixed; z-index: 90;
   left: 50%; transform: translateX(-50%);
-  bottom: calc(var(--menu-h) + var(--gvn) + 16px);
+  bottom: calc(var(--menu-h) + var(--gvn) + 28px);
   background: var(--metin); color: var(--zemin);
-  padding: 11px 18px; border-radius: 999px;
+  padding: 11px 18px; border-radius: var(--r-round);
   font-size: 14.5px; font-weight: 600;
   box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
   max-width: calc(100vw - 32px); text-align: center;
@@ -855,7 +821,7 @@ main { position: relative; z-index: 1; }
 }
 .bildirim button {
   border: 0; background: var(--sari); color: #3B2A22;
-  border-radius: 999px; padding: 5px 12px; margin-left: 10px;
+  border-radius: var(--r-round); padding: 5px 12px; margin-left: 10px;
   font-weight: 800; font-size: 13.5px; cursor: pointer;
 }
 
@@ -865,15 +831,16 @@ html[data-yazi="b"]  { --olcek: 1.13; }
 html[data-yazi="cb"] { --olcek: 1.30; }
 
 .cip,
-.tarif-kart .tk-ad,
+.tk-ad,
 .bilgi-kart p,
 .malzeme-satir,
 .adim,
 .ipucu-kart,
 .pm-malzeme ul       { font-size: calc(15px * var(--olcek, 1)); }
-.hero h2             { font-size: calc(26px * var(--olcek, 1)); }
+.tk-kahraman h2      { font-size: calc(26px * var(--olcek, 1)); }
 .td-baslik           { font-size: calc(24px * var(--olcek, 1)); }
 .pm-metin            { font-size: calc(22px * var(--olcek, 1)); }
+.td-sekme            { font-size: calc(14.5px * var(--olcek, 1)); }
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; transition-duration: .001ms !important; }
@@ -881,5 +848,5 @@ html[data-yazi="cb"] { --olcek: 1.30; }
 
 @media (min-width: 700px) {
   .tarif-izgara { grid-template-columns: repeat(auto-fill, minmax(175px, 1fr)); }
-  .hero h2 { font-size: 30px; }
+  .tk-kahraman h2 { font-size: 30px; }
 }

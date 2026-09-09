@@ -1,0 +1,136 @@
+/* ============================================================================
+   BİLEŞENLER — Faz 1'de eklenen/yenilenen görsel bileşenler.
+   style.css'teki temel jetonları (renk, radius, gölge) kullanır, kendi renk
+   değeri tanımlamaz.
+   ========================================================================== */
+
+/* ----------------------------------------------------------------- rozet */
+/* Kartlarda ve tarif panelinde (js/arayuz.js: ui.detay) ortak kullanılıyor. */
+.rozet-satir { display: flex; flex-wrap: wrap; gap: 7px; margin-top: 12px; }
+.rozet-mini {
+  font-size: 12.5px; font-weight: 700;
+  background: var(--kagit-2); border: 1.5px solid var(--cizgi);
+  color: var(--metin-orta);
+  padding: 4px 10px; border-radius: var(--r-round);
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.rozet-mini.iyi   { background: var(--yesil-acik); border-color: transparent; color: var(--vurgu-yesil); }
+.rozet-mini.eksik { background: var(--sari-acik);  border-color: transparent; color: var(--vurgu-sari); }
+
+/* ============================================================================
+   TARİF KARTI — dört varyant (kahraman/izgara/liste/serit), tek üreteçten
+   (js/arayuz.js: ui.tarifKarti). Görsel AM.gorsel.kutu() ile basılan
+   .gorsel-kutu (bkz. style.css) — burada sadece en-boy oranı ve metin gövdesi.
+   ========================================================================== */
+.tk {
+  position: relative;
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: var(--kagit);
+  border: 1.5px solid var(--cizgi);
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+}
+.tk:not(.tk-kahraman):active { transform: scale(.98); }
+.tk-kalp { position: absolute; top: 9px; right: 9px; font-size: 15px; z-index: 1; }
+.tk-govde { display: flex; flex-direction: column; gap: 5px; padding: 12px 12px 11px; }
+.tk-eksik {
+  align-self: flex-start;
+  font-size: 12px; font-weight: 700; color: var(--vurgu-sari);
+  background: var(--sari-acik); border-radius: 8px; padding: 4px 7px; margin-top: 2px;
+}
+
+/* --- izgara (varsayılan ızgara kartı) ------------------------------------ */
+.tk-izgara { border-radius: var(--r-m); box-shadow: var(--golge); }
+.tk-izgara .gorsel-kutu { aspect-ratio: 4 / 3; }
+.tk-izgara .tk-ad { font-size: 15px; font-weight: 700; line-height: 1.3; }
+.tk-izgara .tk-alt { font-size: 12.5px; color: var(--metin-soluk); }
+
+/* --- liste satırı (kompakt, yatay) ---------------------------------------- */
+.tk-liste { display: flex; align-items: stretch; border-radius: var(--r-m); box-shadow: var(--golge); }
+.tk-liste .gorsel-kutu { width: 76px; flex: none; }
+.tk-liste .tk-govde { flex: 1; justify-content: center; padding: 8px 12px; gap: 3px; }
+.tk-liste .tk-ad { font-size: 14.5px; font-weight: 700; line-height: 1.3; }
+.tk-liste .tk-alt { font-size: 12px; color: var(--metin-soluk); }
+
+/* --- yatay şerit (dar kart — Bugün ekranında "Diğer seçenekler" şeridinde,
+       ileride Dünya ekranındaki mutfak vitrinlerinde de kullanılacak) ---- */
+.tarif-serit { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 2px; -webkit-overflow-scrolling: touch; }
+.tk-serit { flex: none; width: 138px; border-radius: var(--r-m); box-shadow: var(--golge); }
+.tk-serit .gorsel-kutu { aspect-ratio: 4 / 3; }
+.tk-serit .tk-govde { padding: 9px 10px 10px; gap: 3px; }
+.tk-serit .tk-ad { font-size: 13.5px; font-weight: 700; line-height: 1.25; }
+.tk-serit .tk-alt { font-size: 11.5px; color: var(--metin-soluk); }
+
+/* --- kahraman (bugünün önerisi, tıklanamaz — açma düğmesi ayrı) ----------- */
+.tk-kahraman { cursor: default; border-radius: var(--r-l); box-shadow: var(--golge-kart); }
+.tk-kahraman .gorsel-kutu { aspect-ratio: 16 / 9; }
+.tk-kahraman .tk-govde { padding: 16px 18px 18px; gap: 6px; }
+.tk-kahraman .tk-etiket {
+  display: inline-block;
+  font-size: 12px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--vurgu-kirmizi);
+}
+.tk-kahraman h2 { font-size: 24px; margin: 0; }
+.tk-kahraman .tk-ozet { font-size: 14.5px; color: var(--metin-orta); margin: 0; }
+
+/* ============================================================================
+   TARİF PANELİ — tam genişlik görsel, besin rozetleri, sekmeler
+   (js/arayuz.js: ui.detay). .panel-govde'nin kendi padding'ini (16px) taşarak
+   kenardan kenara bir görsel elde ediyoruz — panel-tarif.js/index.html'e
+   dokunmadan.
+   ========================================================================== */
+.gk-panel {
+  width: calc(100% + 32px);
+  margin: -16px -16px 14px;
+  aspect-ratio: 16 / 9;
+}
+
+.besin-satir { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+.besin-halka {
+  flex: 1 1 70px;
+  text-align: center;
+  background: var(--kagit-2);
+  border: 1.5px solid var(--cizgi);
+  border-radius: var(--r-m);
+  padding: 8px 6px 7px;
+}
+.besin-halka strong { display: block; font-size: 16px; font-weight: 800; }
+.besin-halka small { font-size: 11px; color: var(--metin-soluk); }
+
+.td-sekmeler {
+  display: flex; gap: 6px;
+  margin: 18px 0 14px;
+  border-bottom: 1.5px solid var(--cizgi);
+}
+.td-sekme {
+  flex: 1;
+  border: 0; background: none; cursor: pointer;
+  padding: 10px 4px;
+  font-size: 14.5px; font-weight: 700;
+  color: var(--metin-soluk);
+  border-bottom: 2.5px solid transparent;
+  margin-bottom: -1.5px;
+}
+.td-sekme.aktif { color: var(--vurgu-kirmizi); border-bottom-color: var(--vurgu-kirmizi); }
+
+/* ============================================================================
+   YÜZEN ALT MENÜ — "Bugün ne pişirsem?" FAB'ı
+   .alt-menu (style.css) artık kenarlardan çekili bir hap; bu düğme normal
+   akıştan çıkıp (position:absolute) üstüne biniyor. Diğer üç .menu-btn akışta
+   kalıp flex:1 ile eşit aralanıyor — hiçbir JS/yönlendirme değişikliği yok.
+   ========================================================================== */
+.menu-btn.menu-btn-fab {
+  position: absolute;
+  top: -26px; left: 50%; transform: translateX(-50%);
+  width: 60px; height: 60px;
+  border-radius: 50%;
+  background: var(--marka); color: #fff; /* aktif sınıfı rengi ezmesin diye .menu-btn.aktif ile aynı özgüllük */
+  border: 3px solid var(--zemin);
+  box-shadow: var(--golge-yuzen);
+  display: flex; align-items: center; justify-content: center;
+}
+.menu-btn-fab:active { transform: translateX(-50%) scale(.96); }
+.menu-btn-fab svg { width: 28px; height: 28px; }

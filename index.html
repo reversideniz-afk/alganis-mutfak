@@ -16,6 +16,7 @@
 <link rel="icon" href="icons/icon-192.png" sizes="192x192" type="image/png">
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/bilesenler.css">
 </head>
 <body>
 
@@ -83,6 +84,13 @@
 <section class="ekran" id="ekran-bugun" hidden>
   <div class="ekran-ic">
 
+    <div class="arama-satir">
+      <button type="button" class="arama-kutu arama-kutu-kisayol" id="btnBugunAramaKisayol" aria-label="Tarif ara">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="M20 20l-3.5-3.5"/></svg>
+        <span>Tarif ara… (örn. dolma)</span>
+      </button>
+    </div>
+
     <div id="bosMutfakUyari" class="bilgi-kart sari" hidden>
       <h2>Önce mutfağını tanıyayım</h2>
       <p>Evdeki malzemeleri işaretlersen sana ne pişirebileceğini söyleyebilirim.</p>
@@ -106,6 +114,13 @@
           <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7h5l3 5M21 7h-5l-7 10H3M21 17h-5"/><path d="M18 4l3 3-3 3M18 14l3 3-3 3"/></svg>
           Başka bir şey öner
         </button>
+      </div>
+
+      <div class="bolum" id="bolumDigerSecenekler" hidden>
+        <div class="bolum-baslik">
+          <h3>Diğer seçenekler</h3>
+        </div>
+        <div class="tarif-serit" id="digerSecenekler"></div>
       </div>
 
       <div class="bolum" id="bolumYapilabilir">
@@ -177,9 +192,8 @@
 
 <!-- ========================================================== ALT MENÜ -->
 <nav class="alt-menu" id="altMenu" aria-label="Ana menü">
-  <button type="button" class="menu-btn" data-git="bugun">
+  <button type="button" class="menu-btn menu-btn-fab" data-git="bugun" aria-label="Bugün ne pişirsem?">
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 11h16v6a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3z"/><path d="M2 11h20M7 7c0-1.5 1-1.5 1-3M12 7c0-1.5 1-1.5 1-3M17 7c0-1.5 1-1.5 1-3"/></svg>
-    <span>Bugün</span>
   </button>
   <button type="button" class="menu-btn" data-git="mutfak">
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M4 10h16M8 5V3M16 5V3M9 15h6"/></svg>
@@ -205,6 +219,9 @@
       </button>
       <button type="button" class="ikon-btn kalp" id="btnFavori" aria-label="Favorilere ekle" aria-pressed="false">
         <svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.5-7-9.5A3.9 3.9 0 0 1 12 7a3.9 3.9 0 0 1 7 3.5C19 15.5 12 20 12 20z"/></svg>
+      </button>
+      <button type="button" class="ikon-btn" id="btnPaylas" aria-label="Tarifi paylaş" hidden>
+        <svg viewBox="0 0 24 24" width="21" height="21" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="M8.6 10.5l6.8-3.9M8.6 13.5l6.8 3.9"/></svg>
       </button>
     </div>
     <div class="panel-govde" id="panelGovde"></div>
@@ -283,6 +300,7 @@
 <script src="data/tarifler-tatli.js"></script>
 <script src="data/tarifler-tatli-2.js"></script>
 <script src="data/tarifler-tatli-3.js"></script>
+<script src="data/tarifler-dunya-italyan.js"></script>
 <script src="data/surum.js"></script>
 <script src="data/gorseller.js"></script>
 <script src="data/besin.js"></script>
