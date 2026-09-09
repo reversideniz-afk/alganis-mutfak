@@ -278,6 +278,51 @@ yerleşiyordu (kart türüne göre bazı tariflerde emoji köşede kalıyordu).
 Emoji artık her zaman tam ortada, sadece arka plandaki atmosferik tabak
 dairesi kayıyor.
 
+#### İkinci tur (aynı gün) — kapak fotoğrafları ve tam kopya görseller
+
+Kullanıcı ilk temizlikten sonra iki şey daha fark etti: (1) dünya mutfağı
+kapak fotoğrafları ("Dünya" ekranındaki 9 mutfak kartı) hiç kontrol
+edilmemişti ve üçü çok kötüydü; (2) bazı tarif kartları birebir aynı
+fotoğrafı gösteriyordu.
+
+**Kapak fotoğrafları** — `tools/gorsel-bul.js`'in kapak sorgusu tek ve
+çok geniş: `"traditional " + mutfağın İngilizce adı + " food"`, tek
+deneme, yedek sorgu yok (tarifler için 3 kademeli sorgu var, kapaklar
+için yok — bu asimetri not edildi, ileride tools/gorsel-bul.js'e kapaklar
+için de yedek sorgu eklenebilir). Sonuç: `kapak-mutfak-ortadogu` bir yol
+kenarı fotoğrafıydı (sarı çiçekli ot + araba), `kapak-mutfak-uzakdogu`
+çamurdaki bir çöp parçasıydı, `kapak-mutfak-meksika` kızarmış solucandı
+(gerçek ama iğrenç bir Meksika yemeği — kapak için uygun değil). Üçü de
+elle, daha spesifik sorgularla (`"middle eastern food falafel"`,
+`"chinese food dim sum noodles"`, `"mexican street tacos al pastor"`)
+yeniden arandı ve iyi sonuçlar bulundu (meze tabağı, dim sum, sokak
+tacosu) — ikisi atıf gerektiriyor (`_kaynaklar.csv`'ye eklendi), biri
+CC0. **Ders**: kapak sorgusu ülke/bölge adı gibi çok genel kaldığında
+Openverse coğrafi etiketleme yüzünden tamamen alakasız (bitki, yol,
+çamur) sonuç dönebiliyor — bir sonraki kapak aramasında ilk denemede
+somut bir yemek adı (falafel, dim sum, taco gibi) kullanmak daha güvenli.
+
+**Tam kopya görseller** — `md5sum gorseller/*.jpg | sort | uniq -c -w32`
+ile bayt-bayt aynı dosyalar tarandı (önceki elle taramada bu kontrol
+yapılmamıştı, sadece "görsel doğru mu" bakılmıştı, "aynı görsel iki
+tarife mi düşmüş" bakılmamıştı). **10 grup, 19 fazla dosya** bulundu —
+en çarpıcısı aynı Wikimedia fotoğrafı (curid=42965567, patlıcanlı/biberli
+yoğurtlu bir tepsi) yedi ayrı tarife (fırında patlıcan dizme, kıymasız
+musakka, patatesli biber sote, patlıcan kızartma, patlıcan sote,
+sarımsaklı fırın patates, silkme) atanmıştı. Her grupta en isabetli tek
+tarif seçildi (ör. "patlıcanlı yoğurtlu tepsi" — ad zaten yoğurtlu diyor),
+kalanı silindi. Bazı gruplarda (kabaklı pilav + mantarlı risotto'nun
+paylaştığı fine-dining tabağı; fırında hindi + tavuk sote'nin paylaştığı
+uçak yemeği tepsisi) hiçbir tarif iyi eşleşmiyordu, ikisi de silindi.
+**Ders**: görsel doğruluk denetimi hem "bu fotoğraf bu yemek mi?" hem
+"bu fotoğraf başka bir tarife de atanmış mı?" sorusunu sormalı — ikinci
+soru md5 karşılaştırmasıyla saniyeler içinde otomatik yanıtlanabiliyor,
+elle taramaya hiç gerek yok.
+
+Toplamda bu iki turda 73 yanlış/tekrar eden görsel silindi (54 + 19),
+3 kapak fotoğrafı değiştirildi, tarif görseli sayısı 436 → 363/910'a
+düştü ama artık hepsi doğru. Sürüm 3.1.2.
+
 ### Mobil çıkış ve gelir modeli — ERTELENDİ (2026-09-09)
 
 **Karar E**: Play Store / App Store çıkışı ve her türlü gelir modeli **uzun
