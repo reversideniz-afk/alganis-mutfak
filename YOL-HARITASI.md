@@ -323,6 +323,79 @@ Toplamda bu iki turda 73 yanlış/tekrar eden görsel silindi (54 + 19),
 3 kapak fotoğrafı değiştirildi, tarif görseli sayısı 436 → 363/910'a
 düştü ama artık hepsi doğru. Sürüm 3.1.2.
 
+#### Üçüncü tur (aynı gün) — Fooocus artıkları ve %95 yanlışlık iddiası
+
+Kullanıcı ikinci turdan sonra da "yemeklerin %95'inin ismiyle fotoğrafı
+uyuşmuyor" dedi ve "telifsiz olsun dedim diye rastgele fotoğraf
+koyacaksan komple kaldırmayı düşüneceğim" diyerek özelliğin devam edip
+etmeyeceğini sorguladı. Bu, ilk iki turun aslında **yüzeysel** kaldığını
+gösterdi — kök nedene bakıldı ve çok daha büyük bir sorun bulundu:
+
+**363 tarif görselinin 182'si (%50'si) `_kaynaklar.csv`'de hiç atıf
+kaydı yoktu.** Bu, gerçek (Openverse) fotoğrafların neredeyse hepsinin
+atıf gerektirdiği bilgisiyle (CC0 nadir) birleştirilince: bu 182 dosya
+gerçek fotoğraf değil, **Fooocus döneminden kalan, hiçbir zaman
+denetlenmemiş yapay zekâ görselleriydi**. Dosya tarihleri (2 ve 3 Eylül)
+bunu doğruladı — Fooocus 9 Eylül'de kaldırılmıştı ama "Önceki (Fooocus
+dönemi) ilerleme... korunuyor" kararıyla bu görseller silinmeden
+bırakılmıştı. `data/gorseller.js` manifesti bozuk olduğu için bu
+görseller uygulamada hiç görünmüyordu — birinci turdaki manifest
+düzeltmesi (bkz. yukarı) bunları da sessizce diriltmiş, ne birinci ne
+ikinci tur denetimi bunları "AI kalıntısı, güvenilmez" diye ayrı
+kategoride ele almamıştı. Kullanıcının somut örneği ("Zeytinyağlı Havuç
+Yemeği" — internette aratınca hiç benzemiyor) bu 182'nin içindeydi:
+görsel, aynı stüdyo şablonunu (bakır kap + iki yağ şişesi + zeytin
+kâsesi + keten örtü) tekrar tekrar üreten Fooocus çıktılarından biriydi.
+**Bu 182 dosyanın hepsi, doğru görünüp görünmediğine bakılmadan
+silindi** — çünkü "gerçek fotoğraf" kararının kendisiyle çelişiyorlardı
+ve hiçbir zaman gözden geçirilmemişlerdi.
+
+Kalan 181 gerçek (Openverse) fotoğraf bu sefer çok daha büyük ve net
+kontrol tablolarıyla (5×5, 280×210 px), İLK turdaki "kabaca doğru
+kategori" ölçütü yerine "bu gerçekten bu yemek mi" ölçütüyle yeniden
+tarandı. Sonuç: **49 tane daha silindi** — künefe (kabarık pastane
+görünümü yok, düz kahverengi sıvı), tavuklu köfte (makarna gösteriyor),
+kazandibi (tost görünüyor), soğan dolması (soğan şekli yok), tiramisu
+(klasik kat görünümü yok, soyut tabak), ışkembe/tarhana/sebze çorbaları
+(rengi/dokusu tutmuyor) gibi. Sonuç: 181 → 132/910 tarif görseli.
+**İlk turun ölçütü gevşekti** — "makul bir yemek fotoğrafı mı" ile
+"bu spesifik yemeğin fotoğrafı mı" arasındaki fark, küçük thumbnail'de
+kolayca kayboluyor; büyütülmüş görsel + daha şüpheci bir bakışla ikinci
+geçişte iki katı hata yakalandı.
+
+**Dünya kapakları — doğruluk yetmiyor, iştah açıcılık da gerekiyor.**
+Kullanıcı "İtalyan'da enfes duran bir pizza resmi neden yok" diye sordu
+— önceki turda kapaklar sadece "doğru mu" diye kontrol edilmişti, "güzel
+mi" hiç sorulmamıştı. İtalyan (makarna → gerçek bir fırın pizza, kömürlü
+kenarlı Napoli usulü), Balkan (kağıt havlu üstünde kızarmış köfte →
+kajmaklı ekmek arası çevapi, yüksek çözünürlük), Akdeniz (dağınık mutfak
+tezgahı → canlı renkli Yunan salatası, iri feta) değiştirildi — üçü de
+hem doğru hem gerçekten "enfes duran" fotoğraflarla. Türk, Hint ve
+Fransız kapakları için de alternatif arandı ama bulunanlar (bulanık
+telefon fotoğrafı, arka planda dikkat dağıtan masa numarası) mevcuttan
+daha iyi değildi, değiştirilmedi.
+
+**Dürüst değerlendirme (kullanıcının doğrudan sorduğu soru — "yapılamayacak
+bir şeyse söyle"):** Bu iş yapılabilir ama üç koşulla:
+1. Her yeni bulunan fotoğraf **elle, büyütülmüş halde ve şüpheci bir
+   gözle** onaylanmadan uygulamaya girmemeli — otomatik bulma aracının
+   sonucu asla doğru kabul edilmemeli (bkz. [[gorsel-liste-ve-dogrulama]]).
+2. Tanınmış/uluslararası yemekler (pizza, taco, humus, dim sum) için
+   arama gerçekten iyi çalışıyor — bu oturumda aranan her şey ilk
+   denemede güzel sonuç verdi. Türkiye'ye özgü, dar bölgesel ev
+   yemekleri için (özellikle İngilizce karşılığı zayıf olanlar) başarı
+   oranı çok daha düşük — bu durumda SVG portreye düşmek, yanlış
+   fotoğraftan her zaman daha iyi.
+3. Gerçekçi kapsam beklentisi: 897 Türk+İtalyan+Uzak Doğu tarifinin
+   hepsine doğru fotoğraf bulmak mümkün değil; %15-20 (yaklaşık 130-150
+   tarif) gerçekçi bir hedef, kalanı SVG'de kalır. Bu, "resim olsun
+   hepsi" isteğiyle doğrudan çelişir — kapsam ile doğruluk arasında
+   seçim yapılması gerekiyor, ikisi birden olmuyor.
+
+Sürüm 3.1.3. `node tools/veri-kontrol.js` yeşil (910 tarif, 132/910
+görsel), `node tools/arayuz-testi.js` 22/22, tüm görsellerde md5
+tam-kopya taraması sıfır sonuç verdi.
+
 ### Mobil çıkış ve gelir modeli — ERTELENDİ (2026-09-09)
 
 **Karar E**: Play Store / App Store çıkışı ve her türlü gelir modeli **uzun
