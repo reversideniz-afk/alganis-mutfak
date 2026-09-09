@@ -64,6 +64,7 @@ module.exports = {
   "beyaz-peynir": "white brined cheese", "kasar": "kasseri cheese",
   "lor": "curd cheese", "tulum-peyniri": "tulum cheese",
   "labne": "cream cheese", "ayran": "ayran yogurt drink",
+  "parmesan": "parmesan cheese", "mozzarella": "mozzarella cheese",
   "otlu-peynir": "herbed cheese", "cokelek": "dry curd cheese",
   "dil-peyniri": "string cheese", "keci-peyniri": "goat cheese",
   "kefir": "kefir",
@@ -94,6 +95,7 @@ module.exports = {
   "zerdecal": "turmeric", "zencefil": "ginger", "kakule": "cardamom",
   "defne": "bay leaf", "corek-otu": "nigella seeds", "susam": "sesame seeds",
   "biberiye": "rosemary", "safran": "saffron", "mahlep": "mahlep",
+  "muskat": "nutmeg", "adacayi": "sage",
   "damla-sakizi": "mastic", "gul-suyu": "rose water", "sahlep": "salep",
   "hashas": "poppy seeds", "limon-tuzu": "citric acid",
 
@@ -123,6 +125,7 @@ module.exports = {
   "ton-baligi": "canned tuna", "kakao": "cocoa", "cikolata": "chocolate",
   "et-suyu": "meat broth", "maden-suyu": "sparkling water",
   "mayonez": "mayonnaise", "hardal": "mustard", "kahve": "coffee",
+  "kedi-dili-biskuvi": "ladyfinger biscuits",
   "dondurma": "ice cream", "kadayif": "shredded kadayif pastry",
   "kapari": "capers", "recel": "fruit jam", "jelatin": "gelatin",
   "ketcap": "ketchup"

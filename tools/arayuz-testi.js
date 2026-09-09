@@ -34,7 +34,7 @@ function kontrol(ad, gecti, ek) {
     gorselVar: !!AM.gorsel,
     depoVar: !!AM.depo
   })`);
-  kontrol("uygulama yükleniyor", temel.tarif === 869, temel.tarif + " tarif");
+  kontrol("uygulama yükleniyor", temel.tarif === 897, temel.tarif + " tarif");
   kontrol("besin katmanı yüklü", temel.besinVar);
   kontrol("görsel katmanı yüklü", temel.gorselVar);
   kontrol("depo katmanı yüklü", temel.depoVar);
@@ -98,7 +98,7 @@ function kontrol(ad, gecti, ek) {
 
   /* --- 6. tarif paneli açılıyor mu? --- */
   const kartVar = await t.calistir(`(function () {
-    var k = document.querySelector(".tarif-kart");
+    var k = document.querySelector(".tk-izgara");
     if (!k) return false;
     k.click();
     return true;
@@ -198,7 +198,7 @@ function kontrol(ad, gecti, ek) {
   const ogunSonuc = await t.calistir(`(function () {
     return {
       aktifCip: (document.querySelector("#ogunSerit .aktif") || {}).textContent || "",
-      kartSayisi: document.querySelectorAll("#gruplarYapilabilir .tarif-kart").length
+      kartSayisi: document.querySelectorAll("#gruplarYapilabilir .tk-izgara").length
     };
   })()`);
   kontrol("bugün: öğün çipi listeyi daraltıyor",

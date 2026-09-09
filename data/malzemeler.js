@@ -117,6 +117,8 @@ AM.MALZEMELER = [
   ["tulum-peyniri",     "Tulum peyniri",          "sut", 0],
   ["labne",             "Labne / krem peynir",    "sut", 0],
   ["ayran",             "Ayran",                  "sut", 0],
+  ["parmesan",          "Parmesan peyniri",       "sut", 0],
+  ["mozzarella",        "Mozzarella",             "sut", 0],
 
   /* ------------------------------------------------------------- BAKLIYAT */
   ["un",                "Un",                     "bakliyat", 1],
@@ -173,7 +175,9 @@ AM.MALZEMELER = [
   ["corek-otu",         "Çörek otu",              "baharat", 0],
   ["susam",             "Susam",                  "baharat", 0],
   ["biberiye",          "Biberiye",               "baharat", 0],
+  ["adacayi",           "Adaçayı",                "baharat", 0, "sage"],
   ["safran",            "Safran / zafiran",       "baharat", 0],
+  ["muskat",            "Muskat cevizi",          "baharat", 0, "nutmeg"],
 
   /* ---------------------------------------------------------------- MEYVE */
   ["limon",             "Limon",                  "meyve", 1],
@@ -227,6 +231,7 @@ AM.MALZEMELER = [
   ["mayonez",           "Mayonez",                "kiler", 0],
   ["hardal",            "Hardal",                 "kiler", 0],
   ["kahve",             "Kahve",                  "kiler", 0, "nescafe turk kahvesi"],
+  ["kedi-dili-biskuvi", "Kedi dili bisküvi",      "kiler", 0, "savoiardi ladyfinger"],
   ["dondurma",          "Dondurma",               "kiler", 0],
   ["kadayif",           "Tel kadayıf",            "kiler", 0],
 
