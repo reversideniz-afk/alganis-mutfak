@@ -30,13 +30,27 @@ Annem için hazırlanan, "bugün ne pişirsem?" web uygulaması. Mobil öncelikl
 - Yeni bir "ara sıcak" tarifi eklersen `data/surum.js` → `AM.ARA_SICAKLAR` listesine id'sini ekle (yoksa "Bugün" ekranında yanlış grupta görünür); `veri-kontrol.js` bu listedeki yazım hatalarını yakalar.
 - Değişiklikten sonra HER ZAMAN `node tools/veri-kontrol.js` çalıştır.
 
-## Görsel üretim hattı
+## Görsel üretim hattı — DURDURULDU (2026-09-10)
+
+**Bu bölümdeki hat şu an KAPALI. Aşağıdaki adımları kendi başına ÇALIŞTIRMA.**
+Openverse'ten bulunan fotoğrafların büyük kısmı tarifle uyuşmuyordu (bazıları
+Fooocus'tan kalan hiç denetlenmemiş yapay zekâ görselleriydi) — kullanıcı
+"midem kalkmaya başladı" diyerek **tüm görselleri kaldırmayı** istedi.
+`gorseller/*.jpg` tamamen silindi, `data/gorseller.js` boş listeye döndü,
+`_kaynaklar.csv` sıfırlandı. Uygulama şu an tamamen SVG portrelerle çalışıyor
+— bu bir hata değil, bilinçli bir karar. Ayrıntı ve yeni konsept fikri
+(kullanıcının "Nefis Yemek Tarifleri" örneği — aşçının kendi çektiği fotoğraf)
+→ `YOL-HARITASI.md` Bölüm 6, "Görsel hattı durduruldu" alt başlığı. Yeniden
+başlatma kararı kullanıcıdan gelmeli; kendi kendine `gorsel-bul.js`/`gorsel-
+istek.js` çalıştırıp görsel eklemeye kalkışma.
 
 **2026-09-09'da yön değişti: Fooocus kaldırıldı (kullanıcı sildi).** Yapay
 zekâ üretimi yerine **internetten telifsiz/yeniden kullanılabilir gerçek
 fotoğraf** kaynaklanıyor. `tools/fooocus-uret.js` bu yüzden silindi — yeniden
 gerekirse git geçmişinde duruyor (`ea9c19d` ve öncesi). Ayrıntılı gerekçe ve
-öğrenilenler için → `YOL-HARITASI.md` Bölüm 6.
+öğrenilenler için → `YOL-HARITASI.md` Bölüm 6. **(Bu yaklaşımın kendisi de
+2026-09-10'da durduruldu, yukarıdaki nota bak — aşağıdaki adımlar artık
+tarihsel referans, aktif talimat değil.)**
 
 1. `node tools/gorsel-istek.js --hepsi` → `gorseller/_istekler.csv` (öncelik
    sırası: kategori/mutfak kapakları → "vitrin" tarifleri → gövde). Yeni tarif
@@ -75,17 +89,16 @@ gerekirse git geçmişinde duruyor (`ea9c19d` ve öncesi). Ayrıntılı gerekçe
 5. `node tools/veri-kontrol.js` görsel sayısını raporlar ve yanlış
    adlandırılmış dosyaları yakalar.
 
-Kurallar: `gorseller/*.jpg` commit **edilir**; `_ham/`, `_istekler.*` ve
-`_bulunamadi.csv` edilmez, **`_kaynaklar.csv` edilir** (atıf borcu takibi).
-Eksik görsel hata değildir — `gorsel.js` SVG portreye düşer, kart boş
-kalmaz. Service worker tarif görsellerini önden indirmez, yalnızca
-kapakları; kalanı görüldükçe önbelleğe alınır. `tools/malzeme-en.js`
-istem/arama üretiminde kullanılan İngilizce sözlüktür, **uygulamaya dahil
-değildir** (yeni malzeme eklersen oraya da bir satır ekle).
+Kurallar (hat yeniden açılırsa geçerli): `gorseller/*.jpg` commit **edilir**;
+`_ham/`, `_istekler.*` ve `_bulunamadi.csv` edilmez, **`_kaynaklar.csv`
+edilir** (atıf borcu takibi). Eksik görsel hata değildir — `gorsel.js` SVG
+portreye düşer, kart boş kalmaz (şu an TÜM tarifler bu durumda, kasıtlı).
+`tools/malzeme-en.js` istem/arama üretiminde kullanılan İngilizce sözlüktür,
+**uygulamaya dahil değildir** (yeni malzeme eklersen oraya da bir satır ekle).
 
-**Stil tutarlılığı artık garanti değil** — her fotoğraf farklı kaynaktan
-geliyor, Fooocus'un tek tip görünümü yok. Bilinçli bir ödün: gerçek
-fotoğraf, tutarlı-ama-yapay görselden daha değerli sayıldı.
+**Stil tutarlılığı zaten garanti değildi** — her fotoğraf farklı kaynaktan
+geliyordu, Fooocus'un tek tip görünümü yok. Bu artık tartışmalı değil çünkü
+hat durduruldu; not tarihsel referans olarak duruyor.
 
 ## Test/doğrulama yaklaşımı
 

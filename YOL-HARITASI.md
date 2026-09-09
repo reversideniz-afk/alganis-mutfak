@@ -396,6 +396,38 @@ Sürüm 3.1.3. `node tools/veri-kontrol.js` yeşil (910 tarif, 132/910
 görsel), `node tools/arayuz-testi.js` 22/22, tüm görsellerde md5
 tam-kopya taraması sıfır sonuç verdi.
 
+#### Görsel hattı durduruldu (2026-09-10) — yeni konsept fikri var
+
+Kullanıcı üçüncü tur özetini gördükten sonra ("%15-20 kapsam, kalanı SVG")
+karar değiştirdi: **"midem kalkmaya başladı, şimdilik bütün fotoğrafları
+kaldıralım minik ikonlarla devam edelim."** Bu, önceki turların düzeltme
+çabası değil, **tüm Openverse görsel hattının geçici olarak tamamen
+durdurulması** kararı. Yapılan: `gorseller/*.jpg` (132 tarif + 20 kapak,
+hepsi) silindi, `data/gorseller.js` → `AM.GORSELLER = []`,
+`gorseller/_kaynaklar.csv` başlık satırına sıfırlandı. Uygulama artık
+tamamen SVG portrelerle çalışıyor — `tools/veri-kontrol.js` ve
+`tools/arayuz-testi.js` (22/22) bunun sorunsuz çalıştığını doğruladı,
+emoji artık her kartta tam ortada (bkz. yukarıdaki kaymış-ikon düzeltmesi).
+`CLAUDE.md`deki "Görsel üretim hattı" bölümü **DURDURULDU** uyarısıyla
+işaretlendi — bir sonraki oturum kendi başına `gorsel-bul.js` çalıştırıp
+bu görselleri geri getirmeye kalkışmamalı, karar kullanıcıdan gelmeli.
+
+**Kullanıcının yeni konsept önerisi**: Nefis Yemek Tarifleri'nin kart
+tasarımını örnek verdi — video oynatma ikonlu kapak fotoğrafı, tarifi
+yapan aşçının adı/avatarı, görüntülenme/yorum sayısı. Vurguladığı asıl
+nokta sorgulanabilir stok fotoğraf değil, **tarifi gerçekten yapan
+kişinin o tarife özel çektiği gerçek fotoğraf** olması — yani "internetten
+bulunan alakasız bir fotoğraf" ile "bu yemeği yapan kişinin kendi çektiği
+fotoğraf" arasındaki fark. Bu, Nefis gibi çok-kullanıcılı bir platformda
+doğal geliyor (binlerce katılımcı kendi tarifini kendi fotoğrafıyla
+yüklüyor); Alganis Mutfak'ta tek yazar (kullanıcının kendisi) olduğu için
+doğrudan uygulanamaz — ama kavram olarak "gerçek, o tarife özel çekilmiş
+fotoğraf" hedefi hâlâ geçerli, sadece kaynağı farklı olmalı (ör. kullanıcı
+zamanla kendi mutfağında pişirip fotoğrafladığı tarifleri elle ekleyebilir,
+ya da aile/çevre paylaşırsa onların fotoğrafları kullanılabilir). **Henüz
+karar verilmedi** — bu bir sonraki konuşmada netleşecek, plan burada
+güncellenecek.
+
 ### Mobil çıkış ve gelir modeli — ERTELENDİ (2026-09-09)
 
 **Karar E**: Play Store / App Store çıkışı ve her türlü gelir modeli **uzun
