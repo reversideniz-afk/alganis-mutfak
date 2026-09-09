@@ -1,8 +1,12 @@
 /* ============================================================================
    DÜNYA MUTFAKLARI — İTALYAN
    ----------------------------------------------------------------------------
-   Şema data/tarifler-corba.js başında belgeli; buradaki tek fark her tarifte
-   "mutfak" alanının açıkça yazılması ("turk" varsayılanı burada geçersiz).
+   Şema data/tarifler-corba.js başında belgeli; buradaki iki fark: her tarifte
+   "mutfak" alanının açıkça yazılması ("turk" varsayılanı burada geçersiz) ve
+   isteğe bağlı "ozet" alanı — tek cümlelik bir tanıtım, tarif panelinde
+   mutfak+kategori altbaşlığının altında gösterilir (js/arayuz.js: ui.detay).
+   Sadece dünya mutfağı tariflerine elle yazılıyor (karar 2026-09-09) — Türk
+   tarifleri için gereksiz, 897 tarifin hepsine yazmak da çok pahalı olurdu.
 
    Domuz ürünü ve alkol kataloğa hiç girmemiş (bkz. malzemeler.js) — orijinal
    tariflerde guanciale/pancetta isteyen yerlerde "kavurma" kullanıldı, şarap
@@ -16,6 +20,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"spagetti-carbonara", ad:"Spagetti Carbonara", kat:"pilav", mutfak:"italyan",
   em:"🍝", sure:25, zor:2, por:4,
+  ozet:"Roma'nın klasik makarnası: yumurta, peynir ve kavurmayla yapılan kremasız, pürüzsüz bir sos.",
   m:[["makarna",400,"gram","ana","ince spagetti"],
      ["kavurma",150,"gram","ana","orijinalinde guanciale/pankçeta kullanılır"],
      ["yumurta",5,"adet","ana","sarısı ayrılacak, 4 kişi + tava için 1 fazladan"],
@@ -31,6 +36,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"spagetti-bolonez", ad:"Spagetti Bolonez (Ragù alla Bolognese)", kat:"pilav", mutfak:"italyan",
   em:"🍝", sure:150, zor:2, por:4,
+  ozet:"Bologna'nın saatlerce ağır ateşte pişen imza et sosu, tagliatelle ya da spagettiyle.",
   m:[["kiyma",400,"gram","ana","dana kıyma, orta yağlı"],
      ["kavurma",50,"gram","ops","ekstra zenginlik için, olmasa da olur"],
      ["sogan",1,"adet","yrd"],["havuc",1,"adet","yrd"],
@@ -50,6 +56,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"pesto-makarna", ad:"Fesleğenli Pesto Makarna (Pesto alla Genovese)", kat:"pilav", mutfak:"italyan",
   em:"🌿", sure:15, zor:1, por:4,
+  ozet:"Cenova'nın fesleğen, çam fıstığı ve parmesanla yapılan yeşil sosu — pişmeden, hemen karıştırılarak hazırlanır.",
   m:[["feslegen",60,"gram","ana","yaklaşık 2 su bardağı, sıkı basılmış"],
      ["cam-fistigi",30,"gram","ana"],
      ["sarimsak",2,"diş","yrd"],
@@ -65,6 +72,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"cacio-e-pepe", ad:"Cacio e Pepe", kat:"pilav", mutfak:"italyan",
   em:"🧀", sure:15, zor:2, por:4,
+  ozet:"Roma'nın üç malzemeli makarnası: peynir, karabiber, makarna suyu — sadeliğinde ustalık ister.",
   m:[["makarna",400,"gram","ana","spagetti veya tonnarelli"],
      ["parmesan",240,"gram","ana","orijinalinde pecorino romano kullanılır"],
      ["karabiber",2,"tatlı kaşığı","ana","bol, iri çekilmiş"]],
@@ -76,6 +84,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"mantarli-risotto", ad:"Mantarlı Risotto (Risotto ai Funghi)", kat:"pilav", mutfak:"italyan",
   em:"🍄", sure:40, zor:2, por:4,
+  ozet:"Kepçe kepçe et suyuyla pişirilen kremamsı pirinç yemeği, mantarla zenginleştirilmiş.",
   m:[["pirinc",300,"gram","ana","orijinalinde arborio/carnaroli, yoksa normal pirinç de olur"],
      ["mantar",300,"gram","ana","karışık taze mantar"],
      ["sogan",1,"adet","yrd"],
@@ -92,6 +101,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"minestrone-corbasi", ad:"Minestrone Çorbası", kat:"corba", mutfak:"italyan",
   em:"🍲", sure:45, zor:1, por:4,
+  ozet:"İtalya'nın karışık sebze ve fasulyeli çorbası, mevsimine göre değişen bir mutfak klasiği.",
   m:[["zeytinyagi",2,"yemek kaşığı"],
      ["sogan",1,"adet","yrd"],["havuc",1,"adet","yrd"],
      ["kereviz-sapi",1,"sap","yrd"],["patates",1,"adet","yrd"],
@@ -109,6 +119,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"caprese-salatasi", ad:"Caprese Salatası", kat:"salata", mutfak:"italyan",
   em:"🍅", sure:10, zor:1, por:4,
+  ozet:"Capri adasının üç renkli salatası: domates, mozzarella, fesleğen — pişirme gerektirmez.",
   m:[["domates",4,"adet","ana","olgun, iri"],
      ["mozzarella",200,"gram","ana"],
      ["feslegen",null,"birkaç yaprak","yrd"],
@@ -121,6 +132,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"bruschetta", ad:"Bruschetta", kat:"salata", mutfak:"italyan",
   em:"🍞", sure:15, zor:1, por:4,
+  ozet:"Kızarmış ekmek üzerine domatesli, fesleğenli bir başlangıç — İtalyan sofralarının klasik açılışı.",
   m:[["ekmek",1,"adet","ana","baget/köy ekmeği, dilimlenmiş"],
      ["domates",3,"adet","ana","küp doğranmış"],
      ["sarimsak",1,"diş","yrd"],
@@ -134,6 +146,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"margherita-pizza", ad:"Margherita Pizza", kat:"hamur", mutfak:"italyan",
   em:"🍕", sure:180, zor:2, por:4,
+  ozet:"Napoli'nin ilk pizzası: domates, mozzarella, fesleğen — İtalya bayrağının renkleriyle.",
   m:[["un",500,"gram","ana","tipo 00 yoksa normal un"],
      ["su",325,"ml","ana","ılık"],
      ["maya",7,"gram","ana","kuru maya"],
@@ -152,6 +165,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"tiramisu", ad:"Tiramisu", kat:"tatli", mutfak:"italyan",
   em:"🍮", sure:30, zor:2, por:6,
+  ozet:"Kahveye batırılmış bisküvi ve mascarpone kreması katmanlarından oluşan, pişirilmeyen bir tatlı.",
   m:[["yumurta",4,"adet","ana","sarısı ve beyazı ayrı çırpılacak"],
      ["toz-seker",150,"gram","ana"],
      ["labne",450,"gram","ana","orijinalinde mascarpone kullanılır, bulunursa o tercih edilir"],
@@ -168,6 +182,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"lazanya-bolonez", ad:"Lazanya Bolonez (Lasagne alla Bolognese)", kat:"pilav", mutfak:"italyan",
   em:"🍝", sure:180, zor:3, por:6,
+  ozet:"Beşamel, ragù ve parmesan katmanlarının fırında birleştiği, Bologna'nın en tanınmış fırın yemeği.",
   m:[["kiyma",300,"gram","ana","dana kıyma"],
      ["kavurma",150,"gram","ops","orijinalinde pankçeta/domuz kıyması kullanılır"],
      ["sogan",1,"adet","yrd"],["havuc",1,"adet","yrd"],["kereviz-sapi",1,"sap","yrd"],
@@ -191,6 +206,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"osso-buco", ad:"Osso Buco (Kuzu İncik Güveç, Milano Usulü)", kat:"etli", mutfak:"italyan",
   em:"🍖", sure:150, zor:3, por:4,
+  ozet:"Milano'nun ağır ateşte pişen incik güveci — limon kabuğu ve maydanozlu gremolatayla servis edilir.",
   m:[["kuzu-incik",4,"adet","ana","orijinalinde dana incik (osso buco) kullanılır, kesme kalınlığı 3-4 cm olmalı"],
      ["un",50,"gram","yrd","kaplama için"],
      ["tereyagi",50,"gram","ana"],["zeytinyagi",2,"yemek kaşığı","yrd"],
@@ -210,6 +226,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"patlicanli-parmigiana", ad:"Fırında Patlıcanlı Parmigiana (Parmigiana di Melanzane)", kat:"sebze", mutfak:"italyan",
   em:"🍆", sure:75, zor:2, por:6,
+  ozet:"Kızarmış patlıcan dilimlerinin domates sosu ve peynirle katmanlandığı, Güney İtalya'nın fırın yemeği.",
   m:[["patlican",700,"gram","ana","2 iri patlıcan, boylamasına ince dilim"],
      ["domates-rendesi",700,"gram","ana","passata, koyulaştırılmış"],
      ["sarimsak",1,"diş","yrd"],
@@ -228,6 +245,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"safranli-risotto", ad:"Safranlı Risotto (Risotto alla Milanese)", kat:"pilav", mutfak:"italyan",
   em:"🟡", sure:35, zor:2, por:4,
+  ozet:"Milano'nun safranla sarıya boyanan, tereyağı ve parmesanla tamamlanan klasik risottosu.",
   m:[["pirinc",300,"gram","ana","orijinalinde arborio/carnaroli, yoksa normal pirinç de olur"],
      ["safran",null,"bir tutam (yaklaşık 20 iplik)","ana"],
      ["sogan",0.5,"adet","yrd","ince doğranmış"],
@@ -244,6 +262,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"tavuk-saltimbocca", ad:"Tavuk Saltimbocca (Roma Usulü)", kat:"tavuk", mutfak:"italyan",
   em:"🍗", sure:25, zor:2, por:4,
+  ozet:"Roma'nın adaçaylı, ince dilim etli yemeği — adı 'ağza atlar' anlamına gelir, o kadar hızlı pişer.",
   m:[["tavuk-gogsu",4,"adet","ana","ince dilimlenip dövülmüş; orijinalinde dana pirzola kullanılır"],
      ["pastirma",4,"dilim","ana","orijinalinde prosciutto kullanılır"],
      ["adacayi",8,"yaprak","ana","her dilime 2 yaprak"],
@@ -261,6 +280,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"patates-gnocchi", ad:"Patates Gnocchi (Domates Soslu)", kat:"pilav", mutfak:"italyan",
   em:"🥔", sure:60, zor:3, por:4,
+  ozet:"Patates, un ve yumurtadan yoğrulan yumuşak hamur topları — domates sosuyla ya da sade servis edilir.",
   m:[["patates",1,"kilogram","ana","unlu/nişastalı cins, kabuklu haşlanacak"],
      ["un",190,"gram","ana","yaklaşık 1.5 su bardağı"],
      ["yumurta",1,"adet","ana"],
@@ -279,6 +299,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"firinda-levrek-italyan", ad:"Fırında Levrek İtalyan Usulü (Branzino al Forno)", kat:"balik", mutfak:"italyan",
   em:"🐟", sure:35, zor:1, por:4,
+  ozet:"Limon, sarımsak ve zeytinyağıyla fırında pişirilen bütün balık — İtalyan kıyı mutfağının basit klasiği.",
   m:[["levrek",4,"adet","ana","temizlenmiş, bütün"],
      ["limon",2,"adet","ana","biri dilim, biri suyu için"],
      ["sarimsak",2,"diş","yrd","ezilmiş"],
@@ -294,6 +315,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"pasta-fagioli-corbasi", ad:"Pasta e Fagioli (Barbunyalı Makarna Çorbası)", kat:"corba", mutfak:"italyan",
   em:"🍲", sure:40, zor:1, por:6,
+  ozet:"Fasulye ve küçük makarnanın birlikte kaynatıldığı, koyu kıvamlı bir İtalyan çorbası.",
   m:[["kuru-barbunya",2,"su bardağı","ana","haşlanmış/konserve"],
      ["kavurma",100,"gram","ops","orijinalinde pankçeta kullanılır, olmasa da olur"],
      ["sogan",1,"adet","yrd"],["havuc",1,"adet","yrd"],["kereviz-sapi",1,"sap","yrd"],
@@ -312,6 +334,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"panzanella", ad:"Panzanella (Ekmekli Domates Salatası)", kat:"salata", mutfak:"italyan",
   em:"🍅", sure:20, zor:1, por:4,
+  ozet:"Bayat ekmeğin domates, salatalık ve sirkeyle buluştuğu Toskana salatası — israf etmeme mutfağının ürünü.",
   m:[["ekmek",300,"gram","ana","bayat köy ekmeği, küp doğranmış"],
      ["domates",600,"gram","ana","olgun, iri, doğranmış"],
      ["salatalik",1,"adet","yrd"],
@@ -328,6 +351,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"italyan-frittatasi", ad:"İtalyan Frittatası", kat:"kahvalti", mutfak:"italyan",
   em:"🍳", sure:20, zor:1, por:4,
+  ozet:"Fırın ya da tavada pişen kalın bir omlet — kahvaltıda da, ana yemek olarak da yenir.",
   m:[["yumurta",8,"adet","ana"],
      ["sut",3,"yemek kaşığı","yrd"],
      ["parmesan",50,"gram","ana","rendelenmiş"],
@@ -343,6 +367,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"aglio-e-olio", ad:"Sarımsaklı Zeytinyağlı Spagetti (Aglio e Olio)", kat:"pilav", mutfak:"italyan",
   em:"🍝", sure:20, zor:1, por:4,
+  ozet:"Sadece sarımsak, zeytinyağı ve pul biberle yapılan, kalan makarna suyuyla parlatılan Napoli klasiği.",
   m:[["makarna",400,"gram","ana","spagetti"],
      ["zeytinyagi",80,"ml","ana"],
      ["sarimsak",8,"diş","ana","ince dilimlenmiş"],
@@ -357,6 +382,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"avci-usulu-tavuk", ad:"Avcı Usulü Tavuk (Pollo alla Cacciatora)", kat:"tavuk", mutfak:"italyan",
   em:"🍗", sure:75, zor:2, por:4,
+  ozet:"Avcıların ormanda hazırladığı rivayet edilen, domates ve sebzeyle ağır ateşte pişen tavuk yahnisi.",
   m:[["tavuk-but",8,"adet","ana","kuşbaşı/parça, orijinalinde bütün tavuk parçalanır"],
      ["domates-rendesi",450,"gram","ana"],
      ["sogan",1,"adet","yrd"],["havuc",2,"adet","yrd"],["kereviz-sapi",1,"sap","yrd"],
@@ -374,6 +400,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"milano-usulu-tavuk-snitzel", ad:"Milano Usulü Şnitzel (Cotoletta alla Milanese)", kat:"tavuk", mutfak:"italyan",
   em:"🍗", sure:25, zor:2, por:4,
+  ozet:"İnce açılıp galeta ununa bulanan, tereyağında kızartılan Milano usulü şnitzel.",
   m:[["tavuk-gogsu",4,"adet","ana","orijinalinde kemikli dana pirzola kullanılır, ince açılmış"],
      ["yumurta",2,"adet","ana","çırpılmış"],
      ["galeta-unu",120,"gram","ana","ince, mümkünse baharatsız"],
@@ -388,6 +415,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"ribollita-corbasi", ad:"Ribollita (Toskana Usulü Ekmekli Sebze Çorbası)", kat:"corba", mutfak:"italyan",
   em:"🍲", sure:120, zor:2, por:6,
+  ozet:"Toskana'nın 'yeniden kaynatılmış' ekmek çorbası — bayat ekmek, fasulye ve karalahanadan.",
   m:[["kuru-fasulye",2,"su bardağı","ana","haşlanmış/konserve"],
      ["karalahana",1,"demet","ana","sapları ayıklanmış, doğranmış"],
      ["kavurma",100,"gram","ops","orijinalinde pankçeta kullanılır, olmasa da olur"],
@@ -408,6 +436,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"caponata", ad:"Caponata (Sicilya Usulü Tatlı-Ekşi Patlıcan)", kat:"sebze", mutfak:"italyan",
   em:"🍆", sure:50, zor:2, por:6,
+  ozet:"Sicilya'nın tatlı-ekşi patlıcan yemeği; sirke ve şekerle dengelenen, ılık servis edilen bir meze.",
   m:[["patlican",1,"kilogram","ana","küp doğranmış"],
      ["kereviz-sapi",4,"sap","ana","doğranmış"],
      ["sogan",1,"adet","ana","iri doğranmış"],
@@ -428,6 +457,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 { id:"arancini", ad:"Arancini (Sicilya Usulü Kızarmış Pirinç Topları)", kat:"pilav", mutfak:"italyan",
   grup:"arasicak",
   em:"🍙", sure:60, zor:3, por:4,
+  ozet:"Sicilya'nın kızarmış pirinç topları — içi mozzarella dolu, dışı çıtır galeta unu kaplı.",
   m:[["pirinc",300,"gram","ana","haşlanmış/pilav olarak soğutulmuş"],
      ["parmesan",60,"gram","ana","rendelenmiş, pirince karışacak"],
      ["yumurta",3,"adet","ana","1'i pirince, 2'si kaplama için"],
@@ -445,6 +475,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"biftek-fiorentina", ad:"Toskana Usulü Izgara Biftek (Bistecca alla Fiorentina)", kat:"etli", mutfak:"italyan",
   em:"🥩", sure:25, zor:2, por:4,
+  ozet:"Floransa'nın kalın kesim ızgara bifteği — sadece tuz, zeytinyağı ve ateşle pişirilir.",
   m:[["bonfile",1000,"gram","ana","orijinalinde kemikli T-bone/porterhouse kesim kullanılır, en az 4-5 cm kalınlıkta tek parça"],
      ["zeytinyagi",3,"yemek kaşığı","ana"],
      ["biberiye",2,"dal","yrd"],
@@ -459,6 +490,7 @@ AM.TARIFLER = (AM.TARIFLER || []).concat([
 
 { id:"torta-caprese", ad:"Torta Caprese (Unsuz Çikolatalı Badem Kek)", kat:"tatli", mutfak:"italyan",
   em:"🍫", sure:60, zor:2, por:8,
+  ozet:"Capri adasının unsuz çikolatalı badem keki — dışı hafif çıtır, içi yoğun ve nemli kalır.",
   m:[["cikolata",125,"gram","ana","bitter, %50-70 kakao"],
      ["badem",185,"gram","ana","kabuksuz, öğütülmüş (badem unu)"],
      ["tereyagi",125,"gram","ana","oda sıcaklığında"],

@@ -123,6 +123,18 @@
   }
   ui.eksikMetni = eksikMetni;
 
+  /* --- mutfak + kategori metni ----------------------------------------------
+     Mutfak sadece Türk dışıysa yazılır — 869 Türk tarifte sürekli "Türk"
+     görmek gürültü olurdu. Kahraman kart özetinde ve tarif panelinin
+     altbaşlığında (ui.detay) ortak kullanılıyor. */
+  function mutfakKategoriMetni(t) {
+    var mutfakId = AM.mutfakBul(t);
+    var katAdi = AM.TARIF_KATEGORILERI_AD[t.kat] || "";
+    if (mutfakId === AM.MUTFAK_VARSAYILAN) return katAdi;
+    return (AM.MUTFAKLAR_EMOJI[mutfakId] || "") + " " + (AM.MUTFAKLAR_AD[mutfakId] || "") + " · " + katAdi;
+  }
+  ui.mutfakKategoriMetni = mutfakKategoriMetni;
+
   /* --- saate göre selamlama ------------------------------------------------ */
 
   ui.selamlama = function () {
@@ -153,6 +165,15 @@
 
     kart.appendChild(AM.gorsel.kutu(t, "gk-" + varyant));
 
+    /* Mutfak rozeti — sadece Türk dışı tariflerde, kahramanda değil (orada
+       zaten alt metinde mutfak adı geçiyor, rozet tekrar olurdu). */
+    var mutfakId = AM.mutfakBul(t);
+    if (!kahramanMi && mutfakId !== AM.MUTFAK_VARSAYILAN) {
+      kart.appendChild(el("span", {
+        sinif: "tk-mutfak", metin: AM.MUTFAKLAR_EMOJI[mutfakId] || "🌍", "aria-hidden": "true"
+      }));
+    }
+
     if (AM.depo.favMi(t.id)) {
       kart.appendChild(el("span", { sinif: "tk-kalp", metin: "💛", "aria-hidden": "true" }));
     }
@@ -162,8 +183,7 @@
     if (kahramanMi) {
       govde.appendChild(el("span", { sinif: "tk-etiket", metin: ui.selamlama() }));
       govde.appendChild(el("h2", { metin: t.ad }));
-      var ozet = AM.TARIF_KATEGORILERI_AD[t.kat] || "";
-      govde.appendChild(el("p", { sinif: "tk-ozet", metin: ozet + " · " + t.por + " kişilik" }));
+      govde.appendChild(el("p", { sinif: "tk-ozet", metin: mutfakKategoriMetni(t) + " · " + t.por + " kişilik" }));
 
       var pilSatir = el("div", { sinif: "rozet-satir" });
       pilSatir.appendChild(rozet("⏱ " + ui.sureYaz(t.sure)));
@@ -238,17 +258,14 @@
 
     parca.appendChild(el("h2", { sinif: "td-baslik", metin: t.ad }));
 
-    /* Mutfak + kategori düz metin altbaşlıkta — mutfak sadece Türk dışıysa
-       yazılır (869 Türk tarifte sürekli "Türk" görmek gürültü olurdu).
+    /* Mutfak + kategori düz metin altbaşlıkta (mutfakKategoriMetni).
        Süre/zorluk (ve varsa etsiz/fırın) aşağıda rozet olarak kalıyor —
        altı rozetten dörde indi, referans tasarımdaki iki-üç rozetlik
        sadelikle uyumlu (bkz. tasarim/REFERANSLAR.md madde 19). */
-    var mutfakId = AM.mutfakBul(t);
-    var katAdi = AM.TARIF_KATEGORILERI_AD[t.kat] || "";
-    var altBaslikMetin = mutfakId === AM.MUTFAK_VARSAYILAN
-      ? katAdi
-      : (AM.MUTFAKLAR_EMOJI[mutfakId] || "") + " " + (AM.MUTFAKLAR_AD[mutfakId] || "") + " · " + katAdi;
-    parca.appendChild(el("p", { sinif: "td-alt-baslik", metin: altBaslikMetin }));
+    parca.appendChild(el("p", { sinif: "td-alt-baslik", metin: mutfakKategoriMetni(t) }));
+
+    /* Yalnızca dünya mutfağı tariflerinde var — Türk tariflerinde t.ozet yok. */
+    if (t.ozet) parca.appendChild(el("p", { sinif: "td-ozet", metin: t.ozet }));
 
     var rozetler = el("div", { sinif: "rozet-satir" });
     rozetler.appendChild(rozet("⏱ " + ui.sureYaz(t.sure)));

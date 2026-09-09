@@ -141,13 +141,15 @@
 
   /* --- ana öneri hesabı --------------------------------------------------- */
 
-  AM.oneriler = function (sepet, filtreAdi, tolerans) {
+  AM.oneriler = function (sepet, filtreAdi, tolerans, mutfakId) {
     var filtre = FILTRELER[filtreAdi] || FILTRELER.hepsi;
+    var mutfakKapsamli = mutfakId && mutfakId !== "hepsi";
     var tohum = bugununTohumu();
     var tam = [], yakin = [];
 
     (AM.TARIFLER || []).forEach(function (t) {
       if (!filtre(t)) return;
+      if (mutfakKapsamli && AM.mutfakBul(t) !== mutfakId) return;
       var d = AM.degerlendir(t, sepet);
       var kayit = { t: t, d: d, sira: karma(t.id + tohum) };
 

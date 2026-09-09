@@ -91,6 +91,12 @@
       </button>
     </div>
 
+    <div class="bilgi-kart mor ince" id="mutfakKapsamBandi" hidden>
+      <h2 id="mutfakKapsamBaslik"></h2>
+      <p>"Bugün ne pişirsem?" şu an bu mutfaktan öneriyor.</p>
+      <button type="button" class="btn hayalet kucuk" id="btnMutfakKapsamKaldir">Tüm mutfaklara dön</button>
+    </div>
+
     <div id="bosMutfakUyari" class="bilgi-kart sari" hidden>
       <h2>Önce mutfağını tanıyayım</h2>
       <p>Evdeki malzemeleri işaretlersen sana ne pişirebileceğini söyleyebilirim.</p>
@@ -153,6 +159,41 @@
   </div>
 </section>
 
+<!-- ======================================================== EKRAN: DÜNYA -->
+<section class="ekran" id="ekran-dunya" hidden>
+  <div class="ekran-ic">
+
+    <div id="dunyaGiris">
+      <div class="bilgi-kart mor">
+        <h2>Dünya Mutfakları</h2>
+        <p>Bir mutfak seç: tarifleri gez, malzemelerine bak — istersen "Bugün ne pişirsem?" o mutfak için çalışsın.</p>
+      </div>
+      <div class="tarif-izgara" id="dunyaIzgara"></div>
+    </div>
+
+    <div id="dunyaDetay" hidden>
+      <button type="button" class="btn hayalet kucuk" id="btnDunyaGeri">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Tüm mutfaklar
+      </button>
+      <h2 class="td-baslik" id="dunyaMutfakBaslik"></h2>
+      <button type="button" class="btn birincil tam" id="btnDunyaBuMutfakIcinOner">Bu mutfak için "Bugün ne pişirsem?"</button>
+      <div class="bolum">
+        <div class="bolum-baslik">
+          <h3>Tarifler</h3>
+          <span class="sayac" id="dunyaTarifSayac">0</span>
+        </div>
+        <div class="tarif-izgara" id="dunyaTarifIzgara"></div>
+        <div class="bos-durum" id="dunyaTarifBos" hidden>
+          <div class="bos-emoji">🍽</div>
+          <p>Bu mutfaktan henüz tarif eklenmedi — yakında.</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 <!-- ==================================================== EKRAN: FAVORİLER -->
 <section class="ekran" id="ekran-favori" hidden>
   <div class="ekran-ic">
@@ -199,6 +240,10 @@
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2z"/><path d="M4 10h16M8 5V3M16 5V3M9 15h6"/></svg>
     <span>Mutfağım</span>
     <em class="rozet" id="rozetMalzeme" hidden>0</em>
+  </button>
+  <button type="button" class="menu-btn" data-git="dunya">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 0 20M12 2a15.3 15.3 0 0 0 0 20"/></svg>
+    <span>Dünya</span>
   </button>
   <button type="button" class="menu-btn" data-git="favori">
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7-4.5-7-9.5A3.9 3.9 0 0 1 12 7a3.9 3.9 0 0 1 7 3.5C19 15.5 12 20 12 20z"/></svg>
@@ -315,6 +360,7 @@
 <script src="js/arayuz.js"></script>
 <script src="js/cekirdek.js"></script>
 <script src="js/ekran-mutfak.js"></script>
+<script src="js/ekran-dunya.js"></script>
 <script src="js/ekran-bugun.js"></script>
 <script src="js/ekran-liste.js"></script>
 <script src="js/panel-tarif.js"></script>

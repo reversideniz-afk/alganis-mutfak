@@ -109,9 +109,9 @@ kartta **"Weeks $39.80 · Save 33%"** ve yeşil tikli özellik listesi, yeşil
 | 07 | Dört besin halkası (renkli yay) | `besinSatiri()` dört değeri veriyor ama **kenarlıklı kutu**, halka değil; renk yok. Gerekçe kodda yazılı (`arayuz.js:209`): hedef/limit göstermeme kararı — renk "iyi/kötü" der | 🟡 gerekçeli |
 | 08 | "Popular" yatay kaydırmalı kart şeridi | Kapatıldı (2026-09-09): Bugün ekranında kahramanın altında **"Diğer seçenekler"** şeridi — `ciz_digerSecenekler()`, `serit` varyantını kullanıyor | ✅ |
 | 09 | Ana ekranda arama kutusu | Kapatıldı: Bugün ekranının en üstünde arama kutusu görünümlü düğme — dokununca Tarifler ekranına gidip oradaki gerçek kutuya odaklanıyor (mantık tekrarlanmadı) | ✅ |
-| 10 | Kartın üstünde mutfak rozeti ("Turkish") | Mutfak rozeti **yalnızca detay panelinde** (`arayuz.js:243`), kartta yok | 🔴 Faz 2 ile |
-| 11 | Filtre açılırları: Dish · **Cuisine** · Available | Öğün/süre/zorluk/etsiz var; **mutfak filtresi yok** — Faz 2'nin eksik parçası | 🔴 Faz 2 ile |
-| 12 | Tarif tanıtım metni + "View More" | Tariflerde **açıklama/özet alanı yok** (yalnızca `ip` = püf noktası). Karar (2026-09-09): sadece dünya mutfağı tariflerine elle yazılacak — Türk tarifleri için gereksiz, 897'sine elle yazmak da çok pahalı | 🔴 Faz 2 ile |
+| 10 | Kartın üstünde mutfak rozeti ("Turkish") | Kapatıldı: `.tk-mutfak` — Türk dışı her tarifin kartında (kahraman hariç) küçük bir mutfak emojisi rozeti | ✅ |
+| 11 | Filtre açılırları: Dish · **Cuisine** · Available | Kapatıldı — Dünya ekranı hem mutfak ansiklopedisi hem kapsam seçici oldu: bir mutfak seçilince `AM.depo.mutfak()` set edilir, `AM.oneriler()` sadece o mutfaktan öneriyor, Bugün ekranında kapsam bandı çıkıyor | ✅ |
+| 12 | Tarif tanıtım metni + "View More" | Kapatıldı: `ozet` alanı — 28 İtalyan tarifinin hepsine elle, tek cümlelik, tarif panelinde altbaşlığın altında (`td-ozet`). "View More" eklenmedi, cümleler zaten kısa | ✅ |
 | 13 | ★ puan ve yorum sayısı | Yabancıların puanı alınmıyor; **kendi puanın + kendi notun** gelecek | Faz 3 |
 | 14 | Yer imi ikonu (her kartta) | Favori kalbi **yalnızca favoriyse** görünüyor; kartta ekleme düğmesi yok | 🟡 |
 | 15 | Çoklu fotoğraf şeridi (detayda) | Tarif başına tek görsel | 🔴 düşük öncelik |
@@ -127,11 +127,12 @@ kartta **"Weeks $39.80 · Save 33%"** ve yeşil tikli özellik listesi, yeşil
 **Özet (2026-09-09 güncellemesi):** Alt menü, sekmeler, çipler, kart sistemi ve
 kahraman görsel referansa uygun kuruldu. Sapmaların ikisi gerekçeli (besin
 halkası, reddedilen ekranlar). Faz 1 artıklarının dördü (08, 09, 16, 19)
-kapatıldı — `node tools/arayuz-testi.js` (21/21) ve özel bir CDP betiğiyle
-tek tek doğrulandı. Geri kalan üç madde (10, 11, 12) bilinçli olarak **Dünya
-ekranıyla birlikte** yapılacak — üçü de mutfak kavramı olmadan anlamsız
-(Türk tarifi kartında "Türk" rozeti, tek mutfaklı bir kataloğa mutfak filtresi
-eklemek gibi). 17 zaten Faz 4'te.
+kapatıldı, ardından Dünya ekranıyla birlikte 10-11-12 de kapatıldı — geriye
+sadece 13-15-17-18 (Faz 3/4 kapsamı) ve 06-07-14 (gerekçeli/küçük) kaldı.
+`node tools/arayuz-testi.js` (22/22) ve birkaç özel CDP betiğiyle tek tek
+doğrulandı: mutfak kartı grid → detay → "Bu mutfak için öner" → Bugün
+ekranında kapsam bandı → `AM.oneriler()` sadece o mutfaktan döndürüyor →
+"Tüm mutfaklara dön" sıfırlıyor, hepsi konsol hatasız çalışıyor.
 
 ---
 
@@ -139,13 +140,15 @@ eklemek gibi). 17 zaten Faz 4'te.
 
 1. ✅ **Şerit varyantını bağla** (madde 08) — `ekran-bugun.js`: `ciz_digerSecenekler()`.
 2. ✅ **Bugün ekranına arama** (madde 09) — `btnBugunAramaKisayol`, Tarifler ekranına yönlendirip odaklıyor.
-3. ⬜ **Kartta mutfak rozeti** (madde 10) — Dünya ekranı işiyle birlikte.
-4. ⬜ **Mutfak filtresi** (madde 11) — Dünya ekranı işiyle birlikte.
-5. ⬜ **Tarife `ozet` alanı** (madde 12) — Dünya mutfağı tarifleri için, elle;
-   Faz 2 içerik işiyle birlikte yazılacak (karar 2026-09-09'da verildi).
+3. ✅ **Kartta mutfak rozeti** (madde 10) — `.tk-mutfak`, `js/arayuz.js: ui.tarifKarti`.
+4. ✅ **Mutfak filtresi** (madde 11) — `js/ekran-dunya.js` + `AM.depo.mutfak()` +
+   `AM.oneriler()`'a 4. parametre.
+5. ✅ **Tarife `ozet` alanı** (madde 12) — 28 İtalyan tarifinin hepsine elle
+   yazıldı, `js/arayuz.js: ui.detay` içinde `.td-ozet` olarak gösteriliyor.
 6. ✅ **Paylaş düğmesi** (madde 16) — `btnPaylas`, Web Share API.
 7. ✅ **Rozet şeridini sadeleştir** (madde 19) — mutfak+kategori `td-alt-baslik`'e
    taşındı, rozet-satir'da süre+zorluk (+koşullu etsiz/fırın) kaldı.
 
-1-2-6-7 tamamlandı ve `node tools/arayuz-testi.js` (21/21) ile doğrulandı.
-3-4-5 kasıtlı olarak Dünya ekranı işine bırakıldı.
+Hepsi tamamlandı ve `node tools/arayuz-testi.js` (22/22) ile doğrulandı. Geri
+kalan açık maddeler (13, 15, 17, 18) Faz 3/4 kapsamında; 06/07/14 gerekçeli
+sapmalar olarak kalıyor.

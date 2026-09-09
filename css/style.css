@@ -615,6 +615,7 @@ main { position: relative; z-index: 1; }
 /* ------------------------------------------------------ tarif detay içi */
 .td-baslik { font-size: 24px; margin: 14px 0 4px; }
 .td-alt-baslik { font-size: 14.5px; color: var(--metin-soluk); margin: 0 0 2px; }
+.td-ozet { font-size: 14.5px; color: var(--metin-orta); margin: 8px 0 0; line-height: 1.5; }
 .td-bolum-baslik {
   font-size: 13px; font-weight: 800; letter-spacing: .07em; text-transform: uppercase;
   color: var(--metin-soluk); margin: 20px 0 9px;

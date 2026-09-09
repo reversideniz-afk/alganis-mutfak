@@ -15,6 +15,12 @@
              • rol: yoksa "ana" · "yrd" = olmasa da olur · "ops" = süs/servis
      y     : hazırlanış adımları (dizi)
      ip    : püf noktası (isteğe bağlı)
+     mutfak: data/surum.js → AM.MUTFAKLAR id'lerinden biri (isteğe bağlı,
+             yoksa "turk" sayılır — bkz. tarifler-dunya-*.js dosyaları)
+     ozet  : tek cümlelik tanıtım (isteğe bağlı) — şu an sadece dünya mutfağı
+             tariflerinde kullanılıyor, tarif panelinde gösterilir
+     grup  : sofra grubu, verilirse AM.ARA_SICAKLAR listesini ezer (isteğe
+             bağlı — bkz. data/surum.js "YENİ TARİFLERDE" notu)
 
    Etsiz / fırınsız etiketleri otomatik hesaplanır; elle yazmana gerek yok.
    ========================================================================== */

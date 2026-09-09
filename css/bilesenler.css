@@ -35,6 +35,12 @@
 }
 .tk:not(.tk-kahraman):active { transform: scale(.98); }
 .tk-kalp { position: absolute; top: 9px; right: 9px; font-size: 15px; z-index: 1; }
+.tk-mutfak {
+  position: absolute; top: 9px; left: 9px; z-index: 1;
+  width: 24px; height: 24px; border-radius: 50%;
+  background: var(--kagit); border: 1.5px solid var(--cizgi);
+  display: grid; place-items: center; font-size: 13px;
+}
 .tk-govde { display: flex; flex-direction: column; gap: 5px; padding: 12px 12px 11px; }
 .tk-eksik {
   align-self: flex-start;
@@ -75,6 +81,23 @@
 }
 .tk-kahraman h2 { font-size: 24px; margin: 0; }
 .tk-kahraman .tk-ozet { font-size: 14.5px; color: var(--metin-orta); margin: 0; }
+
+/* ============================================================================
+   MUTFAK KARTI — Dünya ekranındaki mutfak vitrini (js/ekran-dunya.js).
+   .tk ile aynı davranış (buton sıfırlama, gölge, dokununca küçülme) ama
+   tarif kartı değil, kendi ad alanında (mk-).
+   ========================================================================== */
+.mk {
+  position: relative; display: block; width: 100%; text-align: left;
+  background: var(--kagit); border: 1.5px solid var(--cizgi);
+  border-radius: var(--r-m); box-shadow: var(--golge);
+  overflow: hidden; cursor: pointer; padding: 0;
+}
+.mk:active { transform: scale(.98); }
+.mk .gorsel-kutu { aspect-ratio: 4 / 3; }
+.mk-govde { display: flex; flex-direction: column; gap: 3px; padding: 11px 12px 12px; }
+.mk-ad { font-size: 15.5px; font-weight: 700; }
+.mk-alt { font-size: 12.5px; color: var(--metin-soluk); }
 
 /* ============================================================================
    TARİF PANELİ — tam genişlik görsel, besin rozetleri, sekmeler

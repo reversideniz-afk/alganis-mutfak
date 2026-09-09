@@ -38,12 +38,10 @@ sürüm 2.1.2, 0 bağımlılık.
   (`ciz_digerSecenekler`), Bugün ekranına arama kısayolu eklendi (Tarifler
   ekranına yönlendirip odaklıyor, mantık tekrarlanmadı), Web Share API ile
   paylaş düğmesi eklendi (desteklenmezse sessizce gizli kalır), tarif
-  panelindeki rozet sayısı altıdan dörde indi. Üçü kasıtlı olarak Dünya
-  ekranı işine bırakıldı (kartta mutfak rozeti, mutfak filtresi, dünya
-  tariflerine elle özet alanı) — hepsi mutfak kavramı olmadan anlamsız.
-  **Kalan**: parti 1+2 görselleri arka planda hâlâ üretiliyor (bkz. alt
-  madde) — kod bundan bağımsız, üretim bitince görseller sürüm bump'ı
-  olmadan telefona iner. Commit/push henüz yapılmadı.
+  panelindeki rozet sayısı altıdan dörde indi. Kalan üç madde Dünya
+  ekranıyla birlikte kapatıldı (aşağıda). `node tools/gorsel-isle.ps1`
+  çalıştırıldı: kapak görseli **20/20 tamamlandı**, tarif görseli 194 →
+  370/897'ye çıktı. Faz 1 artık tamamen bitti — kod, görsel, doğrulama.
 - **Faz 2 — sürüyor: İtalyan mutfağı (28/~40 tarif).** İlk dünya mutfağı
   tarifi `data/tarifler-dunya-italyan.js` olarak eklendi (spagetti
   carbonara, bolonez, pesto, cacio e pepe, mantarlı risotto, minestrone,
@@ -73,13 +71,25 @@ sürüm 2.1.2, 0 bağımlılık.
   Toskana usulü ızgara biftek (bistecca alla fiorentina — porterhouse
   yerine bonfile), torta caprese. `node tools/veri-kontrol.js`
   (897 tarif, 247 malzeme) yeşil.
-  **Not**: 18 yeni İtalyan tarifinin hiçbirinin görseli yok — şu an
-  çalışan `gorsel-bul.js --hepsi` taraması (683 tarif, Faz 1 kapak/gövde
-  öncelikli liste) bu tarifleri kapsamıyor çünkü `_istekler.csv` onlardan
-  önce üretilmişti. Tarama bitince sırayla:
-  `node tools/gorsel-istek.js --hepsi` (listeyi yeni tariflerle tazele) →
-  `node tools/gorsel-bul.js --hepsi` (sadece eksik kalanlar taranır,
-  önceki bulunanlar tekrar aranmaz).
+  **Dünya ekranı kuruldu (2026-09-09)** — `js/ekran-dunya.js`, alt menüde
+  5. sekme. Karar C'nin iki fikri birden çalışıyor: mutfak kartları grid
+  (Türk hariç 8 mutfak, tarif sayısı gösteriliyor) → tıklanınca o mutfağın
+  ansiklopedisi (tarif-izgara, boş kalanlarda "yakında"); "Bu mutfak için
+  öner" düğmesi `AM.depo.mutfak()`'ı set edip Bugün ekranına gider —
+  `AM.oneriler()` artık 4. parametre olarak mutfakId alıyor ve sadece o
+  mutfaktan öneriyor, Bugün ekranında bir kapsam bandı ("Tüm mutfaklara
+  dön" düğmeli) çıkıyor. Kartlarda mutfak rozeti (`.tk-mutfak`) ve 28
+  İtalyan tarifinin hepsine elle yazılmış tek cümlelik `ozet` alanı
+  (tarif panelinde gösteriliyor) eklendi. Bir CSP ihlali bulundu ve
+  düzeltildi (satır içi `style=` — `el()`'in `stil` alanı kullanılmalıydı,
+  CLAUDE.md'nin uyardığı tam o hata). `node tools/arayuz-testi.js` (22/22)
+  ve birkaç özel CDP betiğiyle uçtan uca doğrulandı — ayrıntı
+  `tasarim/REFERANSLAR.md`.
+  **Görsel tarama bitti**: 683/683, bulundu 181, `gorsel-isle.ps1` ile
+  işlendi (bkz. Faz 1). 28 İtalyan tarifinden sadece ilk partideki 6'sının
+  görseli var (`_istekler.csv` diğer 22'den önce üretilmişti) — sırada
+  `gorsel-istek.js --hepsi` ile listeyi tazeleyip `gorsel-bul.js --hepsi`'yi
+  tekrar çalıştırmak var.
   **Sırada**: İtalyan mutfağının geri kalanı (~12 tarif daha — ör.
   cannoli, insalata di riso, involtini, peperonata, stracciatella
   gibi tanınmış tarifler değerlendirilebilir), sonra Uzak Doğu mutfağı.

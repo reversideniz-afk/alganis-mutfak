@@ -62,6 +62,15 @@
       ic.ciz_malzemeler(); mArama.focus();
     });
 
+    /* Dünya ekranı: mutfak detayından geri dön / seçili mutfağı "Bugün ne
+       pişirsem?" kapsamına al */
+    $("btnDunyaGeri").addEventListener("click", ic.dunyaGeri);
+    $("btnDunyaBuMutfakIcinOner").addEventListener("click", ic.dunyaBuMutfakIcinOner);
+    $("btnMutfakKapsamKaldir").addEventListener("click", function () {
+      AM.depo.mutfak("hepsi");
+      ic.ciz_bugun();
+    });
+
     $("btnTemelleriSec").addEventListener("click", function () {
       AM.depo.temelleriSec();
       ic.ciz_malzemeler(); ic.ciz_katSerit(); ic.rozetGuncelle();

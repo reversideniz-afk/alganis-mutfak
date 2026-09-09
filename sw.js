@@ -69,6 +69,7 @@ const DOSYALAR = [
   "./js/arayuz.js",
   "./js/cekirdek.js",
   "./js/ekran-mutfak.js",
+  "./js/ekran-dunya.js",
   "./js/ekran-bugun.js",
   "./js/ekran-liste.js",
   "./js/panel-tarif.js",

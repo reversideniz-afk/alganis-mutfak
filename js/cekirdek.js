@@ -20,7 +20,7 @@
   var el = AM.ui.el, bosalt = AM.ui.bosalt;
   function $(id) { return document.getElementById(id); }
 
-  var EKRANLAR = ["bugun", "mutfak", "favori", "tarifler"];
+  var EKRANLAR = ["bugun", "mutfak", "dunya", "favori", "tarifler"];
 
   var ic = AM.ic = {
     el: el,
@@ -77,6 +77,7 @@
     var altYazi = {
       bugun: "Bugün ne pişirsem?",
       mutfak: "Evde neler var?",
+      dunya: "Dünya mutfakları",
       favori: "En sevdikleriniz",
       tarifler: (AM.TARIFLER.length) + " tarif"
     };
@@ -84,6 +85,7 @@
     window.scrollTo(0, 0);
 
     if (ad === "bugun") ic.ciz_bugun();
+    if (ad === "dunya") ic.ciz_dunya();
     if (ad === "favori") ic.ciz_favori();
     if (ad === "tarifler") ic.ciz_tarifler();
   };

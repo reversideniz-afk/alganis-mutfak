@@ -11,13 +11,22 @@
   var ic = AM.ic, el = ic.el, bosalt = ic.bosalt, $ = ic.$;
 
   ic.ciz_bugun = function () {
+    var mutfakId = AM.depo.mutfak();
+    var kapsamli = mutfakId && mutfakId !== "hepsi";
+    var bandi = $("mutfakKapsamBandi");
+    if (kapsamli) {
+      var m = (AM.MUTFAKLAR || []).filter(function (x) { return x.id === mutfakId; })[0];
+      $("mutfakKapsamBaslik").textContent = m ? (m.emoji || "") + " " + m.ad : mutfakId;
+    }
+    bandi.hidden = !kapsamli;
+
     var sepet = AM.depo.sepet();
     var bos = sepet.size === 0;
     $("bosMutfakUyari").hidden = !bos;
     $("oneriAlan").hidden = bos;
     if (bos) return;
 
-    var sonuc = AM.oneriler(sepet, AM.depo.filtre(), AM.depo.tolerans());
+    var sonuc = AM.oneriler(sepet, AM.depo.filtre(), AM.depo.tolerans(), mutfakId);
     ic.durum.sonOneriler = sonuc;
 
     /* --- kahraman kart --- */
