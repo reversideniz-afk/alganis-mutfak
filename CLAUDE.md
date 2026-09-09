@@ -102,4 +102,4 @@ Dikkat edilecekler:
 
 ## Durum (özet — detaylar için git log)
 
-897 tarif (869 Türk + 28 İtalyan), 247 malzeme, 11 tarif kategorisi, 9 mutfak, 8 öğün grubu (Bugün ekranı). Ayarlarda 6 renk paleti + yüksek kontrast, tema (gün ışığı/gece/sistem), yazı boyutu, ölçü cetveli var. Malzeme/favori seçimleri katalogla karşılaştırılmadan saklanır (veri kaybını önlemek için — bkz. `js/depo.js` başındaki not). Güncel sürüm: `data/surum.js` → `AM.SURUM`.
+910 tarif (869 Türk + 28 İtalyan + 13 Uzak Doğu), 252 malzeme, 11 tarif kategorisi, 9 mutfak, 8 öğün grubu (Bugün ekranı). Ayarlarda 6 renk paleti + yüksek kontrast, tema (gün ışığı/gece/sistem), yazı boyutu, ölçü cetveli var. Malzeme/favori seçimleri katalogla karşılaştırılmadan saklanır (veri kaybını önlemek için — bkz. `js/depo.js` başındaki not). Güncel sürüm: `data/surum.js` → `AM.SURUM`.

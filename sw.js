@@ -14,7 +14,7 @@
    değişmez, kimsenin bir şey yüklemesi gerekmez.
    ========================================================================== */
 
-const SURUM = "3.0.0";
+const SURUM = "3.1.0";
 const ONBELLEK = "alganis-mutfak-v" + SURUM;
 
 /* Tarif görselleri (gorseller/*.jpg) BİLEREK bu listede yok: yüzlerce dosya,
@@ -59,6 +59,7 @@ const DOSYALAR = [
   "./data/tarifler-tatli-2.js",
   "./data/tarifler-tatli-3.js",
   "./data/tarifler-dunya-italyan.js",
+  "./data/tarifler-dunya-uzakdogu.js",
   "./data/surum.js",
   "./data/gorseller.js",
   "./data/besin.js",

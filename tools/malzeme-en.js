@@ -128,5 +128,10 @@ module.exports = {
   "kedi-dili-biskuvi": "ladyfinger biscuits",
   "dondurma": "ice cream", "kadayif": "shredded kadayif pastry",
   "kapari": "capers", "recel": "fruit jam", "jelatin": "gelatin",
-  "ketcap": "ketchup"
+  "ketcap": "ketchup",
+
+  /* --- uzak doğu --- */
+  "soya-sosu": "soy sauce", "susam-yagi": "sesame oil",
+  "pirinc-sirkesi": "rice vinegar", "istiridye-sosu": "oyster sauce",
+  "tofu": "tofu"
 };

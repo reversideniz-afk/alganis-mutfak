@@ -101,25 +101,43 @@ sürüm 2.1.2, 0 bağımlılık.
   involtini, peperonata, stracciatella gibi) sonra istenirse eklenir,
   şu an planda değil.
 
-  **Sırada — Uzak Doğu mutfağı** (`mutfak:"uzakdogu"`, `AM.MUTFAKLAR`'da
-  zaten tanımlı, kapak görseli hazır: `gorseller/kapak-mutfak-uzakdogu.jpg`
-  — 9 mutfak kapağının hepsi tarandı). Tek "mutfak" olarak ele alınıyor —
-  Çin/Japon/Kore ağırlıklı ev yemekleri, alt kategoriye bölünmüyor.
-  Beklenen desen (İtalyan'la aynı mantık, bkz. yukarısı):
-  - **Domuz** çok yaygın (Çin/Kore) → tavuk/dana/kuzu ile uyarla.
-  - **Alkol**: Şaoxing şarabı (Çin), sake/mirin (Japon), rice wine (Kore)
-    → çıkar ya da pirinç sirkesi + su gibi alkolsüz bir karşılıkla dengele.
-  - **Muhtemelen yeni malzeme gerekecek** (kontrol edilip eksikse
-    eklenecek — `malzemeler.js`+`besin.js`(USDA)+`tools/malzeme-en.js`):
-    soya sosu, susam yağı, mısır/patates nişastası (kıvam için), pirinç
-    sirkesi, istiridye sosu, tofu. **Zaten katalogda var, tekrar ekleme**:
-    `zencefil` (baharat), `eriste` (noodle karşılığı olabilir, kontrol et).
-  - Kaynak önerisi: The Woks of Life, Just One Cookbook, Maangchi,
-    Omnivore's Cookbook — İtalyan'da olduğu gibi güvenilir, ölçü veren
-    siteler; uydurma oran yazma.
-  - Tarifler eklendikten sonra: `gorsel-istek.js --hepsi` (listeyi
-    tazele) unutulmasın, yoksa yeni tarifler taramaya girmez (bkz.
-    Faz 2'nin İtalyan'da yaşadığı gecikme).
+  **Uzak Doğu mutfağı başladı (13/~35 tarif, 2026-09-09)** —
+  `data/tarifler-dunya-uzakdogu.js` eklendi (`mutfak:"uzakdogu"`), tek
+  "mutfak" olarak ele alınıyor, Çin/Japon/Kore ağırlıklı ev yemekleri alt
+  kategoriye bölünmüyor. İlk parti: kung pao tavuk, tatlı-ekşi tavuk,
+  Yangzhou usulü kızarmış pirinç, tavuklu Çin usulü erişte (chow mein),
+  mapo tofu, ekşi-acı çorba, haşlama Çin mantısı (jiaozi), teriyaki
+  tavuk, tavuk katsu, bulgogi, bibimbap, yumurtalı Çin çorbası (egg drop
+  soup), yeşil soğanlı Çin gözlemesi (cong you bing) — kaynaklar The Woks
+  of Life, Just One Cookbook, Maangchi, Korean Bapsang, Plays Well With
+  Butter, Kirbie's Cravings (güvenilir ölçü/oran, uydurma yok).
+  **Beş yeni kiler malzemesi eklendi** (`malzemeler.js`+`besin.js`(USDA
+  yaklaşık)+`tools/malzeme-en.js` hepsi güncel): `soya-sosu`, `susam-yagi`,
+  `pirinc-sirkesi`, `istiridye-sosu`, `tofu`. `susam-yagi` diğer yağlarla
+  aynı yoğunlukta olduğu için `AM.GRAM_OZEL`'e de eklendi (13 g/yemek
+  kaşığı). Zaten katalogda olup tekrar eklenmeyenler: `zencefil`, `eriste`.
+  **Uyarlama kararları** (İtalyan'daki domuz/alkol kalıbı tekrarladı):
+  domuz gerektiren yerlerde dana/tavuk kullanıldı (Yangzhou'da char siu +
+  jambon yerine sosis, mapo tofu'da domuz kıyma yerine dana/tavuk); Şaoksing
+  şarabı/sake/mirin gerektiren yerlerde alkol çıkarıldı, teriyakide
+  pirinç sirkesi + şeker + su dengesiyle karşılandı. **Yeni bir uyarlama
+  türü**: gochujang (Kore) ve doubanjiang (Sıçuan) — fermente biber
+  ezmeleri — kataloğa hiç girmedi, biber salçası + pul biber + şeker
+  karışımıyla yaklaşık karşılandı (bibimbap, mapo tofu; ilgili tariflerin
+  "ip" alanında not edildi, tam aynı fermente tat beklenmemeli).
+  `node tools/veri-kontrol.js` yeşil (910 tarif, 252 malzeme),
+  `node tools/arayuz-testi.js` 22/22 (beklenen tarif sayısı 897→910
+  güncellendi). `index.html` + `sw.js` DOSYALAR listesine dosya eklendi.
+  `gorsel-istek.js --hepsi` ile liste tazelendi (540 eksik görsel) ve
+  `gorsel-bul.js --hepsi` oturumdan bağımsız arka planda başlatıldı —
+  durum kontrolü: `Get-Content gorseller\_bulma.log -Tail 15`.
+  **Kalan ~22 tarif** (eksik: Kore pirinç keki/tteokbokki, kimchi'li
+  tarifler, miso çorbası gibi ek fermente malzeme gerektirenler, ayrıca
+  daha fazla Çin/Japon ev yemeği) sonraki bir oturumda eklenebilir —
+  bilinçli olarak bu partiye dahil edilmedi çünkü her biri en az bir yeni
+  fermente/özel malzeme (miso, gochujang'ın kendisi, tteok, kimchi)
+  gerektiriyor ve tek seferde çok fazla yeni malzeme eklemek riskli
+  görüldü (İtalyan'ın kademeli 3 partili yaklaşımıyla aynı mantık).
 
   **Telif kontrolü yapıldı (2026-09-09)**: Kullanıcı isteği üzerine hem
   tarif metinlerinin hem görsellerin telif riski gözden geçirildi.

@@ -282,7 +282,14 @@ AM.BESIN = {
   "kapari":           [23, 4.9, 2.4, 0.9],
   "recel":            [278, 69.0, 0.4, 0.1],
   "jelatin":          [335, 0.0, 85.6, 0.1],
-  "ketcap":           [101, 25.8, 1.2, 0.1]
+  "ketcap":           [101, 25.8, 1.2, 0.1],
+
+  /* --- Uzak Doğu kileri --- */
+  "soya-sosu":        [60, 5.6, 10.5, 0.1],
+  "susam-yagi":       [884, 0.0, 0.0, 100.0],
+  "pirinc-sirkesi":   [18, 0.3, 0.0, 0.0],
+  "istiridye-sosu":   [51, 10.6, 2.8, 0.3],
+  "tofu":             [76, 1.9, 8.1, 4.8]
 };
 
 
@@ -392,6 +399,7 @@ AM.GRAM_OZEL = {
   /* --- yoğun sıvı ve macunlar --- */
   "zeytinyagi":       { "su bardağı": 180, "yemek kaşığı": 13, "çay bardağı": 90 },
   "sivi-yag":         { "su bardağı": 180, "yemek kaşığı": 13, "çay bardağı": 90 },
+  "susam-yagi":       { "su bardağı": 180, "yemek kaşığı": 13, "çay bardağı": 90 },
   "tereyagi":         { "yemek kaşığı": 14, "paket": 250 },
   "salca":            { "yemek kaşığı": 18, "çay kaşığı": 6 },
   "biber-salcasi":    { "yemek kaşığı": 18 },

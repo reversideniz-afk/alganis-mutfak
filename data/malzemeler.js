@@ -310,5 +310,12 @@ AM.MALZEMELER = [
   ["kapari",            "Kapari",                 "kiler", 0],
   ["recel",             "Reçel",                  "kiler", 0],
   ["jelatin",           "Jelatin / toz jöle",     "kiler", 0],
-  ["ketcap",            "Ketçap",                 "kiler", 0]
+  ["ketcap",            "Ketçap",                 "kiler", 0],
+
+  /* --- Uzak Doğu kileri --- */
+  ["soya-sosu",         "Soya sosu",              "kiler", 0],
+  ["susam-yagi",        "Susam yağı",             "kiler", 0],
+  ["pirinc-sirkesi",    "Pirinç sirkesi",         "kiler", 0],
+  ["istiridye-sosu",    "İstiridye sosu",         "kiler", 0],
+  ["tofu",              "Tofu",                   "kiler", 0, "soya peyniri"]
 ];
