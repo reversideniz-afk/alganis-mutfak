@@ -110,9 +110,11 @@
       fill: "hsl(" + ton + " 40% 98%)", opacity: "0.22"
     }));
 
-    /* Tarifin emojisi — portrenin okunur kısmı burası. */
+    /* Tarifin emojisi — portrenin okunur kısmı burası, her zaman tam
+       ortada durur. Tabak dairesi kayabilir (üstteki atmosferik katman),
+       emoji kaymaz — kaymış görünen ikon şikâyetinin kaynağı buydu. */
     var yazi = svg("text", {
-      x: String(tabakX), y: String(tabakY),
+      x: "400", y: "300",
       "text-anchor": "middle", "dominant-baseline": "central",
       "font-size": "170"
     });

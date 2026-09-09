@@ -65,7 +65,14 @@ gerekirse git geçmişinde duruyor (`ea9c19d` ve öncesi). Ayrıntılı gerekçe
 3. `powershell -File tools/gorsel-isle.ps1` → 4:3 kırpar, 800×600 JPEG q78
    olarak `gorseller/<tarif-id>.jpg` yazar (System.Drawing, kurulum
    gerektirmez) — kaynak PNG/JPG/WEBP fark etmez.
-4. `node tools/veri-kontrol.js` görsel sayısını raporlar ve yanlış
+4. **`node tools/gorsel-liste.js` — ASLA ATLAMA.** `gorseller/` klasörünü
+   tarar, `data/gorseller.js`'i (AM.GORSELLER) yeniden üretir. `js/gorsel.js`
+   SADECE bu listeye bakar; disk'te jpg olsa bile listede yoksa kart SVG
+   portreye düşer. 2026-09-09'da bu adım aylarca atlanmış (897→910 tarif,
+   yüzlerce görsel eklenmiş) ve uygulama sadece 47/436 gerçek görseli
+   gösteriyordu — kullanıcı "çoğu şey ikon kalmış" diye fark etti. `gorsel-
+   isle.ps1`'den SONRA, commit'ten ÖNCE her seferinde çalıştır.
+5. `node tools/veri-kontrol.js` görsel sayısını raporlar ve yanlış
    adlandırılmış dosyaları yakalar.
 
 Kurallar: `gorseller/*.jpg` commit **edilir**; `_ham/`, `_istekler.*` ve

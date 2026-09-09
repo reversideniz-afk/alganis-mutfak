@@ -229,6 +229,55 @@ tarifin fotoğrafsız kaldığını gör (SVG portreye düşerler, hata değil) 
 işlenmiş, 194/879 tarif fotoğraflı, 11/20 kapak görseli hazırdı. Bunlar
 korunuyor, üstüne ekleniyor.
 
+### Kritik hata bulundu ve düzeltildi: görsel listesi ayı boyunca bayattı (2026-09-09)
+
+Kullanıcı "çoğu şey sadece ikon kalmış" diye fark etti. Kök neden:
+`data/gorseller.js` (AM.GORSELLER — `js/gorsel.js`'in gerçek fotoğrafı
+olan tarifleri bulmak için baktığı TEK liste) sürüm 3.0.0'dan
+(commit `00a49e3`) sonra **hiç yeniden üretilmemiş** — `tools/gorsel-
+liste.js` çalıştırılmadan üç ayrı görsel commit'i (`a9839ce`, `b9d1f4c`,
+ve bu oturumun kendisi) atılmış. Disk'te 436 gerçek fotoğraf varken
+uygulama sadece 47'sinin farkındaydı, kalan 389'u boşuna SVG portreye
+düşüyordu. **Bu adım artık CLAUDE.md'de "ASLA ATLAMA" uyarısıyla
+işaretli** — `gorsel-isle.ps1`'den sonra, her seferinde.
+
+**İkinci bulgu — bulunan fotoğrafların bir kısmı yanlıştı.** Kullanıcının
+"patates püresi" örneği doğrulandı (görsel zeytinyağlı köy patatesiydi,
+püre değil) ve manifest düzeltmesinden sonra tüm 436 görsel etiketli bir
+kontrol tablosunda (13 sayfa, PowerShell/System.Drawing ile üretildi,
+`tools/gorsel-liste.js`'in ürettiği id→ad eşlemesiyle) elle tarandı.
+**54 tarifin görseli tamamen yanlış çıktı ve silindi** — üç kategori:
+- Konu tamamen alakasız: kitap kapağı (balık şiş), insanlar yemek yerken
+  fotoğrafı (beyti sarma, karışık turşu, sumaklı soğan salatası), bir
+  heykel (tarator), bir manolya ağacı (Magnolia tatlısı), boş tabak/masa
+  düzeni (yoğurtlu patlıcan mezesi), tavuz kutusu/bento fotoğrafı.
+- Aynı yanlış stok fotoğraf birden fazla farklı tarife düşmüş — Openverse'ün
+  jenerik İngilizce sorgusu (3. seviye yedek sorgu) çok geniş kaldığında
+  aynı popüler "Turkish food" etiketli fotoğrafı defalarca döndürüyor:
+  ör. aynı Flickr fotoğrafı hem "sarığı burma" hem "bülbül yuvası" hem
+  "ev baklavası" için, başka bir fotoğraf hem "beyti sarma" hem "karışık
+  turşu" hem "sumaklı soğan salatası" için eşleşmiş.
+- Kategori doğru ama yemek yanlış: cezerye (turuncu olması gerekirken
+  kahverengi), krem karamel (pudding yerine haşlanmış yumurta), mozaik
+  pasta (kare kesilmiş çikolatalı bisküvi yerine taş dokusu), vb.
+- **Kendi eklediğimiz Uzak Doğu tarifinde de bulundu**: `yangzhou-pilavi`
+  görseli kızarmış pirinç değil, bir sebze çorbasıydı — otomatik bulma
+  aracının sonucu doğrulanmadan güvenilmemesi gerektiğinin kanıtı.
+
+Silinen 54 id ve _kaynaklar.csv'den çıkarılan 42 atıf satırı için
+git geçmişine bakılabilir (bu oturumun commit'i). Bu tarifler şimdilik
+SVG portreye düşüyor — yanlış ama "gerçek" bir fotoğraf göstermek, doğru
+bir ikon göstermekten kötü sayıldı. **Ders**: `gorsel-bul.js` bir eşleşme
+bulduğunda otomatik doğru kabul edilmemeli; en azından örnek bir kontrol
+tablosuyla gözden geçirilmeli, özellikle 3. seviye (jenerik İngilizce)
+sorguyla bulunanlar için.
+
+`js/gorsel.js`'te ayrıca bağımsız bir görsel hata düzeltildi: SVG
+portresindeki emoji, tabak dairesiyle birlikte rastgele kaymış konuma
+yerleşiyordu (kart türüne göre bazı tariflerde emoji köşede kalıyordu).
+Emoji artık her zaman tam ortada, sadece arka plandaki atmosferik tabak
+dairesi kayıyor.
+
 ### Mobil çıkış ve gelir modeli — ERTELENDİ (2026-09-09)
 
 **Karar E**: Play Store / App Store çıkışı ve her türlü gelir modeli **uzun
