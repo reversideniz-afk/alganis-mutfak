@@ -138,6 +138,7 @@ AM.MALZEMELER = [
   ["nohut",             "Nohut",                  "bakliyat", 1],
   ["kuru-fasulye",      "Kuru fasulye",           "bakliyat", 1],
   ["kuru-barbunya",     "Kuru barbunya",          "bakliyat", 0],
+  ["kuru-bakla",        "Kuru bakla",             "bakliyat", 0],
   ["borulce",           "Börülce",                "bakliyat", 0],
   ["makarna",           "Makarna",                "bakliyat", 1],
   ["sehriye",           "Arpa şehriye",           "bakliyat", 1],

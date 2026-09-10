@@ -154,6 +154,29 @@ sürüm 2.1.2, 0 bağımlılık.
   aşamasında acil değil ama **Play Store'a çıkmadan veya $5 IAP
   eklenmeden önce mutlaka yapılmalı** — aksi halde CC BY-SA'nın atıf
   şartını ihlal eder.
+- **Orta Doğu mutfağı başladı (13/~30 tarif, 2026-09-11)** —
+  `data/tarifler-dunya-ortadogu.js` eklendi (`mutfak:"ortadogu"`), Levant
+  (Lübnan/Suriye/Filistin), Mısır ve İran ağırlıklı ev/sokak yemekleri
+  tek mutfak altında. İlk parti: falafel, tabule, fettuş, tavuk şavarma,
+  muhammara, şakşuka (yumurtalı), mücedere, maklube, ful, koşari, zahter
+  ekmeği (manakish), ümmü ali, fesenjan — kaynaklar The Mediterranean
+  Dish, Feel Good Foodie, Cookie and Kate, Little Sunny Kitchen, Daring
+  Gourmet, Saveur, Silk Road Recipes. Humus, babagannuş ve künefe
+  **eklenmedi** — zaten Türk kataloğunda vardı (Türk sofralarında da
+  yaygın), tekrar oluşturmak yerine gerçekten yeni tarifler seçildi.
+  **Domuz/alkol uyarlaması gerekmedi** — bu mutfak zaten büyük ölçüde
+  bu iki malzemeyi kullanmıyor, İtalyan/Uzak Doğu'daki gibi bir uyarlama
+  kararı alınmadı. Za'atar (zahter) kataloğa tek malzeme olarak
+  eklenmedi, kekik+susam+sumak karışımı olarak doğrudan tarifte
+  yazıldı — yeni malzeme sayısını azaltmak için bilinçli bir seçim.
+  **Bir yeni bakliyat malzemesi eklendi**: `kuru-bakla` (ful medames
+  için gerekli, katalogda kuru fasulyeden farklı bir baklagil yoktu) —
+  `malzemeler.js`+`besin.js`(USDA yaklaşık)+`tools/malzeme-en.js` güncel.
+  `node tools/veri-kontrol.js` yeşil (923 tarif, 253 malzeme),
+  `node tools/arayuz-testi.js` 22/22 (beklenen tarif sayısı 910→923
+  güncellendi). `index.html` + `sw.js` DOSYALAR listesine dosya eklendi.
+  **Görsel eklenmedi** — görsel hattı 2026-09-10'da durduruldu (bkz.
+  altındaki not), bu 13 tarif SVG ikonla kalacak, bu normal.
 - **Tasarım sadakat denetimi yapıldı (2026-09-09).** Referans tasarımlar
   yeniden paylaşıldı ve `tasarim/REFERANSLAR.md`'ye kalıcı olarak döküldü
   (ekran ekran tarif + 23 maddelik sadakat tablosu). **Sonuç**: alt menü,
@@ -732,8 +755,16 @@ görülmemiş bir tarif SVG portresine düşer.
 
 ## Sıradaki adım
 
-Faz 0 tamamlandı. Faz 1 sürüyor: şema/iskelet katmanı bitti, şimdi görünen
-kabuk yenileniyor. Faz 0 ve Faz 1 tek sürümde (3.0.0) çıkacak; annen
-telefonunda önce yeni arayüzü ve ilk 169 görseli (parti 1 + 2) görecek,
-dünya mutfakları ve akıllı öneri arkasından gelecek. Link değişmiyor,
-kurulum gerekmiyor.
+Faz 0 ve Faz 1 tamamlandı (sürüm 3.0.0'da yayınlandı). **Faz 2 (Dünya
+mutfakları) sürüyor**: İtalyan 28/~40 tarifte durdu, Uzak Doğu ilk
+partiyle (13/~35) başladı, Orta Doğu ilk partiyle (13/~30) başladı —
+üçü de kasıtlı olarak tamamlanmadan bırakıldı, tek mutfağa saplanıp
+kalmamak için (bkz. Durum bölümü). **Sırada — Meksika mutfağı**
+(8 mutfaklık listede 4. sıra: İtalyan ✓, Uzak Doğu ✓, Orta Doğu ✓,
+Meksika, Hint, Balkan, Akdeniz, Fransız). Uzak Doğu'nun kalan ~22
+tarifi (miso, gochujang, kimchi, tteok gibi yeni fermente malzeme
+gerektirenler), İtalyan'ın eksik ~12 tarifi ve Orta Doğu'nun kalan
+~17 tarifi istenirse ayrıca eklenir. Görsel hattı 2026-09-10'da
+durduruldu — yeni tarifler görselsiz, SVG ikonla eklenecek (bkz.
+Bölüm 6 altındaki not). Faz 3 (akıllı öneri) ve Faz 4 (pişirme
+deneyimi) henüz başlamadı.
