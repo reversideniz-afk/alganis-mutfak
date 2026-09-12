@@ -198,6 +198,31 @@ sürüm 2.1.2, 0 bağımlılık.
   güncellendi). `index.html` + `sw.js` DOSYALAR listesine dosya eklendi.
   **Görsel eklenmedi** — görsel hattı durduruldu, bu 13 tarif de
   SVG ikonla kalacak.
+- **Hint mutfağı başladı (13/~25 tarif, 2026-09-12)** —
+  `data/tarifler-dunya-hint.js` eklendi (`mutfak:"hint"`), Kuzey
+  Hindistan/Pencap ağırlıklı ev ve restoran yemekleri. İlk parti: dal
+  tadka, chana masala, palak paneer, tereyağlı tavuk (butter chicken),
+  chicken tikka masala, tavuklu biryani, aloo gobi, raita, samosa, naan
+  ekmeği, kuzu rogan josh, tandır usulü tavuk (tandoori chicken), gulab
+  jamun — kaynaklar Swasthi's Recipes, Piping Pot Curry, Tea for
+  Turmeric, Dassana's Veg Recipes, Ministry of Curry, Cook With Manali,
+  Whisk Affair. **Domuz/alkol uyarlaması gerekmedi** — bu mutfak zaten
+  ikisini de neredeyse hiç kullanmıyor. **Paneer** yerine dokusu/tadı
+  yakın katalogdaki `lor` peyniri kullanıldı (yeni malzeme eklenmedi).
+  **Garam masala** tek malzeme olarak eklenmedi — tarçın+karanfil+
+  kakule+kimyon+kişniş tohumu karışımı doğrudan tariflerde yazıldı
+  (za'atar'daki gibi aynı mantık). Keşmir kırmızı biberi yerine toz
+  biber+pul biber, hardal yağı yerine sıvı yağ kullanıldı.
+  **İki yeni malzeme eklendi**: `kisnis-tohumu` (toz kişniş —
+  Meksika'da eklenen taze yaprak `taze-kisnis`'ten farklı, `kuru-nane`/
+  `taze-nane` ayrımıyla aynı mantık), `sut-tozu` (gulab jamun için).
+  İkisi de `malzemeler.js`+`besin.js`(USDA yaklaşık)+`tools/
+  malzeme-en.js`'e işlendi; süt tozu `AM.GRAM_OZEL`'e de eklendi.
+  `node tools/veri-kontrol.js` yeşil (949 tarif, 259 malzeme),
+  `node tools/arayuz-testi.js` 22/22 (beklenen tarif sayısı 936→949
+  güncellendi). `index.html` + `sw.js` DOSYALAR listesine dosya eklendi.
+  **Görsel eklenmedi** — görsel hattı durduruldu, bu 13 tarif de
+  SVG ikonla kalacak.
 - **Tasarım sadakat denetimi yapıldı (2026-09-09).** Referans tasarımlar
   yeniden paylaşıldı ve `tasarim/REFERANSLAR.md`'ye kalıcı olarak döküldü
   (ekran ekran tarif + 23 maddelik sadakat tablosu). **Sonuç**: alt menü,
@@ -779,13 +804,14 @@ görülmemiş bir tarif SVG portresine düşer.
 Faz 0 ve Faz 1 tamamlandı (sürüm 3.0.0'da yayınlandı). **Faz 2 (Dünya
 mutfakları) sürüyor**: İtalyan 28/~40 tarifte durdu, Uzak Doğu ilk
 partiyle (13/~35) başladı, Orta Doğu ilk partiyle (13/~30) başladı,
-Meksika ilk partiyle (13/~25) başladı — dördü de kasıtlı olarak
-tamamlanmadan bırakıldı, tek mutfağa saplanıp kalmamak için (bkz.
-Durum bölümü). **Sırada — Hint mutfağı** (8 mutfaklık listede 5. sıra:
-İtalyan ✓, Uzak Doğu ✓, Orta Doğu ✓, Meksika ✓, Hint, Balkan, Akdeniz,
-Fransız). Uzak Doğu'nun kalan ~22 tarifi (miso, gochujang, kimchi,
-tteok gibi yeni fermente malzeme gerektirenler), İtalyan'ın eksik ~12
-tarifi, Orta Doğu'nun kalan ~17 tarifi ve Meksika'nın kalan ~12 tarifi
+Meksika ilk partiyle (13/~25) başladı, Hint ilk partiyle (13/~25)
+başladı — beşi de kasıtlı olarak tamamlanmadan bırakıldı, tek mutfağa
+saplanıp kalmamak için (bkz. Durum bölümü). **Sırada — Balkan mutfağı**
+(8 mutfaklık listede 6. sıra: İtalyan ✓, Uzak Doğu ✓, Orta Doğu ✓,
+Meksika ✓, Hint ✓, Balkan, Akdeniz, Fransız). Uzak Doğu'nun kalan ~22
+tarifi (miso, gochujang, kimchi, tteok gibi yeni fermente malzeme
+gerektirenler), İtalyan'ın eksik ~12 tarifi, Orta Doğu'nun kalan ~17
+tarifi, Meksika'nın kalan ~12 tarifi ve Hint'in kalan ~12 tarifi
 istenirse ayrıca eklenir. Görsel hattı 2026-09-10'da durduruldu — yeni
 tarifler görselsiz, SVG ikonla eklenecek (bkz. Bölüm 6 altındaki not).
 Faz 3 (akıllı öneri) ve Faz 4 (pişirme deneyimi) henüz başlamadı.

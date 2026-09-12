@@ -61,7 +61,7 @@ module.exports = {
   /* --- süt ürünleri --- */
   "yumurta": "eggs", "sut": "milk", "yogurt": "yogurt",
   "suzme-yogurt": "strained yogurt", "krema": "cream",
-  "kondanse-sut": "sweetened condensed milk",
+  "kondanse-sut": "sweetened condensed milk", "sut-tozu": "milk powder",
   "kaymak": "clotted cream", "tereyagi": "butter",
   "beyaz-peynir": "white brined cheese", "kasar": "kasseri cheese",
   "lor": "curd cheese", "tulum-peyniri": "tulum cheese",
@@ -94,6 +94,7 @@ module.exports = {
   /* --- baharat --- */
   "tuz": "salt", "karabiber": "black pepper", "pul-biber": "red pepper flakes",
   "toz-biber": "ground red pepper", "isot": "isot pepper", "kimyon": "cumin",
+  "kisnis-tohumu": "ground coriander",
   "kekik": "oregano", "kuru-nane": "dried mint", "sumak": "sumac",
   "tarcin": "cinnamon", "karanfil": "cloves", "yenibahar": "allspice",
   "zerdecal": "turmeric", "zencefil": "ginger", "kakule": "cardamom",

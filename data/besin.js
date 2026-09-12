@@ -130,6 +130,7 @@ AM.BESIN = {
   "suzme-yogurt":     [97, 3.9, 9.0, 5.0],
   "krema":            [292, 2.9, 2.1, 30.0],
   "kondanse-sut":     [321, 54.4, 7.9, 8.7],
+  "sut-tozu":         [362, 52.9, 36.2, 0.8],
   "kaymak":           [430, 3.0, 3.5, 45.0],
   "tereyagi":         [717, 0.1, 0.9, 81.1],
   "beyaz-peynir":     [264, 4.1, 14.2, 21.3],
@@ -195,6 +196,7 @@ AM.BESIN = {
   "toz-biber":        [282, 49.7, 12.0, 14.3],
   "isot":             [282, 49.7, 12.0, 14.3],
   "kimyon":           [375, 44.2, 17.8, 22.3],
+  "kisnis-tohumu":    [298, 55.0, 12.4, 17.8],
   "kekik":            [276, 68.9, 9.1, 4.4],
   "kuru-nane":        [285, 52.0, 19.9, 6.0],
   "sumak":            [325, 65.0, 5.0, 7.0],
@@ -419,6 +421,7 @@ AM.GRAM_OZEL = {
   "suzme-yogurt":     { "su bardağı": 240, "yemek kaşığı": 18 },
   "krema":            { "su bardağı": 200, "paket": 200 },
   "kondanse-sut":     { "su bardağı": 300, "yemek kaşığı": 20 },
+  "sut-tozu":         { "su bardağı": 100, "yemek kaşığı": 7 },
   "mayonez":          { "yemek kaşığı": 14 },
 
   /* --- ekmek ve hamur --- */
