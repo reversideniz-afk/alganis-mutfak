@@ -67,7 +67,7 @@
       tarifIndeks[t.id] = t;
 
       var etVar = false;
-      var aramaParcalari = [t.ad, t.kat];
+      var malzemeAdlari = [];
 
       t.m.forEach(function (satir) {
         var roller = satir[3] || "ana";
@@ -75,7 +75,7 @@
           if (!malzemeIndeks[mid]) {
             bilinmeyen.push(t.id + " → " + mid);
           } else {
-            aramaParcalari.push(malzemeIndeks[mid].ad);
+            malzemeAdlari.push(malzemeIndeks[mid].ad);
             if (etIdleri.has(mid) && roller !== "ops") etVar = true;
           }
         });
@@ -85,7 +85,14 @@
       if (t.firinsiz === undefined) {
         t.firinsiz = !(t.y || []).some(function (a) { return /fırın|firin/i.test(a); });
       }
-      t.ara = nrm(aramaParcalari.join(" "));
+
+      /* Arama alanları ağırlıklı puanlama için ayrı tutuluyor (bkz. tarifAra):
+         ad en önemlisi, kategori/mutfak adı orta, malzeme adları en düşük. */
+      var katAdi = (AM.TARIF_KATEGORILERI_AD && AM.TARIF_KATEGORILERI_AD[t.kat]) || t.kat;
+      var mutfakAdi = (AM.MUTFAKLAR_AD && AM.MUTFAKLAR_AD[AM.mutfakBul(t)]) || "";
+      t.araAd = nrm(t.ad);
+      t.araIkincil = nrm(katAdi + " " + mutfakAdi);
+      t.araMalzeme = nrm(malzemeAdlari.join(" "));
       t.puanTohum = karma(t.id);
     });
 
@@ -178,18 +185,74 @@
     return { tam: tam, yakin: yakin };
   };
 
-  /* --- tarif arama (Tarifler ekranı) -------------------------------------- */
+  /* --- tarif arama (Tarifler ekranı) -------------------------------------
+     Alan ağırlıklı puanlama: bir arama kelimesi tarifin ADINDA geçiyorsa
+     kategori/mutfak adında ya da malzeme listesinde geçmesinden daha değerli
+     sayılır — sıralama buna göre yapılır. "mercimek çorbsı" gibi tek harflik
+     yazım hatalarını da tolere eder (bkz. duzenUzakligiEnFazla1): önce düz alt
+     dize aranır, bulunamazsa hedef alandaki kelimelerle düzenleme uzaklığı
+     1'e kadar karşılaştırılır (daha düşük ağırlıkla). */
+
+  var ALAN_AGIRLIK = { ad: 5, ikincil: 2, malzeme: 1 };
+  var FUZZY_EN_AZ_UZUNLUK = 3;
+
+  /** İki kelime en fazla tek harf farkıyla (ekleme/çıkarma/değiştirme) aynı mı? */
+  function duzenUzakligiEnFazla1(a, b) {
+    if (a === b) return true;
+    var la = a.length, lb = b.length;
+    if (Math.abs(la - lb) > 1) return false;
+    var kisa = la <= lb ? a : b;
+    var uzun = la <= lb ? b : a;
+    var esitUzunluk = kisa.length === uzun.length;
+    var i = 0, j = 0, farkVar = false;
+    while (i < kisa.length && j < uzun.length) {
+      if (kisa[i] === uzun[j]) { i++; j++; continue; }
+      if (farkVar) return false;
+      farkVar = true;
+      if (esitUzunluk) { i++; j++; } else { j++; }
+    }
+    return true;
+  }
+
+  /** Normalize edilmiş bir alanda ("hedef") bir arama kelimesi ne kadar iyi geçiyor? 1 = tam eşleşme, 0 = yok. */
+  function alanSkoru(hedef, kelime) {
+    if (!hedef) return 0;
+    if (hedef.indexOf(kelime) !== -1) return 1;
+    if (kelime.length < FUZZY_EN_AZ_UZUNLUK) return 0;
+    var kelimeler = hedef.split(" ");
+    for (var i = 0; i < kelimeler.length; i++) {
+      if (kelimeler[i].length >= FUZZY_EN_AZ_UZUNLUK && duzenUzakligiEnFazla1(kelimeler[i], kelime)) {
+        return 0.5;
+      }
+    }
+    return 0;
+  }
 
   AM.tarifAra = function (metin, kategori) {
     var q = nrm(metin);
-    var kelimeler = q ? q.split(" ") : [];
-    return (AM.TARIFLER || []).filter(function (t) {
-      if (kategori && kategori !== "hepsi" && t.kat !== kategori) return false;
-      if (!kelimeler.length) return true;
+    var kelimeler = q ? q.split(" ").filter(Boolean) : [];
+    var eslesenler = [];
+
+    (AM.TARIFLER || []).forEach(function (t) {
+      if (kategori && kategori !== "hepsi" && t.kat !== kategori) return;
+      if (!kelimeler.length) { eslesenler.push({ t: t, skor: 0 }); return; }
+
+      var toplamSkor = 0;
       for (var i = 0; i < kelimeler.length; i++) {
-        if (t.ara.indexOf(kelimeler[i]) === -1) return false;
+        var kelime = kelimeler[i];
+        var enIyi = Math.max(
+          alanSkoru(t.araAd, kelime) * ALAN_AGIRLIK.ad,
+          alanSkoru(t.araIkincil, kelime) * ALAN_AGIRLIK.ikincil,
+          alanSkoru(t.araMalzeme, kelime) * ALAN_AGIRLIK.malzeme
+        );
+        if (enIyi === 0) return; // bu kelime hiçbir alanda yok — tarif elenir
+        toplamSkor += enIyi;
       }
-      return true;
+      eslesenler.push({ t: t, skor: toplamSkor });
     });
+
+    /* Arama boşsa katalog sırası korunur; doluysa en iyi eşleşme öne gelir. */
+    if (kelimeler.length) eslesenler.sort(function (a, b) { return b.skor - a.skor; });
+    return eslesenler.map(function (e) { return e.t; });
   };
 })();

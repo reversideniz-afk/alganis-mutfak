@@ -238,26 +238,67 @@
     return kart;
   };
 
-  /* --- besin rozetleri -------------------------------------------------------
-     Not: ilerleme halkası (yüzde/hedef) DEĞİL — bu uygulamada hiçbir yerde
-     hedef/limit/uyarı yok (bkz. Karar D). Dört rozet de nötr, aynı yüzey
-     rengiyle; sadece emoji + etiketle ayrışıyor, renkle "iyi/kötü" demiyor. */
-  var BESIN_ALANLAR = [
-    ["kcal", "🔥", "kcal"],
-    ["karb", "🌾", "g karb"],
-    ["prot", "🥩", "g prot"],
-    ["yag",  "🫒", "g yağ"]
+  /* --- besin grafiği -----------------------------------------------------
+     Faz 4: dört düz rakam yerine kalori + makro dağılımını gösteren küçük
+     bir çubuk grafik (Faz 4 planındaki "adım içi zamanlayıcı" yerine
+     kullanıcıyla birlikte kararlaştırılan alternatif — bkz. YOL-HARITASI.md).
+     Not: ilerleme halkası ya da hedef/limit göstergesi DEĞİL — bu uygulamada
+     hiçbir yerde hedef/limit/uyarı yok (Karar D). Üç renkli parça sadece
+     kalorinin ne kadarının karbonhidrat/protein/yağdan geldiğini gösteriyor,
+     "iyi/kötü" demiyor. Toplam kcal ayrı bir kaynaktan (USDA) geldiği için üç
+     parçanın oranı kcal sayısıyla birebir tutmayabilir — diğer besin
+     değerleri gibi bu da her zaman "yaklaşık". */
+  var BESIN_MAKRO = [
+    ["karb", "🌾", "Karbonhidrat"],
+    ["prot", "🥩", "Protein"],
+    ["yag",  "🫒", "Yağ"]
   ];
 
-  function besinSatiri(besin) {
-    var satir = el("div", { sinif: "besin-satir" });
-    BESIN_ALANLAR.forEach(function (b) {
-      satir.appendChild(el("div", { sinif: "besin-halka" }, [
-        el("strong", { veri: { besin: b[0] }, metin: String(besin[b[0]]) }),
-        el("small", { metin: b[2] })
+  function besinGenislikleri(besin) {
+    var karbK = besin.karb * 4, protK = besin.prot * 4, yagK = besin.yag * 9;
+    var toplam = karbK + protK + yagK;
+    if (!(toplam > 0)) return { karb: 0, prot: 0, yag: 0 };
+    return { karb: karbK / toplam * 100, prot: protK / toplam * 100, yag: yagK / toplam * 100 };
+  }
+
+  function cubukDoldur(cubuk, besin) {
+    bosalt(cubuk);
+    var genislik = besinGenislikleri(besin);
+    BESIN_MAKRO.forEach(function (m) {
+      var yuzde = genislik[m[0]];
+      if (!(yuzde > 0)) return;
+      cubuk.appendChild(el("span", { sinif: "bg-parca bg-" + m[0], stil: { width: yuzde + "%" } }));
+    });
+  }
+
+  function besinGrafik(besin) {
+    var kap = el("div", { sinif: "besin-grafik" });
+
+    kap.appendChild(el("div", { sinif: "bg-ust" }, [
+      el("span", { "aria-hidden": "true", metin: "🔥" }),
+      el("strong", { sinif: "bg-kcal", veri: { besin: "kcal" }, metin: String(besin.kcal) }),
+      el("span", { sinif: "bg-kcal-birim", metin: "kcal · yaklaşık" })
+    ]));
+
+    var cubuk = el("div", {
+      sinif: "bg-cubuk", role: "img",
+      "aria-label": "Karbonhidrat " + besin.karb + " g, protein " + besin.prot + " g, yağ " + besin.yag + " g"
+    });
+    cubukDoldur(cubuk, besin);
+    kap.appendChild(cubuk);
+
+    var lejant = el("div", { sinif: "bg-lejant" });
+    BESIN_MAKRO.forEach(function (m) {
+      lejant.appendChild(el("span", { sinif: "bg-oge" }, [
+        el("i", { sinif: "bg-nokta bg-" + m[0], "aria-hidden": "true" }),
+        el("span", { sinif: "bg-oge-ad", metin: m[1] + " " + m[2] }),
+        el("strong", { veri: { besin: m[0] }, metin: String(besin[m[0]]) }),
+        el("small", { metin: "g" })
       ]));
     });
-    return satir;
+    kap.appendChild(lejant);
+
+    return kap;
   }
 
   /* --- tarif detayı --------------------------------------------------------- */
@@ -288,7 +329,7 @@
 
     var besinSonuc = AM.besin.hesapla(t, porsiyon);
     if (AM.depo.besinGoster() && AM.besin.gosterilsinMi(besinSonuc)) {
-      parca.appendChild(besinSatiri(besinSonuc));
+      parca.appendChild(besinGrafik(besinSonuc));
     }
 
     /* sekmeler: Malzemeler / Yapılışı */
@@ -390,6 +431,8 @@
       Array.prototype.forEach.call(kap.querySelectorAll("[data-besin]"), function (e) {
         if (besin[e.dataset.besin] !== undefined) e.textContent = String(besin[e.dataset.besin]);
       });
+      var cubuk = kap.querySelector(".bg-cubuk");
+      if (cubuk) cubukDoldur(cubuk, besin);
     }
   };
 

@@ -104,12 +104,13 @@
 
   ic.panelKapat = function (id) {
     $(id).hidden = true;
-    if ($("pisirmePanel").hidden && $("tarifPanel").hidden && $("ayarPanel").hidden) {
+    if ($("pisirmePanel").hidden && $("tarifPanel").hidden && $("ayarPanel").hidden && $("tanitimPanel").hidden) {
       document.body.style.overflow = "";
     }
   };
 
   ic.hepsiniKapat = function () {
+    if (!$("tanitimPanel").hidden) { ic.tanitimKapat(); return true; }
     if (!$("pisirmePanel").hidden) { ic.pisirmeKapat(); return true; }
     if (!$("tarifPanel").hidden) { ic.panelKapat("tarifPanel"); return true; }
     if (!$("ayarPanel").hidden) { ic.panelKapat("ayarPanel"); return true; }

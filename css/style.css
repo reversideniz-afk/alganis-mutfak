@@ -199,6 +199,24 @@
 :root[data-palet="kontrast"] .btn.ikincil,
 :root[data-palet="kontrast"] .btn.hayalet { border-width: 2px; }
 
+/* Besin grafiğinin üç parçası (js/arayuz.js) normalde --grad-1/2/3 kullanır;
+   kontrast paletinde bu üçü birbirine çok yakın koyu gri olur (#1A1A1A /
+   #2E2E2E / #454545) ve ayırt edilemez hale gelir — tam da bu paletin var
+   olma sebebiyle çelişir. Burada renk yerine desenle ayrışıyorlar: düz siyah,
+   sağa çizgili, sola çizgili. Aynı sınıflar hem çubuk parçasında (.bg-parca)
+   hem lejant noktasında (.bg-nokta) kullanıldığı için ikisi de otomatik uyumlu
+   kalıyor. */
+:root[data-palet="kontrast"] .bg-karb,
+:root[data-palet="kontrast"] .bg-prot,
+:root[data-palet="kontrast"] .bg-yag { background: #000000; }
+:root[data-palet="kontrast"] .bg-prot {
+  background-image: repeating-linear-gradient(45deg, #FFFFFF 0, #FFFFFF 2px, transparent 2px, transparent 6px);
+}
+:root[data-palet="kontrast"] .bg-yag {
+  background-image: repeating-linear-gradient(-45deg, #FFFFFF 0, #FFFFFF 2px, transparent 2px, transparent 6px);
+}
+:root[data-palet="kontrast"] .bg-cubuk { border: 1.5px solid var(--cizgi); }
+
 * { box-sizing: border-box; }
 
 /* ÖNEMLİ: Aşağıdaki bazı kurallar (.panel, .pisirme, .bolum, .btn …) display
@@ -716,6 +734,32 @@ main { position: relative; z-index: 1; }
   border-top: 1.5px solid var(--cizgi);
 }
 .adim-sayac { font-size: 14px; font-weight: 800; color: var(--metin-soluk); white-space: nowrap; }
+
+/* ------------------------------------------------------------- tanıtım
+   İlk açılışta üç adımlık, atlanabilir tanıtım (Faz 4). Pişirme moduyla
+   aynı tam ekran deseni: z-index pişirme modundan (70) da yüksek çünkü
+   uygulama açılır açılmaz her şeyin üstünde çıkması gerekiyor. */
+.tanitim {
+  position: fixed; inset: 0; z-index: 80;
+  background: var(--zemin);
+  display: flex; flex-direction: column;
+}
+.tanitim-ic {
+  flex: 1; display: flex; flex-direction: column;
+  padding: calc(var(--gvn) + 14px) 20px 20px;
+}
+.tanitim-ust { display: flex; justify-content: flex-end; }
+.tanitim-govde {
+  flex: 1; display: flex; flex-direction: column;
+  align-items: center; justify-content: center; text-align: center;
+  gap: 10px; padding: 0 8px;
+}
+.tanitim-emoji { font-size: 64px; line-height: 1; margin-bottom: 6px; }
+.tanitim-baslik { font-size: 23px; margin: 0; }
+.tanitim-metin { font-size: 15.5px; line-height: 1.6; color: var(--metin-orta); max-width: 380px; }
+.tanitim-nokta { display: flex; justify-content: center; gap: 8px; padding: 16px 0; }
+.tanitim-nokta-tek { width: 8px; height: 8px; border-radius: 50%; background: var(--cizgi); }
+.tanitim-nokta-tek.aktif { width: 22px; border-radius: var(--r-round); background: var(--marka); transition: width .2s; }
 
 /* ------------------------------------------------------------ ayarlar */
 .ayar-satir {

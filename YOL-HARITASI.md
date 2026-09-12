@@ -365,6 +365,59 @@ sürüm 2.1.2, 0 bağımlılık.
   **Henüz yapılmadı**: `arama.js` (ağırlıklı puanlama + yazım toleransı) ve
   `tools/derle.js` — ikisi de Faz 4 kapsamında kalabilir, Faz 3'ün
   "akıllı öneri ve defter" özü tamamlandı.
+- **Faz 4 kısmen tamamlandı (2026-09-12), sürüm 3.9.0.** Kullanıcı Faz 4'ün
+  beş maddesinden üçünü seçti ve birini bilerek değiştirdi: **"adım içi
+  zamanlayıcı" madde listesinden çıkarıldı, yerine besin değerini gösteren
+  bir grafik istendi** ("zamanlayıcı yerine kalori besin değerlerinin
+  yazdığı bir grafik vs. yap"). "Adıma ait malzeme vurgusu" ve "hareket ve
+  geçişler" bu turda hiç istenmedi, yapılmadı — aşağıdaki "Sıradaki adım"a
+  bakılabilir.
+  - **Besin grafiği** (zamanlayıcının yerine) — `js/arayuz.js`: tarif
+    panelindeki dört düz rakam rozeti (`besinSatiri`) kaldırıldı, yerine
+    `besinGrafik()` geldi: büyük kcal sayısı + karbonhidrat/protein/yağın
+    kaloriye oranını gösteren üç renkli yatay çubuk + gram değerli lejant.
+    Karar D hâlâ geçerli — hedef/limit/uyarı yok, üç renk sadece kalorinin
+    nereden geldiğini gösteriyor, "iyi/kötü" demiyor. Renkler `--grad-1/2/3`
+    (paletin kendi üç tonu) — yeni bir renk eklenmedi, palet/tema
+    değişince otomatik uyuyor. **Bir sorun bulundu ve düzeltildi**:
+    "kontrast" (yüksek kontrast) paletinde `--grad-1/2/3` birbirine çok
+    yakın koyu gri olduğu için üç parça ayırt edilemiyordu — tam da o
+    paletin var olma sebebiyle çelişen bir durum. Çözüm: `[data-palet=
+    "kontrast"]` altında renk yerine desen kullanılıyor (düz siyah / sağa
+    çizgili / sola çizgili) — `css/style.css`, kontrast paleti bloğunun
+    yanı. Porsiyon değişince çubuk da tazeleniyor (`ui.porsiyonYenile`).
+  - **Arama iyileştirmesi** — `js/eslestir.js`: `AM.hazirla()` artık tek bir
+    `t.ara` yerine üç ayrı alan tutuyor (`araAd`, `araIkincil` = kategori +
+    mutfak adı, `araMalzeme`); `AM.tarifAra()` bunları ağırlıklandırıyor
+    (ad ×5, kategori/mutfak ×2, malzeme ×1) ve sonucu puana göre sıralıyor —
+    Sorun 04'ün "mercimek çorbsı" örneği artık çalışıyor: bir kelime hiçbir
+    alanda düz alt dize olarak geçmese bile, o alandaki bir kelimeyle
+    düzenleme uzaklığı (Levenshtein) tam 1 ise yine eşleşiyor (tek harf
+    eksik/fazla/yanlış), sadece daha düşük ağırlıkla. `AM.tarifAra`'nın imzası
+    ve dönüş tipi değişmedi (`ekran-liste.js` hiç dokunulmadı). Malzeme arama
+    kutusu (Mutfağım ekranı) kasıtlı olarak dokunulmadı — Sorun 04 özellikle
+    tarif aramasını hedefliyordu.
+  - **Açılış tanıtımı** — yeni `js/tanitim.js` + `index.html`'de yeni
+    `#tanitimPanel`: ilk açılışta (aynı `ilkKezMi()` sinyali, ayrı bir
+    "görüldü mü" bayrağı YOK — temelleriSec() ilk açılışta sepeti zaten
+    dolduruyor, bir sonraki açılış otomatik olarak ilkKez=false oluyor)
+    üç adımlık, her adımda "Atla" ile atlanabilen bir tanıtım açılıyor:
+    "Bugün ne pişirsem?" → "Dünya mutfakları da burada" → "Her şey
+    telefonunda kalır". `js/cekirdek.js`'teki `panelKapat`/`hepsiniKapat`
+    genel panel altyapısına eklendi (Android geri tuşu/Escape de kapatıyor).
+  - **Test**: `tools/arayuz-testi.js` 29/29 — 6 yeni kontrol eklendi: tanıtımın
+    ilk açılışta çıkması + İleri/Atla akışı (3), besin grafiğinin beklenen
+    görünürlükle eşleşmesi (1), arama ağırlığı + yazım toleransı (2). Temiz
+    tarayıcı profili yüzünden test her çalıştığında `ilkKezMi()` true
+    çıkıyor — tanıtım paneli artık testin en başında kapatılıyor, yoksa alt
+    menü onun altında kalıp geri kalan kontrolleri bloke ediyordu.
+    `node tools/veri-kontrol.js` yeşil (988 tarif, veri şeması değişmedi).
+    `sw.js` DOSYALAR listesine `./js/tanitim.js` eklendi, sürüm 3.8.0→3.9.0.
+  **Sıradaki adım**: Faz 4'ün geri kalanı — "adıma ait malzeme vurgusu"
+  (pişirme modunda o adımda kullanılan malzemenin yan panelde vurgulanması)
+  ve "hareket ve geçişler" (`prefers-reduced-motion`'a saygılı geçişler) —
+  ya da herhangi bir mutfağın kalan tariflerini tamamlamak, ya da görsel
+  hattı konusunda karar (bkz. Bölüm 6). Kullanıcı henüz yön belirtmedi.
 
 ### Görsel üretimi — yön değişikliği ve canlı durum (2026-09-09)
 
@@ -786,18 +839,23 @@ Faz 0'da toplanmaya başlayan geçmiş, burada işe yarar hale gelir.
 - Koleksiyonlar — kullanıcının kendi adlandırdığı listeler.
 - Bu hafta ne pişirdim — küçük bir geriye bakış.
 
-### Faz 4 — MUTFAKTA (Pişirme deneyimi)
+### Faz 4 — MUTFAKTA (Pişirme deneyimi) — 🔵 kısmen tamamlandı (sürüm 3.9.0)
 
 Uygulamanın gerçekten ocak başında kullanıldığı an.
 
-- Adım içi zamanlayıcı — adım metnindeki "20 dakika" ifadesi
-  dokunulabilir kronometreye dönüşür.
-- Adıma ait malzeme vurgusu — o adımda kullanılan malzemeler yanda
-  görünür.
-- Arama iyileştirmesi — alan ağırlıklı sıralama, tek harf yazım
-  toleransı.
-- Açılış tanıtımı — üç adım, atlanabilir.
-- Hareket ve geçişler — `prefers-reduced-motion`'a saygılı.
+- ~~Adım içi zamanlayıcı — adım metnindeki "20 dakika" ifadesi dokunulabilir
+  kronometreye dönüşür.~~ **2026-09-12'de kullanıcı kararıyla değiştirildi**:
+  bunun yerine tarif panelindeki besin bilgisi düz rakamdan bir grafiğe
+  (kalori + karbonhidrat/protein/yağ dağılım çubuğu) dönüştürüldü — ayrıntı
+  Durum bölümünde. Zamanlayıcı fikri tamamen terk edilmedi, sadece bu turun
+  kapsamı dışında bırakıldı.
+- ✅ Arama iyileştirmesi — alan ağırlıklı sıralama, tek harf yazım
+  toleransı. (2026-09-12, sürüm 3.9.0)
+- ✅ Açılış tanıtımı — üç adım, atlanabilir. (2026-09-12, sürüm 3.9.0)
+- ⬜ Adıma ait malzeme vurgusu — o adımda kullanılan malzemeler yanda
+  görünür. Bu turda istenmedi, yapılmadı.
+- ⬜ Hareket ve geçişler — `prefers-reduced-motion`'a saygılı. Bu turda
+  istenmedi, yapılmadı.
 
 ---
 
@@ -933,13 +991,15 @@ Akdeniz ✓, Fransız ✓ — hepsi en az bir partiyle temsil ediliyor
 (sürüm 3.7.0, 988 tarif). **Faz 3 (akıllı öneri ve defter) 2026-09-12'de
 tamamlandı** (sürüm 3.8.0) — ayrıntı yukarıdaki Durum bölümünde: `js/
 oneri.js` ile favori/puan/geçmiş/saat ağırlıklı sıralama, "Pişirdim"
-düğmesi, puan+not, koleksiyonlar, yeni "Defterim" sekmesi. **Sırada** —
-kullanıcı henüz yön belirtmedi; olası seçenekler: (a) herhangi bir
-mutfağın kalan tariflerini tamamlamak (Uzak Doğu ~22, İtalyan ~12, Orta
+düğmesi, puan+not, koleksiyonlar, yeni "Defterim" sekmesi. **Faz 4 aynı
+gün kısmen tamamlandı** (sürüm 3.9.0) — kullanıcı beş maddeden üçünü seçti
+(arama iyileştirmesi, açılış tanıtımı) ve "adım içi zamanlayıcı"yı bilerek
+besin/kalori grafiğiyle değiştirdi; ayrıntı yukarıdaki Durum bölümünde.
+**Sırada** — kullanıcı henüz yön belirtmedi; olası seçenekler: (a) herhangi
+bir mutfağın kalan tariflerini tamamlamak (Uzak Doğu ~22, İtalyan ~12, Orta
 Doğu ~17, Meksika ~12, Hint ~12, Balkan ~12, Akdeniz ~12, Fransız ~12),
-(b) Faz 4'e (pişirme deneyimi: adım içi zamanlayıcı, arama iyileştirmesi,
-açılış tanıtımı) geçmek, (c) görsel hattı konusunda yeni bir karar (bkz.
-Bölüm 6 "Görsel hattı durduruldu" — kullanıcının "Nefis Yemek Tarifleri"
-tarzı gerçek/kendi çekilen fotoğraf fikri henüz karara bağlanmadı).
-Görsel hattı 2026-09-10'da durduruldu — yeni tarifler görselsiz, SVG
-ikonla eklenecek.
+(b) Faz 4'ün geri kalanı (adıma ait malzeme vurgusu, hareket ve geçişler),
+(c) görsel hattı konusunda yeni bir karar (bkz. Bölüm 6 "Görsel hattı
+durduruldu" — kullanıcının "Nefis Yemek Tarifleri" tarzı gerçek/kendi
+çekilen fotoğraf fikri henüz karara bağlanmadı). Görsel hattı 2026-09-10'da
+durduruldu — yeni tarifler görselsiz, SVG ikonla eklenecek.

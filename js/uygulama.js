@@ -215,6 +215,10 @@
       if (e.target === $("ayarPanel")) ic.geriGit();
     });
 
+    /* açılış tanıtımı */
+    $("btnTanitimAtla").addEventListener("click", ic.tanitimKapat);
+    $("btnTanitimIleri").addEventListener("click", ic.tanitimIleri);
+
     document.addEventListener("keydown", function (e) {
       if (e.key === "Escape") ic.geriGit();
       if (!$("pisirmePanel").hidden) {
@@ -307,6 +311,9 @@
     window.addEventListener("resize", ustYuksekligiOlc);
     ic.basla_ilkCizim(ilkKez);
     swKur();
+
+    // İlk açılışta doğrudan malzeme ekranına düşmeden önce kısa bir tanıtım.
+    if (ilkKez) ic.tanitimAc();
   }
 
   if (document.readyState === "loading") {

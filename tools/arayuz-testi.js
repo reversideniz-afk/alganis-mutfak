@@ -39,6 +39,28 @@ function kontrol(ad, gecti, ek) {
   kontrol("görsel katmanı yüklü", temel.gorselVar);
   kontrol("depo katmanı yüklü", temel.depoVar);
 
+  /* --- 1b. açılış tanıtımı (Faz 4) ---
+     Her test çalıştırması temiz bir profille başlıyor (bkz. tarayici.js),
+     yani ilkKezMi() burada her zaman true — tanıtım her seferinde çıkar.
+     Geri kalan bütün kontroller alt menüye tıklayabilmeye dayandığı için
+     ("Atla" ile) hemen kapatılması şart; kapanışın kendisi de bir kontrol. */
+  const tanitimAcildi = await t.calistir(`(function () {
+    var p = document.getElementById("tanitimPanel");
+    return !!(p && !p.hidden && getComputedStyle(p).display !== "none");
+  })()`);
+  kontrol("açılış tanıtımı ilk açılışta çıkıyor", tanitimAcildi);
+  if (tanitimAcildi) {
+    const ikinciAdim = await t.calistir(`(function () {
+      document.getElementById("btnTanitimIleri").click();
+      return document.getElementById("tanitimGovde").textContent.trim().length;
+    })()`);
+    kontrol("tanıtım: İleri bir sonraki adımı çiziyor", ikinciAdim > 10, ikinciAdim + " karakter");
+    await t.calistir(`document.getElementById("btnTanitimAtla").click()`);
+    await t.duraklat(300);
+    const tanitimKapandi = await t.calistir(`document.getElementById("tanitimPanel").hidden`);
+    kontrol("tanıtım: Atla kapatıyor", tanitimKapandi);
+  }
+
   /* --- 2. [hidden] gerçekten gizli mi? (eski hatanın nöbetçisi) --- */
   const gizli = await t.calistir(`(function () {
     var kacak = [];
@@ -114,6 +136,27 @@ function kontrol(ad, gecti, ek) {
   })()`);
   kontrol("tarif paneli açılıyor", kartVar && panel.acik && panel.icerik > 100,
           kartVar ? panel.icerik + " karakter" : "kart bulunamadı");
+
+  /* --- 6b. besin grafiği (Faz 4: adım içi zamanlayıcı yerine kalori/makro
+     grafiği) — hangi tarif ilk açılırsa açılsın, "görünmeli mi" beklentisini
+     AM.besin.gosterilsinMi ile kendisi hesaplayıp gerçekle karşılaştırıyor. */
+  const besinKontrol = await t.calistir(`(function () {
+    var t = AM.ic.durum.acikTarif;
+    if (!t) return { uygulanabilir: false };
+    var besin = AM.besin.hesapla(t, AM.ic.durum.porsiyon);
+    var beklenen = AM.depo.besinGoster() && AM.besin.gosterilsinMi(besin);
+    var kutu = document.querySelector("#panelGovde .besin-grafik");
+    return {
+      uygulanabilir: true,
+      beklenen: beklenen,
+      gercek: !!kutu,
+      parcaSayisi: kutu ? kutu.querySelectorAll(".bg-cubuk .bg-parca").length : 0
+    };
+  })()`);
+  kontrol("besin grafiği beklenen görünürlükle eşleşiyor",
+          besinKontrol.uygulanabilir && besinKontrol.beklenen === besinKontrol.gercek &&
+          (!besinKontrol.beklenen || besinKontrol.parcaSayisi >= 1),
+          JSON.stringify(besinKontrol));
 
   /* --- 7. pişirme modu --- */
   await t.calistir(`document.getElementById("btnPisirmeBasla").click()`);
@@ -220,6 +263,19 @@ function kontrol(ad, gecti, ek) {
           malzemeEtkisi.once !== malzemeSonra, malzemeEtkisi.once + " → " + malzemeSonra);
   await t.calistir(`document.querySelector("#malzemeListe .cip").click()`);  /* geri al */
   await t.duraklat(300);
+
+  /* --- arama: alan ağırlığı + tek harf yazım toleransı (Faz 4) --- */
+  const aramaSonuc = await t.calistir(`(function () {
+    var tamAd = AM.tarifAra("mercimek çorbası", "hepsi");
+    var yazimHatali = AM.tarifAra("mercimek corbsi", "hepsi");
+    return {
+      ustSirada: tamAd.length > 0 && tamAd[0].id === "mercimek-corbasi",
+      hataToleransli: yazimHatali.some(function (x) { return x.id === "mercimek-corbasi"; }),
+      tamAdSayisi: tamAd.length
+    };
+  })()`);
+  kontrol("arama: ad eşleşmesi en üstte sıralanıyor", aramaSonuc.ustSirada, aramaSonuc.tamAdSayisi + " sonuç");
+  kontrol("arama: tek harf yazım hatasını tolere ediyor", aramaSonuc.hataToleransli);
 
   /* --- 11. konsol hatası --- */
   const hatalar = t.hatalar();

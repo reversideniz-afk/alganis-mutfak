@@ -111,17 +111,29 @@
   aspect-ratio: 16 / 9;
 }
 
-.besin-satir { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-.besin-halka {
-  flex: 1 1 70px;
-  text-align: center;
+.besin-grafik {
+  margin-top: 14px;
   background: var(--kagit-2);
   border: 1.5px solid var(--cizgi);
   border-radius: var(--r-m);
-  padding: 8px 6px 7px;
+  padding: 12px 14px 14px;
 }
-.besin-halka strong { display: block; font-size: 16px; font-weight: 800; }
-.besin-halka small { font-size: 11px; color: var(--metin-soluk); }
+.bg-ust { display: flex; align-items: baseline; gap: 6px; }
+.bg-kcal { font-size: 21px; font-weight: 800; }
+.bg-kcal-birim { font-size: 12px; color: var(--metin-soluk); }
+.bg-cubuk {
+  display: flex; gap: 3px;
+  height: 14px; margin-top: 10px;
+  background: var(--kagit); border-radius: var(--r-round); overflow: hidden;
+}
+.bg-parca { height: 100%; }
+.bg-karb { background: var(--grad-1); }
+.bg-prot { background: var(--grad-2); }
+.bg-yag  { background: var(--grad-3); }
+.bg-lejant { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 11px; }
+.bg-oge { display: inline-flex; align-items: center; gap: 5px; font-size: 12.5px; color: var(--metin-orta); }
+.bg-oge strong { color: var(--metin); font-size: 13px; }
+.bg-nokta { width: 9px; height: 9px; border-radius: 50%; flex: none; }
 
 .td-sekmeler {
   display: flex; gap: 6px;
