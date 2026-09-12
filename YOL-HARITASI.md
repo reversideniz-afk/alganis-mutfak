@@ -223,6 +223,29 @@ sürüm 2.1.2, 0 bağımlılık.
   güncellendi). `index.html` + `sw.js` DOSYALAR listesine dosya eklendi.
   **Görsel eklenmedi** — görsel hattı durduruldu, bu 13 tarif de
   SVG ikonla kalacak.
+- **Balkan mutfağı başladı (13/~25 tarif, 2026-09-12)** —
+  `data/tarifler-dunya-balkan.js` eklendi (`mutfak:"balkan"`), Sırp/
+  Boşnak/Hırvat/Bulgar ağırlıklı ev ve sokak yemekleri. İlk parti:
+  çevapi, ajvar, şopska salata, burek (Balkan böreği), pljeskavica,
+  kaçamak, Bulgar usulü soğuk yoğurt çorbası (tarator), gibanica,
+  palaçinke, musaka (Balkan usulü patatesli), krempita, Karađorđeva
+  şnitzel, proja — kaynaklar Balkan Lunch Box, The Balkan Hostess,
+  Foreign Fork, Zestful Kitchen, Delish Globe, Granny Zen Kitchen,
+  Serbian Cookbook. **Türk kataloğuyla çakışma riski taşıyan** dolma/
+  sarma/köfte/baklava/mısır ekmeği gibi zaten var olan dişler bilerek
+  atlandı (`lahana-sarmasi`, `misir-ekmegi`, `etli-biber-dolmasi`,
+  `balik-corbasi` kontrol edilip çakışanlar çıkarıldı) — gerçekten
+  farklı tarifler seçildi. Tarator adı Türk kataloğundaki (ceviz sosu)
+  ile çakıştığı için Balkan versiyonu "Bulgar Usulü Soğuk Yoğurt
+  Çorbası (Tarator)" olarak ayrı id'yle eklendi. **Domuz/alkol
+  uyarlaması**: çevapi/pljeskavica orijinalinde domuz+dana karışımı
+  ister, sadece dana kullanıldı (Boşnak/helal varyantıyla aynı mantık).
+  **Yeni malzeme eklenmedi** — kaymak, beyaz peynir, lor, mısır unu,
+  maden suyu zaten katalogdaydı. `node tools/veri-kontrol.js` yeşil
+  (962 tarif, 259 malzeme), `node tools/arayuz-testi.js` 22/22 (beklenen
+  tarif sayısı 949→962 güncellendi). `index.html` + `sw.js` DOSYALAR
+  listesine dosya eklendi. **Görsel eklenmedi** — görsel hattı
+  durduruldu, bu 13 tarif de SVG ikonla kalacak.
 - **Tasarım sadakat denetimi yapıldı (2026-09-09).** Referans tasarımlar
   yeniden paylaşıldı ve `tasarim/REFERANSLAR.md`'ye kalıcı olarak döküldü
   (ekran ekran tarif + 23 maddelik sadakat tablosu). **Sonuç**: alt menü,
@@ -805,13 +828,15 @@ Faz 0 ve Faz 1 tamamlandı (sürüm 3.0.0'da yayınlandı). **Faz 2 (Dünya
 mutfakları) sürüyor**: İtalyan 28/~40 tarifte durdu, Uzak Doğu ilk
 partiyle (13/~35) başladı, Orta Doğu ilk partiyle (13/~30) başladı,
 Meksika ilk partiyle (13/~25) başladı, Hint ilk partiyle (13/~25)
-başladı — beşi de kasıtlı olarak tamamlanmadan bırakıldı, tek mutfağa
-saplanıp kalmamak için (bkz. Durum bölümü). **Sırada — Balkan mutfağı**
-(8 mutfaklık listede 6. sıra: İtalyan ✓, Uzak Doğu ✓, Orta Doğu ✓,
-Meksika ✓, Hint ✓, Balkan, Akdeniz, Fransız). Uzak Doğu'nun kalan ~22
-tarifi (miso, gochujang, kimchi, tteok gibi yeni fermente malzeme
-gerektirenler), İtalyan'ın eksik ~12 tarifi, Orta Doğu'nun kalan ~17
-tarifi, Meksika'nın kalan ~12 tarifi ve Hint'in kalan ~12 tarifi
-istenirse ayrıca eklenir. Görsel hattı 2026-09-10'da durduruldu — yeni
-tarifler görselsiz, SVG ikonla eklenecek (bkz. Bölüm 6 altındaki not).
+başladı, Balkan ilk partiyle (13/~25) başladı — altısı da kasıtlı
+olarak tamamlanmadan bırakıldı, tek mutfağa saplanıp kalmamak için
+(bkz. Durum bölümü). **Sırada — Akdeniz mutfağı** (8 mutfaklık listede
+7. sıra: İtalyan ✓, Uzak Doğu ✓, Orta Doğu ✓, Meksika ✓, Hint ✓,
+Balkan ✓, Akdeniz, Fransız). Uzak Doğu'nun kalan ~22 tarifi (miso,
+gochujang, kimchi, tteok gibi yeni fermente malzeme gerektirenler),
+İtalyan'ın eksik ~12 tarifi, Orta Doğu'nun kalan ~17 tarifi,
+Meksika'nın kalan ~12 tarifi, Hint'in kalan ~12 tarifi ve Balkan'ın
+kalan ~12 tarifi istenirse ayrıca eklenir. Görsel hattı 2026-09-10'da
+durduruldu — yeni tarifler görselsiz, SVG ikonla eklenecek (bkz.
+Bölüm 6 altındaki not).
 Faz 3 (akıllı öneri) ve Faz 4 (pişirme deneyimi) henüz başlamadı.

@@ -122,4 +122,4 @@ Dikkat edilecekler:
 
 ## Durum (özet — detaylar için git log)
 
-949 tarif (869 Türk + 28 İtalyan + 13 Uzak Doğu + 13 Orta Doğu + 13 Meksika + 13 Hint), 259 malzeme, 11 tarif kategorisi, 9 mutfak, 8 öğün grubu (Bugün ekranı). Görsel yok — tüm kartlar SVG ikonla çalışıyor (bkz. "Görsel üretim hattı — DURDURULDU"). Ayarlarda 6 renk paleti + yüksek kontrast, tema (gün ışığı/gece/sistem), yazı boyutu, ölçü cetveli var. Malzeme/favori seçimleri katalogla karşılaştırılmadan saklanır (veri kaybını önlemek için — bkz. `js/depo.js` başındaki not). Güncel sürüm: `data/surum.js` → `AM.SURUM`.
+962 tarif (869 Türk + 28 İtalyan + 13 Uzak Doğu + 13 Orta Doğu + 13 Meksika + 13 Hint + 13 Balkan), 259 malzeme, 11 tarif kategorisi, 9 mutfak, 8 öğün grubu (Bugün ekranı). Görsel yok — tüm kartlar SVG ikonla çalışıyor (bkz. "Görsel üretim hattı — DURDURULDU"). Ayarlarda 6 renk paleti + yüksek kontrast, tema (gün ışığı/gece/sistem), yazı boyutu, ölçü cetveli var. Malzeme/favori seçimleri katalogla karşılaştırılmadan saklanır (veri kaybını önlemek için — bkz. `js/depo.js` başındaki not). Güncel sürüm: `data/surum.js` → `AM.SURUM`.
