@@ -34,6 +34,7 @@ module.exports = {
 
   /* --- yeşillik --- */
   "maydanoz": "parsley", "dereotu": "dill", "taze-nane": "fresh mint",
+  "taze-kisnis": "fresh cilantro",
   "taze-sogan": "spring onion", "roka": "arugula", "marul": "lettuce",
   "tere": "garden cress", "feslegen": "basil", "isirgan": "nettle",
   "radika": "chicory greens", "arapsaci": "wild fennel",
@@ -60,6 +61,7 @@ module.exports = {
   /* --- süt ürünleri --- */
   "yumurta": "eggs", "sut": "milk", "yogurt": "yogurt",
   "suzme-yogurt": "strained yogurt", "krema": "cream",
+  "kondanse-sut": "sweetened condensed milk",
   "kaymak": "clotted cream", "tereyagi": "butter",
   "beyaz-peynir": "white brined cheese", "kasar": "kasseri cheese",
   "lor": "curd cheese", "tulum-peyniri": "tulum cheese",
@@ -78,6 +80,7 @@ module.exports = {
   "kirmizi-mercimek": "red lentils", "yesil-mercimek": "green lentils",
   "nohut": "chickpeas", "kuru-fasulye": "white beans",
   "kuru-barbunya": "cranberry beans", "kuru-bakla": "dried fava beans",
+  "kara-fasulye": "black beans",
   "borulce": "black-eyed peas",
   "makarna": "pasta", "sehriye": "orzo", "tel-sehriye": "vermicelli",
   "eriste": "egg noodles", "kuskus": "couscous", "tarhana": "tarhana",
@@ -110,6 +113,7 @@ module.exports = {
   "badem": "almonds", "antep-fistigi": "pistachios",
   "yer-fistigi": "peanuts", "cam-fistigi": "pine nuts",
   "kestane": "chestnuts", "hindistan-cevizi": "coconut", "erik": "plums",
+  "avokado": "avocado",
   "kiraz": "cherries", "dut": "mulberries", "armut": "pears",
   "kavun": "melon", "karpuz": "watermelon", "mandalina": "mandarin",
   "kizilcik": "cornelian cherries", "kuru-dut": "dried mulberries",

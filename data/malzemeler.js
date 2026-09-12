@@ -76,6 +76,7 @@ AM.MALZEMELER = [
   ["marul",             "Marul",                  "yesillik", 0, "kivircik goebek"],
   ["tere",              "Tere",                   "yesillik", 0],
   ["feslegen",          "Fesleğen",               "yesillik", 0],
+  ["taze-kisnis",       "Taze kişniş",            "yesillik", 0, "coriander"],
 
   /* ------------------------------------------------------------------- ET */
   ["kiyma",             "Kıyma",                  "et", 0],
@@ -109,6 +110,7 @@ AM.MALZEMELER = [
   ["yogurt",            "Yoğurt",                 "sut", 1],
   ["suzme-yogurt",      "Süzme yoğurt",           "sut", 0],
   ["krema",             "Krema",                  "sut", 0],
+  ["kondanse-sut",      "Kondanse süt",           "sut", 0, "yogun sekerli sut"],
   ["kaymak",            "Kaymak",                 "sut", 0],
   ["tereyagi",          "Tereyağı",               "sut", 1],
   ["beyaz-peynir",      "Beyaz peynir",           "sut", 1],
@@ -139,6 +141,7 @@ AM.MALZEMELER = [
   ["kuru-fasulye",      "Kuru fasulye",           "bakliyat", 1],
   ["kuru-barbunya",     "Kuru barbunya",          "bakliyat", 0],
   ["kuru-bakla",        "Kuru bakla",             "bakliyat", 0],
+  ["kara-fasulye",      "Kara fasulye",           "bakliyat", 0, "siyah fasulye"],
   ["borulce",           "Börülce",                "bakliyat", 0],
   ["makarna",           "Makarna",                "bakliyat", 1],
   ["sehriye",           "Arpa şehriye",           "bakliyat", 1],
@@ -205,6 +208,7 @@ AM.MALZEMELER = [
   ["cam-fistigi",       "Çam fıstığı",            "meyve", 0, "dolmalik fistik"],
   ["kestane",           "Kestane",                "meyve", 0],
   ["hindistan-cevizi",  "Hindistan cevizi",       "meyve", 0],
+  ["avokado",           "Avokado",                "meyve", 0],
 
   /* ---------------------------------------------------------------- KILER */
   ["su",                "Su",                     "kiler", 1],

@@ -177,6 +177,27 @@ sürüm 2.1.2, 0 bağımlılık.
   güncellendi). `index.html` + `sw.js` DOSYALAR listesine dosya eklendi.
   **Görsel eklenmedi** — görsel hattı 2026-09-10'da durduruldu (bkz.
   altındaki not), bu 13 tarif SVG ikonla kalacak, bu normal.
+- **Meksika mutfağı başladı (13/~25 tarif, 2026-09-12)** —
+  `data/tarifler-dunya-meksika.js` eklendi (`mutfak:"meksika"`). İlk
+  parti: guacamole, pico de gallo, salsa roja, tacos al pastor (tavuklu),
+  kesadilla, enchilada (tavuklu), frijoles refritos, arroz rojo, chili
+  con carne, tavuk fajita, elote, churros, tres leches — kaynaklar Isabel
+  Eats, Mexico in My Kitchen, Feel Good Foodie, Muy Delish, Chili Pepper
+  Madness, Cookie and Kate, A Cozy Kitchen. **Domuz uyarlaması**: tek
+  domuz gerektiren tarif (tacos al pastor) tavukla uyarlandı, achiote
+  ezmesi yerine toz biber+pul biber karışımı kullanıldı ("ip" alanında
+  not edildi). **Mısır tortillası** yerine katalogdaki lavaş/tortilla
+  kullanıldı — gerçek mısır tortillası masa harina (nixtamalize mısır
+  unu) gerektirir, Türkiye'de bulunmayan özel bir ürün, bu yüzden
+  yeni malzeme olarak eklenmedi. **Dört yeni malzeme eklendi**: avokado,
+  kara-fasulye, taze-kisnis, kondanse-sut (dördü de malzemeler.js +
+  besin.js(USDA yaklaşık) + tools/malzeme-en.js'e işlendi; kondanse süt
+  `AM.GRAM_OZEL`'e de eklendi, avokado "adet" ölçüsü aldı).
+  `node tools/veri-kontrol.js` yeşil (936 tarif, 257 malzeme),
+  `node tools/arayuz-testi.js` 22/22 (beklenen tarif sayısı 923→936
+  güncellendi). `index.html` + `sw.js` DOSYALAR listesine dosya eklendi.
+  **Görsel eklenmedi** — görsel hattı durduruldu, bu 13 tarif de
+  SVG ikonla kalacak.
 - **Tasarım sadakat denetimi yapıldı (2026-09-09).** Referans tasarımlar
   yeniden paylaşıldı ve `tasarim/REFERANSLAR.md`'ye kalıcı olarak döküldü
   (ekran ekran tarif + 23 maddelik sadakat tablosu). **Sonuç**: alt menü,
@@ -757,14 +778,14 @@ görülmemiş bir tarif SVG portresine düşer.
 
 Faz 0 ve Faz 1 tamamlandı (sürüm 3.0.0'da yayınlandı). **Faz 2 (Dünya
 mutfakları) sürüyor**: İtalyan 28/~40 tarifte durdu, Uzak Doğu ilk
-partiyle (13/~35) başladı, Orta Doğu ilk partiyle (13/~30) başladı —
-üçü de kasıtlı olarak tamamlanmadan bırakıldı, tek mutfağa saplanıp
-kalmamak için (bkz. Durum bölümü). **Sırada — Meksika mutfağı**
-(8 mutfaklık listede 4. sıra: İtalyan ✓, Uzak Doğu ✓, Orta Doğu ✓,
-Meksika, Hint, Balkan, Akdeniz, Fransız). Uzak Doğu'nun kalan ~22
-tarifi (miso, gochujang, kimchi, tteok gibi yeni fermente malzeme
-gerektirenler), İtalyan'ın eksik ~12 tarifi ve Orta Doğu'nun kalan
-~17 tarifi istenirse ayrıca eklenir. Görsel hattı 2026-09-10'da
-durduruldu — yeni tarifler görselsiz, SVG ikonla eklenecek (bkz.
-Bölüm 6 altındaki not). Faz 3 (akıllı öneri) ve Faz 4 (pişirme
-deneyimi) henüz başlamadı.
+partiyle (13/~35) başladı, Orta Doğu ilk partiyle (13/~30) başladı,
+Meksika ilk partiyle (13/~25) başladı — dördü de kasıtlı olarak
+tamamlanmadan bırakıldı, tek mutfağa saplanıp kalmamak için (bkz.
+Durum bölümü). **Sırada — Hint mutfağı** (8 mutfaklık listede 5. sıra:
+İtalyan ✓, Uzak Doğu ✓, Orta Doğu ✓, Meksika ✓, Hint, Balkan, Akdeniz,
+Fransız). Uzak Doğu'nun kalan ~22 tarifi (miso, gochujang, kimchi,
+tteok gibi yeni fermente malzeme gerektirenler), İtalyan'ın eksik ~12
+tarifi, Orta Doğu'nun kalan ~17 tarifi ve Meksika'nın kalan ~12 tarifi
+istenirse ayrıca eklenir. Görsel hattı 2026-09-10'da durduruldu — yeni
+tarifler görselsiz, SVG ikonla eklenecek (bkz. Bölüm 6 altındaki not).
+Faz 3 (akıllı öneri) ve Faz 4 (pişirme deneyimi) henüz başlamadı.
