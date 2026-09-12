@@ -246,6 +246,26 @@ sürüm 2.1.2, 0 bağımlılık.
   tarif sayısı 949→962 güncellendi). `index.html` + `sw.js` DOSYALAR
   listesine dosya eklendi. **Görsel eklenmedi** — görsel hattı
   durduruldu, bu 13 tarif de SVG ikonla kalacak.
+- **Akdeniz mutfağı başladı (13/~25 tarif, 2026-09-12)** —
+  `data/tarifler-dunya-akdeniz.js` eklendi (`mutfak:"akdeniz"`), Yunan
+  ve İspanyol ağırlıklı Akdeniz kıyı mutfakları (İtalyan zaten ayrı
+  mutfak). İlk parti: Yunan usulü tavuk şiş (souvlaki), horiatiki (Yunan
+  köy salatası), Yunan usulü musakka (moussaka), spanakopita, avgolemono
+  çorbası, paella, gazpacho, patatas bravas, tortilla española, pisto
+  manchego, İspanyol usulü tavuklu kroket, gambas al ajillo,
+  galaktoboureko — kaynaklar My Greek Dish, The Greek Foodie, The
+  Mediterranean Dish, Spain on a Fork, Spanish Sabores, Downshiftology,
+  196 Flavors. **Tzatziki eklenmedi** — Türk kataloğundaki cacıkla
+  neredeyse birebir aynı, gereksiz tekrar sayıldı; souvlaki tarifinde
+  servis önerisi olarak anıldı. **Domuz/alkol uyarlaması**: paella'daki
+  chorizo yerine katalogdaki sucuk, şeri sirkesi yerine sıradan sirke
+  kullanıldı. **Yeni malzeme eklenmedi** — safran, kapari, zeytin,
+  beyaz peynir, sucuk, mayonez zaten katalogdaydı. `node tools/
+  veri-kontrol.js` yeşil (975 tarif, 259 malzeme), `node tools/
+  arayuz-testi.js` 22/22 (beklenen tarif sayısı 962→975 güncellendi).
+  `index.html` + `sw.js` DOSYALAR listesine dosya eklendi. **Görsel
+  eklenmedi** — görsel hattı durduruldu, bu 13 tarif de SVG ikonla
+  kalacak.
 - **Tasarım sadakat denetimi yapıldı (2026-09-09).** Referans tasarımlar
   yeniden paylaşıldı ve `tasarim/REFERANSLAR.md`'ye kalıcı olarak döküldü
   (ekran ekran tarif + 23 maddelik sadakat tablosu). **Sonuç**: alt menü,
@@ -828,15 +848,17 @@ Faz 0 ve Faz 1 tamamlandı (sürüm 3.0.0'da yayınlandı). **Faz 2 (Dünya
 mutfakları) sürüyor**: İtalyan 28/~40 tarifte durdu, Uzak Doğu ilk
 partiyle (13/~35) başladı, Orta Doğu ilk partiyle (13/~30) başladı,
 Meksika ilk partiyle (13/~25) başladı, Hint ilk partiyle (13/~25)
-başladı, Balkan ilk partiyle (13/~25) başladı — altısı da kasıtlı
-olarak tamamlanmadan bırakıldı, tek mutfağa saplanıp kalmamak için
-(bkz. Durum bölümü). **Sırada — Akdeniz mutfağı** (8 mutfaklık listede
-7. sıra: İtalyan ✓, Uzak Doğu ✓, Orta Doğu ✓, Meksika ✓, Hint ✓,
-Balkan ✓, Akdeniz, Fransız). Uzak Doğu'nun kalan ~22 tarifi (miso,
-gochujang, kimchi, tteok gibi yeni fermente malzeme gerektirenler),
-İtalyan'ın eksik ~12 tarifi, Orta Doğu'nun kalan ~17 tarifi,
-Meksika'nın kalan ~12 tarifi, Hint'in kalan ~12 tarifi ve Balkan'ın
-kalan ~12 tarifi istenirse ayrıca eklenir. Görsel hattı 2026-09-10'da
-durduruldu — yeni tarifler görselsiz, SVG ikonla eklenecek (bkz.
-Bölüm 6 altındaki not).
+başladı, Balkan ilk partiyle (13/~25) başladı, Akdeniz ilk partiyle
+(13/~25) başladı — yedisi de kasıtlı olarak tamamlanmadan bırakıldı,
+tek mutfağa saplanıp kalmamak için (bkz. Durum bölümü). **Sırada —
+Fransız mutfağı** (8 mutfaklık listenin sonuncusu: İtalyan ✓, Uzak
+Doğu ✓, Orta Doğu ✓, Meksika ✓, Hint ✓, Balkan ✓, Akdeniz ✓, Fransız).
+Fransız eklendiğinde Faz 2'nin ilk-parti turu tamamlanmış olacak — 8
+mutfağın hepsi en az bir partiyle temsil edilecek. Uzak Doğu'nun kalan
+~22 tarifi (miso, gochujang, kimchi, tteok gibi yeni fermente malzeme
+gerektirenler), İtalyan'ın eksik ~12 tarifi, Orta Doğu'nun kalan ~17
+tarifi, Meksika'nın kalan ~12 tarifi, Hint'in kalan ~12 tarifi,
+Balkan'ın kalan ~12 tarifi ve Akdeniz'in kalan ~12 tarifi istenirse
+ayrıca eklenir. Görsel hattı 2026-09-10'da durduruldu — yeni tarifler
+görselsiz, SVG ikonla eklenecek (bkz. Bölüm 6 altındaki not).
 Faz 3 (akıllı öneri) ve Faz 4 (pişirme deneyimi) henüz başlamadı.
