@@ -34,7 +34,7 @@ function kontrol(ad, gecti, ek) {
     gorselVar: !!AM.gorsel,
     depoVar: !!AM.depo
   })`);
-  kontrol("uygulama yükleniyor", temel.tarif === 975, temel.tarif + " tarif");
+  kontrol("uygulama yükleniyor", temel.tarif === 988, temel.tarif + " tarif");
   kontrol("besin katmanı yüklü", temel.besinVar);
   kontrol("görsel katmanı yüklü", temel.gorselVar);
   kontrol("depo katmanı yüklü", temel.depoVar);

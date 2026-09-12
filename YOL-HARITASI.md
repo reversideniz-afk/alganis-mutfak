@@ -266,6 +266,35 @@ sürüm 2.1.2, 0 bağımlılık.
   `index.html` + `sw.js` DOSYALAR listesine dosya eklendi. **Görsel
   eklenmedi** — görsel hattı durduruldu, bu 13 tarif de SVG ikonla
   kalacak.
+- **Fransız mutfağı başladı (13/~25 tarif, 2026-09-12) — 8 mutfaklık
+  ilk-parti turunun sonuncusu.** `data/tarifler-dunya-fransiz.js`
+  eklendi (`mutfak:"fransiz"`). İlk parti: ratatouille, quiche
+  lorraine, Fransız usulü soğan çorbası, coq au vin, beef bourguignon,
+  croque monsieur, salade niçoise, tarte tatin, crème brûlée, peynirli
+  süfle, bouillabaisse, cassoulet, madeleine — kaynaklar Once Upon a
+  Chef, Pardon Your French, RecipeTin Eats, The Kitchn, Sally's Baking
+  Addiction, Cookie and Kate, Leite's Culinaria. **Profiterol bilerek
+  atlandı** — Türk kataloğunda (`data/tarifler-tatli-2.js`) zaten var.
+  Soğan çorbasının id'si Türk kataloğundaki `sogan-corbasi` ile
+  çakışmaması için `fransiz-sogan-corbasi` olarak ayrı verildi.
+  **Domuz/alkol uyarlaması**: bacon/lardon/jambon yerine katalogdaki
+  `kavurma` kullanıldı (İtalyan'daki guanciale/pancetta uyarlamasıyla
+  aynı mantık); şarap gerektiren üç tarifte (coq au vin, beef
+  bourguignon, soğan çorbası) alkol tamamen çıkarılıp sirke + nar
+  ekşisi dengesiyle yaklaşık bir derinlik sağlandı (Uzak Doğu'daki
+  Şaoksing şarabı uyarlamasıyla aynı desen). Gruyère peyniri yerine
+  katalogdaki `kaşar`, ançuez yerine `hamsi`, kaz confit'i yerine
+  basitleştirilmiş kavurma-haşlama tekniği kullanıldı — her uyarlama
+  ilgili tarifin `ip` alanında not edildi. **Yeni malzeme eklenmedi** —
+  kavurma, kaşar, nar ekşisi, safran, ton balığı, kaz zaten katalogdaydı.
+  `node tools/veri-kontrol.js` yeşil (988 tarif, 259 malzeme), `node
+  tools/arayuz-testi.js` 22/22 (beklenen tarif sayısı 975→988
+  güncellendi). `index.html` + `sw.js` DOSYALAR listesine dosya eklendi,
+  sürüm 3.7.0. **Görsel eklenmedi** — görsel hattı durduruldu, bu 13
+  tarif de SVG ikonla kalacak. Bu partiyle Faz 2'nin 8 mutfaklık
+  ilk-parti turu tamamlandı (İtalyan, Uzak Doğu, Orta Doğu, Meksika,
+  Hint, Balkan, Akdeniz, Fransız — hepsi en az bir partiyle temsil
+  ediliyor).
 - **Tasarım sadakat denetimi yapıldı (2026-09-09).** Referans tasarımlar
   yeniden paylaşıldı ve `tasarim/REFERANSLAR.md`'ye kalıcı olarak döküldü
   (ekran ekran tarif + 23 maddelik sadakat tablosu). **Sonuç**: alt menü,
@@ -849,16 +878,18 @@ mutfakları) sürüyor**: İtalyan 28/~40 tarifte durdu, Uzak Doğu ilk
 partiyle (13/~35) başladı, Orta Doğu ilk partiyle (13/~30) başladı,
 Meksika ilk partiyle (13/~25) başladı, Hint ilk partiyle (13/~25)
 başladı, Balkan ilk partiyle (13/~25) başladı, Akdeniz ilk partiyle
-(13/~25) başladı — yedisi de kasıtlı olarak tamamlanmadan bırakıldı,
-tek mutfağa saplanıp kalmamak için (bkz. Durum bölümü). **Sırada —
-Fransız mutfağı** (8 mutfaklık listenin sonuncusu: İtalyan ✓, Uzak
-Doğu ✓, Orta Doğu ✓, Meksika ✓, Hint ✓, Balkan ✓, Akdeniz ✓, Fransız).
-Fransız eklendiğinde Faz 2'nin ilk-parti turu tamamlanmış olacak — 8
-mutfağın hepsi en az bir partiyle temsil edilecek. Uzak Doğu'nun kalan
-~22 tarifi (miso, gochujang, kimchi, tteok gibi yeni fermente malzeme
-gerektirenler), İtalyan'ın eksik ~12 tarifi, Orta Doğu'nun kalan ~17
-tarifi, Meksika'nın kalan ~12 tarifi, Hint'in kalan ~12 tarifi,
-Balkan'ın kalan ~12 tarifi ve Akdeniz'in kalan ~12 tarifi istenirse
-ayrıca eklenir. Görsel hattı 2026-09-10'da durduruldu — yeni tarifler
-görselsiz, SVG ikonla eklenecek (bkz. Bölüm 6 altındaki not).
-Faz 3 (akıllı öneri) ve Faz 4 (pişirme deneyimi) henüz başlamadı.
+(13/~25) başladı, Fransız ilk partiyle (13/~25) başladı — sekizi de
+kasıtlı olarak tamamlanmadan bırakıldı, tek mutfağa saplanıp kalmamak
+için (bkz. Durum bölümü). **8 mutfaklık ilk-parti turu tamamlandı**:
+İtalyan ✓, Uzak Doğu ✓, Orta Doğu ✓, Meksika ✓, Hint ✓, Balkan ✓,
+Akdeniz ✓, Fransız ✓ — hepsi en az bir partiyle temsil ediliyor
+(sürüm 3.7.0, 988 tarif). **Sırada** — kullanıcı henüz yön belirtmedi;
+olası seçenekler: (a) herhangi bir mutfağın kalan tariflerini
+tamamlamak (Uzak Doğu ~22, İtalyan ~12, Orta Doğu ~17, Meksika ~12,
+Hint ~12, Balkan ~12, Akdeniz ~12, Fransız ~12), (b) Faz 3'e (akıllı
+öneri) geçmek, (c) görsel hattı konusunda yeni bir karar (bkz. Bölüm 6
+"Görsel hattı durduruldu" — kullanıcının "Nefis Yemek Tarifleri" tarzı
+gerçek/kendi çekilen fotoğraf fikri henüz karara bağlanmadı). Görsel
+hattı 2026-09-10'da durduruldu — yeni tarifler görselsiz, SVG ikonla
+eklenecek. Faz 3 (akıllı öneri) ve Faz 4 (pişirme deneyimi) henüz
+başlamadı.
