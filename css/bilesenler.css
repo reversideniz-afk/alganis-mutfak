@@ -145,6 +145,52 @@
    akıştan çıkıp (position:absolute) üstüne biniyor. Diğer üç .menu-btn akışta
    kalıp flex:1 ile eşit aralanıyor — hiçbir JS/yönlendirme değişikliği yok.
    ========================================================================== */
+/* ============================================================================
+   KİŞİSEL BÖLÜM — puan, not, koleksiyonlar (js/panel-tarif.js: ciz_kisisel).
+   Tarif panelinin altında, ui.detay()'in sekmelerinden bağımsız, her zaman
+   görünür (Faz 3).
+   ========================================================================== */
+.kisisel-alt { font-size: 13px; color: var(--metin-soluk); margin: -4px 0 10px; }
+.puan-satir { display: flex; gap: 2px; margin-bottom: 14px; }
+.puan-yildiz {
+  border: 0; background: none; cursor: pointer; padding: 4px;
+  font-size: 28px; line-height: 1; color: var(--cizgi);
+  min-width: 44px; min-height: 44px;
+}
+.puan-yildiz[aria-pressed="true"] { color: var(--sari); }
+.not-kutu { margin-bottom: 4px; }
+.not-alani {
+  width: 100%; resize: vertical; min-height: 64px;
+  background: var(--kagit); border: 1.5px solid var(--cizgi);
+  border-radius: var(--r-m); padding: 11px 13px;
+  font: inherit; font-size: 14.5px; color: var(--metin);
+}
+.not-alani:focus { outline: 0; border-color: var(--turuncu); }
+.koleksiyon-blok .cip-izgara { margin-bottom: 10px; }
+.yeni-koleksiyon-satir { display: flex; gap: 8px; }
+.yeni-koleksiyon-satir input {
+  flex: 1; min-width: 0;
+  background: var(--kagit); border: 1.5px solid var(--cizgi);
+  border-radius: var(--r-round); padding: 0 14px; height: 44px;
+  font: inherit; font-size: 14.5px; color: var(--metin);
+}
+.yeni-koleksiyon-satir input:focus { outline: 0; border-color: var(--turuncu); }
+
+/* ============================================================================
+   DEFTERİM EKRANI — koleksiyon satırı ve geçmiş satırı (js/ekran-defter.js).
+   ========================================================================== */
+.koleksiyon-satir {
+  display: flex; align-items: center; gap: 10px; width: 100%;
+  background: var(--kagit); border: 1.5px solid var(--cizgi);
+  border-radius: var(--r-m); padding: 13px 15px; margin-bottom: 9px;
+  cursor: pointer; text-align: left; font: inherit; color: var(--metin);
+}
+.koleksiyon-satir:active { transform: scale(.98); }
+.koleksiyon-satir strong { flex: 1; font-size: 15px; font-weight: 700; }
+.gecmis-satir { display: flex; flex-direction: column; gap: 5px; margin-bottom: 10px; }
+.gecmis-satir:last-child { margin-bottom: 0; }
+.gecmis-tarih { font-size: 12px; font-weight: 700; color: var(--metin-soluk); padding-left: 2px; }
+
 .menu-btn.menu-btn-fab {
   position: absolute;
   top: -26px; left: 50%; transform: translateX(-50%);

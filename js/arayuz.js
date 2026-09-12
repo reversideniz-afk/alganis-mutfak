@@ -135,6 +135,18 @@
   }
   ui.mutfakKategoriMetni = mutfakKategoriMetni;
 
+  /* --- göreli tarih (pişirme geçmişi, Defterim ekranı) --------------------- */
+
+  ui.goreliTarih = function (ms) {
+    var gunOnce = Math.floor((Date.now() - ms) / 86400000);
+    if (gunOnce <= 0) return "bugün";
+    if (gunOnce === 1) return "dün";
+    if (gunOnce < 7) return gunOnce + " gün önce";
+    if (gunOnce < 30) return Math.floor(gunOnce / 7) + " hafta önce";
+    if (gunOnce < 365) return Math.floor(gunOnce / 30) + " ay önce";
+    return Math.floor(gunOnce / 365) + " yıl önce";
+  };
+
   /* --- saate göre selamlama ------------------------------------------------ */
 
   ui.selamlama = function () {

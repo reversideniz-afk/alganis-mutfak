@@ -56,7 +56,7 @@ function kontrol(ad, gecti, ek) {
      her ekran 0px görünür. Ayrıca alt menü düğmesi seçilirken .menu-btn
      şartı konuyor — data-git bilgi kartlarının içindeki düğmelerde de var
      ve querySelector onları önce buluyor. */
-  for (const ekran of ["bugun", "mutfak", "dunya", "favori", "tarifler"]) {
+  for (const ekran of ["bugun", "mutfak", "dunya", "favori", "tarifler", "defter"]) {
     await t.calistir(`document.querySelector('.menu-btn[data-git="${ekran}"]').click()`);
     await t.duraklat(400);
     const durum = await t.calistir(`(function () {

@@ -837,6 +837,8 @@ html[data-yazi="cb"] { --olcek: 1.30; }
 .malzeme-satir,
 .adim,
 .ipucu-kart,
+.not-alani,
+.koleksiyon-satir strong,
 .pm-malzeme ul       { font-size: calc(15px * var(--olcek, 1)); }
 .tk-kahraman h2      { font-size: calc(26px * var(--olcek, 1)); }
 .td-baslik           { font-size: calc(24px * var(--olcek, 1)); }

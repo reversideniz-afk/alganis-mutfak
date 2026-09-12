@@ -229,6 +229,69 @@
   </div>
 </section>
 
+<!-- ======================================================= EKRAN: DEFTERİM -->
+<section class="ekran" id="ekran-defter" hidden>
+  <div class="ekran-ic">
+
+    <div id="defterGiris">
+      <div class="bilgi-kart sari">
+        <h2>Defterim</h2>
+        <p>Kendi listelerin, pişirdiklerin ve bu haftaki geçmişin — hepsi bu cihazda kalır.</p>
+      </div>
+
+      <div class="bolum">
+        <div class="bolum-baslik"><h3>Bu hafta ne pişirdim</h3></div>
+        <div class="tarif-serit" id="buHaftaSerit"></div>
+        <div class="bos-durum" id="buHaftaBos" hidden>
+          <div class="bos-emoji">🍳</div>
+          <p>Bu hafta henüz "Pişirdim" demedin. Adım adım pişirme modunun son adımında işaretleyebilirsin.</p>
+        </div>
+      </div>
+
+      <div class="bolum">
+        <div class="bolum-baslik"><h3>Koleksiyonlarım</h3></div>
+        <div class="yeni-koleksiyon-satir">
+          <input type="text" id="yeniKoleksiyonAdi" placeholder="Yeni liste adı… (örn. Bayram sofrası)" maxlength="40">
+          <button type="button" class="btn ikincil kucuk" id="btnYeniKoleksiyon">+ Ekle</button>
+        </div>
+        <div id="koleksiyonListesi"></div>
+        <div class="bos-durum" id="koleksiyonBos" hidden>
+          <div class="bos-emoji">📋</div>
+          <p>Henüz bir listen yok. Bir tarifin panelindeki "Listelerim" bölümünden ekleyebilirsin.</p>
+        </div>
+      </div>
+
+      <div class="bolum">
+        <div class="bolum-baslik">
+          <h3>Geçmişim</h3>
+          <span class="sayac gri" id="sayacGecmis">0</span>
+        </div>
+        <div id="gecmisListesi"></div>
+        <div class="bos-durum" id="gecmisBos" hidden>
+          <div class="bos-emoji">📖</div>
+          <p>Henüz hiçbir şey pişirmedin — ya da pişirdiysen "Pişirdim" demeyi unuttun.</p>
+        </div>
+        <button type="button" class="btn hayalet tam" id="btnDahaFazlaGecmis" hidden>Daha fazla göster</button>
+      </div>
+    </div>
+
+    <div id="koleksiyonDetay" hidden>
+      <button type="button" class="btn hayalet kucuk" id="btnKoleksiyonGeri">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+        Tüm listeler
+      </button>
+      <h2 class="td-baslik" id="koleksiyonDetayBaslik"></h2>
+      <button type="button" class="btn hayalet tehlike kucuk" id="btnKoleksiyonSil">Bu listeyi sil</button>
+      <div class="tarif-izgara" id="koleksiyonDetayIzgara"></div>
+      <div class="bos-durum" id="koleksiyonDetayBos" hidden>
+        <div class="bos-emoji">📋</div>
+        <p>Bu liste henüz boş.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
 </main>
 
 <!-- ========================================================== ALT MENÜ -->
@@ -252,6 +315,10 @@
   <button type="button" class="menu-btn" data-git="tarifler">
     <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h11a3 3 0 0 1 3 3v13H8a3 3 0 0 1-3-3z"/><path d="M9 8h6M9 12h6M9 16h4"/></svg>
     <span>Tarifler</span>
+  </button>
+  <button type="button" class="menu-btn" data-git="defter">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3h10a1 1 0 0 1 1 1v16l-6-4-6 4V4a1 1 0 0 1 1-1z"/></svg>
+    <span>Defterim</span>
   </button>
 </nav>
 
@@ -362,6 +429,7 @@
      ekran modülleri → uygulama.js (olayları bağlar ve çalıştırır). -->
 <script src="js/depo.js"></script>
 <script src="js/eslestir.js"></script>
+<script src="js/oneri.js"></script>
 <script src="js/besin-hesap.js"></script>
 <script src="js/gorsel.js"></script>
 <script src="js/arayuz.js"></script>
@@ -370,6 +438,7 @@
 <script src="js/ekran-dunya.js"></script>
 <script src="js/ekran-bugun.js"></script>
 <script src="js/ekran-liste.js"></script>
+<script src="js/ekran-defter.js"></script>
 <script src="js/panel-tarif.js"></script>
 <script src="js/ayarlar.js"></script>
 <script src="js/uygulama.js"></script>

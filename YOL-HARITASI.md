@@ -315,9 +315,56 @@ sürüm 2.1.2, 0 bağımlılık.
   - *Karar bekliyor*: tarife `ozet` alanı (referanstaki tanıtım metni +
     "View More"). 897 tarife elle yazmak çok pahalı; kategori + ana
     malzemeden üretmek mümkün ama kalitesi tartışmalı.
-- Henüz yok (Faz 3 kapsamı): `oneri.js`, `arama.js` (ağırlıklı puanlama),
-  `ekran-defter.js`, `tools/derle.js`. `ekran-dunya.js` Faz 2'nin geri
-  kalanıyla birlikte gelecek.
+- **Faz 3 başladı ve büyük ölçüde tamamlandı (2026-09-12), sürüm 3.8.0.**
+  Faz 0'dan beri depoda duran (`js/depo.js`: gecmis/puan/not/koleksiyon) ama
+  hiçbir arayüzü olmayan alanlar ilk kez görünür kılındı:
+  - **`js/oneri.js` (yeni)** — "Bugün ne pişirsem?"in sıralamasına ince ayar.
+    `js/eslestir.js`'teki malzeme-tamlığı sıralamasını (tam/neredeyse/yakın)
+    asla ezmiyor, sadece EŞİT eksiklikteki tarifler arasında tercih kuruyor:
+    favori (+1.5), kişisel puan (1★→-1, 5★→+1), son pişirilmeden bu yana
+    geçen süre (3 güne kadar ağır ceza, 14 güne kadar yumuşak ceza — "aynı
+    yemeği üst üste önermeme" kuralı budur) ve günün saati (sabah→kahvaltı,
+    öğle/akşam→ana yemek bonusu). **Mevsim bilerek dışarıda bırakıldı** —
+    kullanıcıyla karar verildi: tariflerde mevsim verisi yok, kategoriden
+    tahmin üretmek (çorba=kış, salata=yaz) çoğu tarif için (tavuk, balık,
+    pilav mevsimsiz) yanlış olurdu, CLAUDE.md'nin "uydurma oran yazma"
+    ilkesiyle aynı gerekçe. `ekran-bugun.js`'teki kahraman kart varsayılanı
+    da ("Hepsi" seçiliyken hangi öğün grubu gösterilsin) artık sabit "ana"
+    yerine `AM.saatGrubu()`'nü kullanıyor.
+  - **"Pişirdim" düğmesi** — pişirme modunun son adımındaki "İleri" düğmesi
+    "Pişirdim ✓" olarak değişiyor; tıklanınca `AM.depo.pisirdim()` çağrılıyor.
+    Roadmap'in "geçmişi besleyen tek kaynak" kararına uygun: erken çıkış
+    (X'e basmak) geçmişe yazmıyor.
+  - **Puan ve kişisel not** — tarif panelinin altında (sekmelerin dışında,
+    her zaman görünür), 5 yıldızlı puan + serbest metin not kutusu
+    (`js/panel-tarif.js`: `ciz_kisisel`, `js/arayuz.js`'in pasif `ui.detay`
+    çıktısına ek olarak). **Önemli ayrıntı**: not kutusu sadece `blur`'a
+    güvenmiyor — kullanıcı panel'i X'e/geri tuşuna basıp kapatırsa (başka
+    yere dokunmadan) blur hiç tetiklenmeyebiliyor. Yazarken 600ms
+    sessizlikte otomatik kaydeden bir zamanlayıcı bunu güvenceye alıyor.
+    Bu, el testinde (`node tools/tarayici.js` ile native `.blur()`
+    çağrısının headless ortamda gerçek bir `blur` olayı DOĞURMADIĞI
+    görülünce fark edildi — tarayıcı testi yazarken benzer bir kayıt
+    noktası varsa `blur()` yerine gerçek `input`/`dispatchEvent` kullan.)
+  - **Koleksiyonlar** — tarif panelinde ("Listelerim" bölümü) çip olarak
+    ekle/çıkar + yeni liste oluştur; yeni "Defterim" ekranında listelenir,
+    tıklanınca `js/ekran-dunya.js`'teki giriş/detay örüntüsüyle açılır,
+    iki dokunuşlu onayla silinir (silmek sadece grubu kaldırır, tarifleri
+    değil).
+  - **"Bu hafta ne pişirdim"** — Defterim'in en üstünde, son 7 günün
+    pişirilenleri (tekilleştirilmiş, en yeni önde) yatay şerit olarak.
+  - **Yeni "Defterim" sekmesi** — kullanıcıyla karar verildi: Favoriler'i
+    genişletmek yerine ayrı 6. sekme (alt menü artık 5 düğme + FAB taşıyor,
+    320px genişlikte bile taşma yok, dokunma hedefleri ≥44px — bkz.
+    `node tools/arayuz-testi.js`). Koleksiyonlar + geçmiş + haftalık özet
+    burada; "Favoriler" (kalp işaretliler) ayrı ve değişmeden kaldı.
+  `node tools/veri-kontrol.js` yeşil (988 tarif, veri şeması değişmedi —
+  Faz 3 tamamen `js/depo.js`'in üstüne kuruldu). `node tools/arayuz-testi.js`
+  23/23 (yeni "defter" ekranı kontrolü eklendi). Ayrıca el yordamıyla puan/
+  not/koleksiyon/pişirdim/defter akışının uçtan uca çalıştığı doğrulandı.
+  **Henüz yapılmadı**: `arama.js` (ağırlıklı puanlama + yazım toleransı) ve
+  `tools/derle.js` — ikisi de Faz 4 kapsamında kalabilir, Faz 3'ün
+  "akıllı öneri ve defter" özü tamamlandı.
 
 ### Görsel üretimi — yön değişikliği ve canlı durum (2026-09-09)
 
@@ -727,7 +774,7 @@ En uzun faz — tarif araştırması elle ve kaynak doğrulayarak yapılıyor.
 - "Evde olmayan malzeme" tonu — dünya tariflerinde eksik malzeme
   normaldir; motor bunu ceza değil, alışveriş fikri olarak sunar.
 
-### Faz 3 — ZEKÂ (Akıllı öneri ve defter)
+### Faz 3 — ZEKÂ (Akıllı öneri ve defter) — ✅ tamamlandı (sürüm 3.8.0)
 
 Faz 0'da toplanmaya başlayan geçmiş, burada işe yarar hale gelir.
 
@@ -883,13 +930,16 @@ kasıtlı olarak tamamlanmadan bırakıldı, tek mutfağa saplanıp kalmamak
 için (bkz. Durum bölümü). **8 mutfaklık ilk-parti turu tamamlandı**:
 İtalyan ✓, Uzak Doğu ✓, Orta Doğu ✓, Meksika ✓, Hint ✓, Balkan ✓,
 Akdeniz ✓, Fransız ✓ — hepsi en az bir partiyle temsil ediliyor
-(sürüm 3.7.0, 988 tarif). **Sırada** — kullanıcı henüz yön belirtmedi;
-olası seçenekler: (a) herhangi bir mutfağın kalan tariflerini
-tamamlamak (Uzak Doğu ~22, İtalyan ~12, Orta Doğu ~17, Meksika ~12,
-Hint ~12, Balkan ~12, Akdeniz ~12, Fransız ~12), (b) Faz 3'e (akıllı
-öneri) geçmek, (c) görsel hattı konusunda yeni bir karar (bkz. Bölüm 6
-"Görsel hattı durduruldu" — kullanıcının "Nefis Yemek Tarifleri" tarzı
-gerçek/kendi çekilen fotoğraf fikri henüz karara bağlanmadı). Görsel
-hattı 2026-09-10'da durduruldu — yeni tarifler görselsiz, SVG ikonla
-eklenecek. Faz 3 (akıllı öneri) ve Faz 4 (pişirme deneyimi) henüz
-başlamadı.
+(sürüm 3.7.0, 988 tarif). **Faz 3 (akıllı öneri ve defter) 2026-09-12'de
+tamamlandı** (sürüm 3.8.0) — ayrıntı yukarıdaki Durum bölümünde: `js/
+oneri.js` ile favori/puan/geçmiş/saat ağırlıklı sıralama, "Pişirdim"
+düğmesi, puan+not, koleksiyonlar, yeni "Defterim" sekmesi. **Sırada** —
+kullanıcı henüz yön belirtmedi; olası seçenekler: (a) herhangi bir
+mutfağın kalan tariflerini tamamlamak (Uzak Doğu ~22, İtalyan ~12, Orta
+Doğu ~17, Meksika ~12, Hint ~12, Balkan ~12, Akdeniz ~12, Fransız ~12),
+(b) Faz 4'e (pişirme deneyimi: adım içi zamanlayıcı, arama iyileştirmesi,
+açılış tanıtımı) geçmek, (c) görsel hattı konusunda yeni bir karar (bkz.
+Bölüm 6 "Görsel hattı durduruldu" — kullanıcının "Nefis Yemek Tarifleri"
+tarzı gerçek/kendi çekilen fotoğraf fikri henüz karara bağlanmadı).
+Görsel hattı 2026-09-10'da durduruldu — yeni tarifler görselsiz, SVG
+ikonla eklenecek.

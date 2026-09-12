@@ -35,11 +35,13 @@
     var yokKart = $("sonucYokKart");
 
     if (sonuc.tam.length) {
-      // Günün önerisi seçili yemek türünden gelir. "Hepsi" seçiliyken ana
-      // yemeklerden seçilir; tatlı ya da salata baş köşeye oturmasın.
+      // Günün önerisi seçili yemek türünden gelir. "Hepsi" seçiliyken günün
+      // saatine göre belirlenir (sabahsa kahvaltı, değilse ana yemek) — tatlı
+      // ya da salata baş köşeye oturmasın.
       var ogun = AM.depo.ogun();
+      var hedefGrup = ogun === "hepsi" ? ((AM.saatGrubu && AM.saatGrubu()) || "ana") : ogun;
       var havuz = sonuc.tam.filter(function (k) {
-        return AM.grupBul(k.t) === (ogun === "hepsi" ? "ana" : ogun);
+        return AM.grupBul(k.t) === hedefGrup;
       });
       if (!havuz.length) havuz = sonuc.tam;
 

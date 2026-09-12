@@ -177,7 +177,32 @@
     $("btnAdimIleri").addEventListener("click", function () {
       var t = ic.durum.acikTarif;
       if (ic.durum.adim < t.y.length - 1) { ic.durum.adim++; ic.ciz_pisirme(); }
-      else { ic.geriGit(); ic.bildir("Afiyet olsun! 🎉"); }
+      else {
+        /* "Pişirdim" — pişirme geçmişini besleyen tek kaynak (bkz. js/depo.js).
+           Akıllı öneri (js/oneri.js) bunu okuyup aynı yemeği hemen tekrar
+           önermemek için kullanıyor. */
+        AM.depo.pisirdim(t.id);
+        ic.geriGit();
+        ic.bildir("Afiyet olsun! 🎉");
+      }
+    });
+
+    /* Defterim ekranı: koleksiyon oluşturma/silme/geri, geçmiş sayfalama.
+       Dinamik olarak çizilen tarif kartları ve koleksiyon satırları kendi
+       dinleyicilerini js/ekran-defter.js içinde alıyor (bkz. o dosyanın
+       koleksiyonSatiri fonksiyonu) — burada sadece sabit HTML düğmeleri var. */
+    $("btnYeniKoleksiyon").addEventListener("click", function () {
+      var girdi = $("yeniKoleksiyonAdi");
+      if (ic.defterYeniKoleksiyon(girdi.value)) girdi.value = "";
+    });
+    $("yeniKoleksiyonAdi").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") { e.preventDefault(); $("btnYeniKoleksiyon").click(); }
+    });
+    $("btnKoleksiyonGeri").addEventListener("click", ic.defterKoleksiyonGeri);
+    $("btnKoleksiyonSil").addEventListener("click", function () { ic.defterKoleksiyonSilTikla(); });
+    $("btnDahaFazlaGecmis").addEventListener("click", function () {
+      ic.durum.gosterGecmis += 20;
+      ic.ciz_defter();
     });
 
     /* ayarlar */

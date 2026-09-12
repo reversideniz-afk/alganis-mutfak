@@ -20,7 +20,7 @@
   var el = AM.ui.el, bosalt = AM.ui.bosalt;
   function $(id) { return document.getElementById(id); }
 
-  var EKRANLAR = ["bugun", "mutfak", "dunya", "favori", "tarifler"];
+  var EKRANLAR = ["bugun", "mutfak", "dunya", "favori", "tarifler", "defter"];
 
   var ic = AM.ic = {
     el: el,
@@ -44,7 +44,9 @@
       acikTarif: null,
       porsiyon: 4,
       adim: 0,
-      sonOneriler: null
+      sonOneriler: null,
+      gosterGecmis: 20,
+      defterKoleksiyon: null
     }
   };
 
@@ -79,7 +81,8 @@
       mutfak: "Evde neler var?",
       dunya: "Dünya mutfakları",
       favori: "En sevdikleriniz",
-      tarifler: (AM.TARIFLER.length) + " tarif"
+      tarifler: (AM.TARIFLER.length) + " tarif",
+      defter: "Listelerin ve geçmişin"
     };
     $("ustAltYazi").textContent = altYazi[ad];
     window.scrollTo(0, 0);
@@ -88,6 +91,7 @@
     if (ad === "dunya") ic.ciz_dunya();
     if (ad === "favori") ic.ciz_favori();
     if (ad === "tarifler") ic.ciz_tarifler();
+    if (ad === "defter") ic.ciz_defter();
   };
 
   /* ======================================================== PANELLER */

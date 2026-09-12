@@ -151,7 +151,10 @@
       if (!filtre(t)) return;
       if (mutfakKapsamli && AM.mutfakBul(t) !== mutfakId) return;
       var d = AM.degerlendir(t, sepet);
-      var kayit = { t: t, d: d, sira: karma(t.id + tohum) };
+      var kayit = {
+        t: t, d: d, sira: karma(t.id + tohum),
+        agirlik: AM.oneriAgirlik ? AM.oneriAgirlik(t) : 0
+      };
 
       if (d.durum === "tam") { kayit.oncelik = 0; tam.push(kayit); }
       else if (d.durum === "neredeyse") {
@@ -164,6 +167,9 @@
     function sirala(a, b) {
       if (a.oncelik !== b.oncelik) return a.oncelik - b.oncelik;
       if (a.d.eksikSayi !== b.d.eksikSayi) return a.d.eksikSayi - b.d.eksikSayi;
+      /* Faz 3: favori/puan/geçmiş/saat ağırlığı — sadece eşit eksiklikteki
+         tarifler arasında tercih kurar, malzeme tamlığını asla ezmez. */
+      if (a.agirlik !== b.agirlik) return b.agirlik - a.agirlik;
       return a.sira - b.sira;
     }
 
